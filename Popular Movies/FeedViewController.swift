@@ -7,13 +7,18 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+protocol FeedViewProtocol: AnyObject {
+    
+}
+
+class FeedViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
+}
 
-
+extension FeedViewController: FeedViewProtocol {
+    
 }
 
