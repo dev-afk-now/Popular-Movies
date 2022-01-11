@@ -11,7 +11,12 @@ final class FeedConfigurator {
     static func create() -> UIViewController {
         let view = FeedViewController()
         let router = FeedRouter(context: view)
-        let presenter = FeedPresenter(view: view, router: router)
+        let requestService = NetworkRequestImplementation()
+        let networkService = NetworkServiceImplementation(requestService: requestService)
+        let repository = FeedRepository(service: networkService)
+        let presenter = FeedPresenter(view: view,
+                                      router: router,
+                                      repository: repository)
         view.presenter = presenter
         let navigationVC = BaseNavigationController(rootViewController: view)
         return navigationVC
