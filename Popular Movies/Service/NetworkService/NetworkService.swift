@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 protocol NetworkService {
     func request<T: Decodable>(url: URL?, completion: @escaping (RequestResponse<T>) -> Void)
@@ -36,12 +37,47 @@ extension NetworkServiceImplementation: NetworkService {
         guard let url = url else {
             return
         }
-        
-        requestService.GET(url: url, completion: completion)
+
+        requestService.GET(url: url) { (result: MovieNetworkList?) -> Void in
+            
+        }
     }
 }
 
-struct RequestResponse<T: Decodable> {
-    var data: T?
-    var error: NetworkRequestImplementation.Error?
+struct RequestResponse<T: Decodable>: Decodable {
+    var results: T?
+    var error: ServerErrorModel?
+}
+
+struct ServerErrorModel: Decodable {
+    var message: String?
+    var code: Int?
+}
+
+struct CustomError {
+    
+    var message: String?
+    var code: Int?
+    
+    init(with serverError: ServerErrorModel?) {
+        guard let error = serverError else {
+            self.message = "Something went wrong"
+            return
+        }
+        self.message = error.message
+        self.code = error.code
+    }
+    
+    init(with afError: AFError?) {
+        guard let error = afError else {
+            self.message = "Something went wrong"
+            return
+        }
+        self.message = error.localizedDescription
+        self.code = error._code
+    }
+    
+    init(message: String) {
+        self.message = message
+    }
 }

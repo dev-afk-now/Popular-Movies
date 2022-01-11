@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import netfox
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,7 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = FeedConfigurator.create()
         window?.makeKeyAndVisible()
+        setupNetworkLogging()
+        
         return true
+    }
+    
+    private func setupNetworkLogging() {
+        NFX.sharedInstance().start()
     }
 }
 

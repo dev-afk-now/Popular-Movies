@@ -13,18 +13,22 @@ enum Endpoint {
     case posterImage(path: String)
     
     var apiKey: String {
-        return "?api_key=748bef7b95d85a33f87a75afaba78982"
+        return "?api_key=748bef7b95d85a33f87a7"
     }
     
     var endPoint: String {
         switch self {
         case .popularMovies(let page):
-            return basicURL + "movie/popular?" + apiKey + pagePath + "\(page)"
+            return String(format: "movie/popular?%@%", pagePath, page)
         case .backdropImage(let path):
             return basicBackdropURL + path
         case .posterImage(let path):
             return basicPosterURL + path
         }
+    }
+    
+    func fullURLString() -> String {
+        return baseURL + self.endPoint + apiKey
     }
     
     var basicBackdropURL: String {
@@ -35,7 +39,7 @@ enum Endpoint {
         return "https://image.tmdb.org/t/p/w500/"
     }
     
-    var basicURL: String {
+    var baseURL: String {
         return "https://api.themoviedb.org/3/"
     }
     

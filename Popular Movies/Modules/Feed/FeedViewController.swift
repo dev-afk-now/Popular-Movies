@@ -26,10 +26,24 @@ class FeedViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .red
         presenter.configureView()
     }
     
-    
+    private func configureTableView() {
+        tableView.backgroundColor = .lightGray
+        tableView.keyboardDismissMode = .interactive
+    }
+    private func setupConstraints() {
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
 }
 
 extension FeedViewController: FeedViewProtocol {
