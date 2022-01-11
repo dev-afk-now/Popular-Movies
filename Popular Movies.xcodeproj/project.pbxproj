@@ -8,20 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		D519C971278C7D340018155F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D519C970278C7D340018155F /* AppDelegate.swift */; };
-		D519C973278C7D340018155F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D519C972278C7D340018155F /* SceneDelegate.swift */; };
 		D519C975278C7D340018155F /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D519C974278C7D340018155F /* FeedViewController.swift */; };
 		D519C97A278C7D350018155F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D519C979278C7D350018155F /* Assets.xcassets */; };
 		D519C97D278C7D350018155F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D519C97B278C7D350018155F /* LaunchScreen.storyboard */; };
+		D57959DC278D7567003CED85 /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959DB278D7567003CED85 /* FeedPresenter.swift */; };
+		D57959DE278D75E0003CED85 /* FeedConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959DD278D75E0003CED85 /* FeedConfigurator.swift */; };
+		D57959E0278D76F9003CED85 /* FeedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959DF278D76F9003CED85 /* FeedRouter.swift */; };
+		D57959E4278D79AD003CED85 /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959E3278D79AD003CED85 /* BaseNavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D519C96D278C7D340018155F /* Popular Movies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Popular Movies.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D519C970278C7D340018155F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D519C972278C7D340018155F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		D519C974278C7D340018155F /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		D519C979278C7D350018155F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D519C97C278C7D350018155F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D519C97E278C7D350018155F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D57959DB278D7567003CED85 /* FeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenter.swift; sourceTree = "<group>"; };
+		D57959DD278D75E0003CED85 /* FeedConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedConfigurator.swift; sourceTree = "<group>"; };
+		D57959DF278D76F9003CED85 /* FeedRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRouter.swift; sourceTree = "<group>"; };
+		D57959E3278D79AD003CED85 /* BaseNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,13 +61,48 @@
 			isa = PBXGroup;
 			children = (
 				D519C970278C7D340018155F /* AppDelegate.swift */,
-				D519C972278C7D340018155F /* SceneDelegate.swift */,
-				D519C974278C7D340018155F /* FeedViewController.swift */,
+				D57959E1278D785E003CED85 /* Developer Tools */,
+				D57959D9278D750C003CED85 /* Modules */,
 				D519C979278C7D350018155F /* Assets.xcassets */,
 				D519C97B278C7D350018155F /* LaunchScreen.storyboard */,
 				D519C97E278C7D350018155F /* Info.plist */,
 			);
 			path = "Popular Movies";
+			sourceTree = "<group>";
+		};
+		D57959D9278D750C003CED85 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				D57959DA278D754C003CED85 /* Feed */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		D57959DA278D754C003CED85 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				D519C974278C7D340018155F /* FeedViewController.swift */,
+				D57959DB278D7567003CED85 /* FeedPresenter.swift */,
+				D57959DF278D76F9003CED85 /* FeedRouter.swift */,
+				D57959DD278D75E0003CED85 /* FeedConfigurator.swift */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
+		D57959E1278D785E003CED85 /* Developer Tools */ = {
+			isa = PBXGroup;
+			children = (
+				D57959E2278D79AD003CED85 /* BaseComponents */,
+			);
+			path = "Developer Tools";
+			sourceTree = "<group>";
+		};
+		D57959E2278D79AD003CED85 /* BaseComponents */ = {
+			isa = PBXGroup;
+			children = (
+				D57959E3278D79AD003CED85 /* BaseNavigationController.swift */,
+			);
+			path = BaseComponents;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -134,9 +175,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D57959DE278D75E0003CED85 /* FeedConfigurator.swift in Sources */,
 				D519C975278C7D340018155F /* FeedViewController.swift in Sources */,
+				D57959E4278D79AD003CED85 /* BaseNavigationController.swift in Sources */,
+				D57959E0278D76F9003CED85 /* FeedRouter.swift in Sources */,
+				D57959DC278D7567003CED85 /* FeedPresenter.swift in Sources */,
 				D519C971278C7D340018155F /* AppDelegate.swift in Sources */,
-				D519C973278C7D340018155F /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,8 +326,10 @@
 				INFOPLIST_FILE = "Popular Movies/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -293,7 +339,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -309,8 +355,10 @@
 				INFOPLIST_FILE = "Popular Movies/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -320,7 +368,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

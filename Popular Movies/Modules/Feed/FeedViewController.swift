@@ -12,7 +12,7 @@ protocol FeedViewProtocol: AnyObject {
 }
 
 class FeedViewController: UIViewController {
-
+    var presenter: FeedPresenterProtocol!
     override func viewDidLoad() {
         super.viewDidLoad()
     }
