@@ -7,5 +7,5 @@ target 'Popular Movies' do
 
   # Pods for Popular Movies
 
-
+pod 'Alamofire', '~> 5.5'
 end
