@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		286869681825F784BD7A0CB0 /* Pods_Popular_Movies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 985A3680CD4F1E474E4000AC /* Pods_Popular_Movies.framework */; };
+		D50BA309278F1DF700E10833 /* MovieTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BA308278F1DF700E10833 /* MovieTableCell.swift */; };
+		D50BA30D278F20B000E10833 /* TableCellRegistrable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BA30B278F20B000E10833 /* TableCellRegistrable.swift */; };
+		D50BA30E278F20B000E10833 /* TableCellReusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BA30C278F20B000E10833 /* TableCellReusable.swift */; };
+		D50BA310278F20CF00E10833 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BA30F278F20CF00E10833 /* BaseTableViewCell.swift */; };
 		D519C971278C7D340018155F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D519C970278C7D340018155F /* AppDelegate.swift */; };
 		D519C975278C7D340018155F /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D519C974278C7D340018155F /* FeedViewController.swift */; };
 		D519C97A278C7D350018155F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D519C979278C7D350018155F /* Assets.xcassets */; };
@@ -31,6 +35,10 @@
 		0A6376EC136BE9AF8859326A /* Pods-Popular Movies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Popular Movies.release.xcconfig"; path = "Target Support Files/Pods-Popular Movies/Pods-Popular Movies.release.xcconfig"; sourceTree = "<group>"; };
 		645D949840643EF7D4E7538B /* Pods-Popular Movies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Popular Movies.debug.xcconfig"; path = "Target Support Files/Pods-Popular Movies/Pods-Popular Movies.debug.xcconfig"; sourceTree = "<group>"; };
 		985A3680CD4F1E474E4000AC /* Pods_Popular_Movies.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Popular_Movies.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D50BA308278F1DF700E10833 /* MovieTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableCell.swift; sourceTree = "<group>"; };
+		D50BA30B278F20B000E10833 /* TableCellRegistrable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCellRegistrable.swift; sourceTree = "<group>"; };
+		D50BA30C278F20B000E10833 /* TableCellReusable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCellReusable.swift; sourceTree = "<group>"; };
+		D50BA30F278F20CF00E10833 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		D519C96D278C7D340018155F /* Popular Movies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Popular Movies.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D519C970278C7D340018155F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D519C974278C7D340018155F /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
@@ -70,6 +78,31 @@
 				985A3680CD4F1E474E4000AC /* Pods_Popular_Movies.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D50BA307278F1DB500E10833 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				D50BA308278F1DF700E10833 /* MovieTableCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		D50BA30A278F1FAE00E10833 /* TableCell */ = {
+			isa = PBXGroup;
+			children = (
+				D50BA30B278F20B000E10833 /* TableCellRegistrable.swift */,
+				D50BA30C278F20B000E10833 /* TableCellReusable.swift */,
+			);
+			path = TableCell;
+			sourceTree = "<group>";
+		};
+		D50BA311278F20DE00E10833 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				D5F56BEA278EDD4C006E5F8E /* UIViewController+Alert.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		D519C964278C7D340018155F = {
@@ -115,6 +148,7 @@
 		D57959DA278D754C003CED85 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
+				D50BA307278F1DB500E10833 /* Cell */,
 				D57959F2278DA0D0003CED85 /* Model */,
 				D519C974278C7D340018155F /* FeedViewController.swift */,
 				D57959DB278D7567003CED85 /* FeedPresenter.swift */,
@@ -127,9 +161,10 @@
 		D57959E1278D785E003CED85 /* Developer Tools */ = {
 			isa = PBXGroup;
 			children = (
-				D57959EC278D83DF003CED85 /* APIEndPoint */,
+				D50BA311278F20DE00E10833 /* Extension */,
+				D50BA30A278F1FAE00E10833 /* TableCell */,
+				D57959EC278D83DF003CED85 /* EndPoints */,
 				D57959E2278D79AD003CED85 /* BaseComponents */,
-				D5F56BEA278EDD4C006E5F8E /* UIViewController+Alert.swift */,
 			);
 			path = "Developer Tools";
 			sourceTree = "<group>";
@@ -139,6 +174,7 @@
 			children = (
 				D57959E3278D79AD003CED85 /* BaseNavigationController.swift */,
 				D5C4F172278EE6670010EEB5 /* BaseViewController.swift */,
+				D50BA30F278F20CF00E10833 /* BaseTableViewCell.swift */,
 			);
 			path = BaseComponents;
 			sourceTree = "<group>";
@@ -170,12 +206,12 @@
 			path = NetworkRequest;
 			sourceTree = "<group>";
 		};
-		D57959EC278D83DF003CED85 /* APIEndPoint */ = {
+		D57959EC278D83DF003CED85 /* EndPoints */ = {
 			isa = PBXGroup;
 			children = (
 				D57959ED278D8418003CED85 /* EndPoint.swift */,
 			);
-			path = APIEndPoint;
+			path = EndPoints;
 			sourceTree = "<group>";
 		};
 		D57959EF278D9E14003CED85 /* Feed Repository */ = {
@@ -329,18 +365,22 @@
 				D57959DE278D75E0003CED85 /* FeedConfigurator.swift in Sources */,
 				D57959EE278D8418003CED85 /* EndPoint.swift in Sources */,
 				D519C975278C7D340018155F /* FeedViewController.swift in Sources */,
+				D50BA310278F20CF00E10833 /* BaseTableViewCell.swift in Sources */,
 				D5F56BEB278EDD4C006E5F8E /* UIViewController+Alert.swift in Sources */,
 				D5C68EC6278EEBBB0010D9FD /* Reachability Manager.swift in Sources */,
 				D57959F1278D9E4A003CED85 /* FeedRepository.swift in Sources */,
 				D5C4F173278EE6670010EEB5 /* BaseViewController.swift in Sources */,
+				D50BA309278F1DF700E10833 /* MovieTableCell.swift in Sources */,
 				D57959EB278D7E7C003CED85 /* NetworkRequest.swift in Sources */,
 				D57959E4278D79AD003CED85 /* BaseNavigationController.swift in Sources */,
 				D57959E0278D76F9003CED85 /* FeedRouter.swift in Sources */,
 				D57959F4278DA0E8003CED85 /* MovieCellItem.swift in Sources */,
 				D57959DC278D7567003CED85 /* FeedPresenter.swift in Sources */,
+				D50BA30D278F20B000E10833 /* TableCellRegistrable.swift in Sources */,
 				D519C971278C7D340018155F /* AppDelegate.swift in Sources */,
 				D57959F6278DA195003CED85 /* MovieNetworkList.swift in Sources */,
 				D57959E8278D7CEB003CED85 /* NetworkService.swift in Sources */,
+				D50BA30E278F20B000E10833 /* TableCellReusable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

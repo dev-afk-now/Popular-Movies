@@ -65,6 +65,7 @@ class BaseViewController: UIViewController {
     }
     
     func showActivityIndicator() {
+        view.bringSubviewToFront(activityIndicatorView)
         activityIndicatorView.startAnimating()
     }
     

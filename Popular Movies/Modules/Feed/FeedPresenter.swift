@@ -7,10 +7,10 @@
 
 import Foundation
 
-//https://api.themoviedb.org/3/movie/popular?api_key=748bef7b95d85a33f87a75afaba78982&language=en-US&page=1
-
 protocol FeedPresenterProtocol: AnyObject {
+    var movieListCount: Int { get }
     func configureView()
+    func getMovieItemForCell(at index: Int) -> MovieCellItem
 }
 
 final class FeedPresenter {
@@ -30,6 +30,14 @@ final class FeedPresenter {
 }
 
 extension FeedPresenter: FeedPresenterProtocol {
+    func getMovieItemForCell(at index: Int) -> MovieCellItem {
+        return movies[index]
+    }
+    
+    var movieListCount: Int {
+        movies.count
+    }
+    
     func configureView() {
         repository.fetchMovies { [weak self] result in
             switch result {
