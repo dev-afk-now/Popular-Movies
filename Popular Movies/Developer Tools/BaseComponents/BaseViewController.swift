@@ -7,12 +7,13 @@
 
 import UIKit
 import Reachability
+import NVActivityIndicatorView
 
 class BaseViewController: UIViewController {
     
     // MARK: - Private properties -
     private let noConnectionMessage = "You are offline. Please, enable your Wi-Fi or connect - using cellular data."
-    private var activityIndicator: UIActivityIndicatorView!
+    private var activityIndicatorView: NVActivityIndicatorView!
     
     // MARK: - LifeCycle -
     init() {
@@ -46,28 +47,29 @@ class BaseViewController: UIViewController {
     }
     
     private func configureActivityIndicator() {
-        activityIndicator = UIActivityIndicatorView()
-        activityIndicator.hidesWhenStopped = true
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.isHidden = true
-        view.addSubview(activityIndicator)
+        activityIndicatorView = NVActivityIndicatorView(frame: .zero,
+                                                        type: .lineScale,
+                                                        color: .black.withAlphaComponent(0.5))
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicatorView.isHidden = true
+        view.addSubview(activityIndicatorView)
     }
     
     private func layoutActivityIndicator() {
         NSLayoutConstraint.activate([
-            activityIndicator.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            activityIndicator.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            activityIndicator.topAnchor.constraint(equalTo: view.topAnchor),
-            activityIndicator.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            activityIndicatorView.widthAnchor.constraint(equalToConstant: 35),
+            activityIndicatorView.heightAnchor.constraint(equalToConstant: 35),
+            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
     func showActivityIndicator() {
-        activityIndicator.startAnimating()
+        activityIndicatorView.startAnimating()
     }
     
     func hideActivityIndicator() {
-        activityIndicator.stopAnimating()
+        activityIndicatorView.stopAnimating()
     }
     
     // MARK: - Actions -
