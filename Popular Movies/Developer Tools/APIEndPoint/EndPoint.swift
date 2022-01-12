@@ -7,28 +7,25 @@
 
 import Foundation
 
-enum Endpoint {
+enum EndPoint {
     case popularMovies(page: Int)
     case backdropImage(path: String)
     case posterImage(path: String)
     
     var apiKey: String {
-        return "?api_key=748bef7b95d85a33f87a7"
+        return "?api_key=748bef7b95d85a33f87a75afaba78982"
     }
     
     var endPoint: String {
         switch self {
         case .popularMovies(let page):
-            return String(format: "movie/popular?%@%", pagePath, page)
+            print(String(format: "\(baseURL)movie/popular%@%@%@%d", apiKey, language, pagePath, page))
+            return String(format: "\(baseURL)movie/popular%@%@%@%d", apiKey, language, pagePath, page)
         case .backdropImage(let path):
             return basicBackdropURL + path
         case .posterImage(let path):
             return basicPosterURL + path
         }
-    }
-    
-    func fullURLString() -> String {
-        return baseURL + self.endPoint + apiKey
     }
     
     var basicBackdropURL: String {

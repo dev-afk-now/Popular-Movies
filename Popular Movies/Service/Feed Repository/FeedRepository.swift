@@ -8,41 +8,45 @@
 import Foundation
 
 protocol FeedRepositoryProtocol {
-    func getPosts(completion: @escaping() -> Void)
+    func fetchMovies(completion: @escaping(Result<[MovieCellItem], CustomError>) -> Void)
 }
 
 final class FeedRepository {
-    enum Error: Swift.Error {
-        case propagated(Swift.Error)
-        case offlined
-        case timeOut
-    }
+    private let service: NetworkServiceProtocol
+    private var pageToLoad: Int = 1
     
-    private let service: NetworkService
+    private lazy var listPath = URL(
+        string: EndPoint.popularMovies(page: pageToLoad).endPoint)
     
-    private let listPath = URL(
-        string: "https://api.themoviedb.org/3/movie/popular?api_key=748bef7b95d85a33f87a75afaba78982&language=en-US&page=1")
-    
-    init(service: NetworkService) {
+    init(service: NetworkServiceProtocol) {
         self.service = service
     }
     
 }
 
 extension FeedRepository: FeedRepositoryProtocol {
-    func getPosts(completion: @escaping () -> Void) {
+    func fetchMovies(completion: @escaping(Result<[MovieCellItem], CustomError>) -> Void) {
         guard let url = listPath else {
-//            completion(.failure(.unresolved))
+            completion(.failure(CustomError(message: "Corrupted URL")))
             return
         }
-        service.request(url: url) { (result: RequestResponse<MovieNetworkList>) in
+        service.request(url: url) { (result: Result<MovieNetworkList, CustomError>) in
             print(result)
-//            switch result {
-//            case .success(let success):
-//                let posts = success.posts.map(PostCellModel.init)
+            switch result {
+            case .success(let success):
+                self.pageToLoad += 1
+                let movieList = success.results.map(MovieCellItem.init)
+                // TODO: Persistence
+                completion(.success(movieList))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+}
+
 //                PostPersistentAdapter.shared.generateDatabasePostObjects(from: posts)
-//                completion(.success(posts))
-//            case .failure(let failure):
+
 //                let list = PostPersistentAdapter.shared.pullDatabasePostObjects()
 //                let posts: [PostCellModel] = list.map { PostCellModel(from: $0) }
 //                if list.isEmpty {
@@ -50,8 +54,3 @@ extension FeedRepository: FeedRepositoryProtocol {
 //                } else {
 //                    completion(.success(posts))
 //                }
-//            }
-        }
-    }
-}
-

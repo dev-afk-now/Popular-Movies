@@ -8,10 +8,11 @@
 import UIKit
 
 protocol FeedViewProtocol: AnyObject {
-    
+    func updateView()
+    func showError(_ message: String)
 }
 
-class FeedViewController: UIViewController {
+class FeedViewController: BaseViewController {
     var presenter: FeedPresenterProtocol!
     
     // MARK: - Private properties -
@@ -28,6 +29,11 @@ class FeedViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .red
         presenter.configureView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        showActivityIndicator()
     }
     
     private func configureTableView() {
@@ -47,7 +53,15 @@ class FeedViewController: UIViewController {
 }
 
 extension FeedViewController: FeedViewProtocol {
+    func showError(_ message: String) {
+        self.showAlert(with: message)
+    }
     
+    func updateView() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
 }
 
 extension FeedViewController: UITableViewDelegate {

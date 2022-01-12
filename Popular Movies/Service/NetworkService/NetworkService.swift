@@ -8,41 +8,34 @@
 import Foundation
 import Alamofire
 
-protocol NetworkService {
-    func request<T: Decodable>(url: URL?, completion: @escaping (RequestResponse<T>) -> Void)
+protocol NetworkServiceProtocol {
+    func request<T: Decodable>(url: URL?, completion: @escaping (Result<T, CustomError>) -> Void)
 }
 
-final class NetworkServiceImplementation {
+final class NetworkService {
+    private let requestService: NetworkRequestProtocol!
     
-    enum Error: Swift.Error {
-        case propagated(Swift.Error)
-        case offlined
-        case timeOut
-    }
-    
-    // TODO: Move to endPoint
-    
-    private var listPath = "https://raw.githubusercontent.com/aShaforostov/jsons/master/api/main.json"
-    private var basicPath = "https://raw.githubusercontent.com/aShaforostov/jsons/master/api/posts/[id].json"
-    private let requestService: NetworkRequest!
-    
-    
-    init(requestService: NetworkRequest) {
+    init(requestService: NetworkRequestProtocol) {
         self.requestService = requestService
     }
 }
 
-extension NetworkServiceImplementation: NetworkService {
-    func request<T: Decodable>(url: URL?, completion: @escaping (RequestResponse<T>) -> Void) {
+extension NetworkService: NetworkServiceProtocol {
+    func request<T: Decodable>(url: URL?, completion: @escaping (Result<T, CustomError>) -> Void) {
         guard let url = url else {
             return
         }
-
-        requestService.GET(url: url) { (result: MovieNetworkList?) -> Void in
-            
+        requestService.GET(url: url) { (result: Result<T, CustomError>) -> Void in
+            switch result {
+            case .success(let success):
+                completion(.success(success))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
         }
     }
 }
+
 
 struct RequestResponse<T: Decodable>: Decodable {
     var results: T?
@@ -52,16 +45,19 @@ struct RequestResponse<T: Decodable>: Decodable {
 struct ServerErrorModel: Decodable {
     var message: String?
     var code: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case message = "status_message"
+        case code = "status_code"
+    }
 }
 
-struct CustomError {
-    
+struct CustomError: Error {
     var message: String?
     var code: Int?
     
     init(with serverError: ServerErrorModel?) {
         guard let error = serverError else {
-            self.message = "Something went wrong"
             return
         }
         self.message = error.message
@@ -70,7 +66,6 @@ struct CustomError {
     
     init(with afError: AFError?) {
         guard let error = afError else {
-            self.message = "Something went wrong"
             return
         }
         self.message = error.localizedDescription

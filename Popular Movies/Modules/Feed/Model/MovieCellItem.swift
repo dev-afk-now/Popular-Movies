@@ -9,5 +9,16 @@ import Foundation
 
 struct MovieCellItem {
     var id: Int
-    var name: String
+    var title: String
+    var backdropPath: String
+    var genres: [Int]
+    var rating: Double
+    
+    init(with networkData: MovieNetworkItem) {
+        self.id = networkData.id
+        self.title = networkData.title
+        self.backdropPath = networkData.backdropPath
+        self.genres = networkData.genres
+        self.rating = networkData.rating
+    }
 }

@@ -18,10 +18,13 @@
 		D57959E4278D79AD003CED85 /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959E3278D79AD003CED85 /* BaseNavigationController.swift */; };
 		D57959E8278D7CEB003CED85 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959E7278D7CEB003CED85 /* NetworkService.swift */; };
 		D57959EB278D7E7C003CED85 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959EA278D7E7C003CED85 /* NetworkRequest.swift */; };
-		D57959EE278D8418003CED85 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959ED278D8418003CED85 /* Endpoint.swift */; };
+		D57959EE278D8418003CED85 /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959ED278D8418003CED85 /* EndPoint.swift */; };
 		D57959F1278D9E4A003CED85 /* FeedRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959F0278D9E4A003CED85 /* FeedRepository.swift */; };
 		D57959F4278DA0E8003CED85 /* MovieCellItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959F3278DA0E8003CED85 /* MovieCellItem.swift */; };
 		D57959F6278DA195003CED85 /* MovieNetworkList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959F5278DA195003CED85 /* MovieNetworkList.swift */; };
+		D5C4F173278EE6670010EEB5 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C4F172278EE6670010EEB5 /* BaseViewController.swift */; };
+		D5C68EC6278EEBBB0010D9FD /* Reachability Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C68EC5278EEBBB0010D9FD /* Reachability Manager.swift */; };
+		D5F56BEB278EDD4C006E5F8E /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F56BEA278EDD4C006E5F8E /* UIViewController+Alert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,10 +43,13 @@
 		D57959E3278D79AD003CED85 /* BaseNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 		D57959E7278D7CEB003CED85 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		D57959EA278D7E7C003CED85 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
-		D57959ED278D8418003CED85 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		D57959ED278D8418003CED85 /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
 		D57959F0278D9E4A003CED85 /* FeedRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRepository.swift; sourceTree = "<group>"; };
 		D57959F3278DA0E8003CED85 /* MovieCellItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCellItem.swift; sourceTree = "<group>"; };
 		D57959F5278DA195003CED85 /* MovieNetworkList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieNetworkList.swift; sourceTree = "<group>"; };
+		D5C4F172278EE6670010EEB5 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		D5C68EC5278EEBBB0010D9FD /* Reachability Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reachability Manager.swift"; sourceTree = "<group>"; };
+		D5F56BEA278EDD4C006E5F8E /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,8 +127,9 @@
 		D57959E1278D785E003CED85 /* Developer Tools */ = {
 			isa = PBXGroup;
 			children = (
-				D57959EC278D83DF003CED85 /* ApiEndpoint */,
+				D57959EC278D83DF003CED85 /* APIEndPoint */,
 				D57959E2278D79AD003CED85 /* BaseComponents */,
+				D5F56BEA278EDD4C006E5F8E /* UIViewController+Alert.swift */,
 			);
 			path = "Developer Tools";
 			sourceTree = "<group>";
@@ -131,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				D57959E3278D79AD003CED85 /* BaseNavigationController.swift */,
+				D5C4F172278EE6670010EEB5 /* BaseViewController.swift */,
 			);
 			path = BaseComponents;
 			sourceTree = "<group>";
@@ -138,6 +146,7 @@
 		D57959E5278D7CC2003CED85 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				D5C68EC4278EEB9B0010D9FD /* Reachability Manager */,
 				D57959EF278D9E14003CED85 /* Feed Repository */,
 				D57959E9278D7E4A003CED85 /* NetworkRequest */,
 				D57959E6278D7CD3003CED85 /* NetworkService */,
@@ -161,12 +170,12 @@
 			path = NetworkRequest;
 			sourceTree = "<group>";
 		};
-		D57959EC278D83DF003CED85 /* ApiEndpoint */ = {
+		D57959EC278D83DF003CED85 /* APIEndPoint */ = {
 			isa = PBXGroup;
 			children = (
-				D57959ED278D8418003CED85 /* Endpoint.swift */,
+				D57959ED278D8418003CED85 /* EndPoint.swift */,
 			);
-			path = ApiEndpoint;
+			path = APIEndPoint;
 			sourceTree = "<group>";
 		};
 		D57959EF278D9E14003CED85 /* Feed Repository */ = {
@@ -186,13 +195,20 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		D5C68EC4278EEB9B0010D9FD /* Reachability Manager */ = {
+			isa = PBXGroup;
+			children = (
+				D5C68EC5278EEBBB0010D9FD /* Reachability Manager.swift */,
+			);
+			path = "Reachability Manager";
+			sourceTree = "<group>";
+		};
 		DD0C168CE4142A42D5F02E3E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				645D949840643EF7D4E7538B /* Pods-Popular Movies.debug.xcconfig */,
 				0A6376EC136BE9AF8859326A /* Pods-Popular Movies.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -311,9 +327,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D57959DE278D75E0003CED85 /* FeedConfigurator.swift in Sources */,
-				D57959EE278D8418003CED85 /* Endpoint.swift in Sources */,
+				D57959EE278D8418003CED85 /* EndPoint.swift in Sources */,
 				D519C975278C7D340018155F /* FeedViewController.swift in Sources */,
+				D5F56BEB278EDD4C006E5F8E /* UIViewController+Alert.swift in Sources */,
+				D5C68EC6278EEBBB0010D9FD /* Reachability Manager.swift in Sources */,
 				D57959F1278D9E4A003CED85 /* FeedRepository.swift in Sources */,
+				D5C4F173278EE6670010EEB5 /* BaseViewController.swift in Sources */,
 				D57959EB278D7E7C003CED85 /* NetworkRequest.swift in Sources */,
 				D57959E4278D79AD003CED85 /* BaseNavigationController.swift in Sources */,
 				D57959E0278D76F9003CED85 /* FeedRouter.swift in Sources */,

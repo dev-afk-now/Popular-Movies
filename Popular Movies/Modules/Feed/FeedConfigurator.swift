@@ -11,8 +11,8 @@ final class FeedConfigurator {
     static func create() -> UIViewController {
         let view = FeedViewController()
         let router = FeedRouter(context: view)
-        let requestService = NetworkRequestImplementation()
-        let networkService = NetworkServiceImplementation(requestService: requestService)
+        let requestService = NetworkRequest()
+        let networkService = NetworkService(requestService: requestService)
         let repository = FeedRepository(service: networkService)
         let presenter = FeedPresenter(view: view,
                                       router: router,

@@ -18,6 +18,8 @@ final class FeedPresenter {
     private let router: FeedRouterProtocol
     private let repository: FeedRepositoryProtocol
     
+    private var movies = [MovieCellItem]()
+    
     init(view: FeedViewProtocol,
          router: FeedRouterProtocol,
          repository: FeedRepositoryProtocol) {
@@ -29,8 +31,14 @@ final class FeedPresenter {
 
 extension FeedPresenter: FeedPresenterProtocol {
     func configureView() {
-        repository.getPosts {
-            //
+        repository.fetchMovies { [weak self] result in
+            switch result {
+            case .success(let movieList):
+                self?.movies = movieList
+                self?.view?.updateView()
+            case .failure(let failure):
+                self?.view?.showError(failure.message ?? "")
+            }
         }
     }
 }

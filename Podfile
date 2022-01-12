@@ -10,5 +10,9 @@ target 'Popular Movies' do
   # Network
   pod 'Alamofire'
   pod 'netfox'
+  pod 'ReachabilitySwift'
+
+  # UI
+  pod 'NVActivityIndicatorView'
 
 end
