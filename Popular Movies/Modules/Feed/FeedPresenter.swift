@@ -26,6 +26,27 @@ final class FeedPresenter {
     private var isLoading = false
     private var pageToLoad = 1
     
+    private var isSearchingForPost: Bool {
+        !searchText.isEmpty
+    }
+    
+    private var postList: [PostCellModel] = []
+    private var searchResults: [PostCellModel] = []
+    private var dataSource: [PostCellModel] {
+        get {
+            var list = isSearchingForPost ? searchResults : postList
+            list = sortedItems(list, by: selectedSortOption)
+            return list
+        }
+        set {
+            if isSearchingForPost {
+                searchResults = newValue
+            } else {
+                postList = newValue
+            }
+        }
+    }
+    
     init(view: FeedViewProtocol,
          router: FeedRouterProtocol,
          repository: FeedRepositoryProtocol) {
@@ -92,7 +113,6 @@ extension FeedPresenter: FeedPresenterProtocol {
     }
     
     func getMovieItemForCell(at index: Int) -> MovieCellItem {
-        print(movies[index])
         return movies[index]
     }
     
