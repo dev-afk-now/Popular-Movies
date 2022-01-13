@@ -9,6 +9,7 @@ import UIKit
 
 protocol FeedViewProtocol: AnyObject {
     func updateView()
+    func showError()
 }
 
 class FeedViewController: BaseViewController {
@@ -37,7 +38,6 @@ class FeedViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
         presenter.configureView()
         configureTableView()
         setupConstraints()
@@ -52,11 +52,18 @@ class FeedViewController: BaseViewController {
         tableView.backgroundColor = .red
         tableView.keyboardDismissMode = .interactive
     }
+    
     private func setupConstraints() {
         view.addSubview(tableView)
+        view.addSubview(searchBarView)
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            searchBarView.topAnchor.constraint(equalTo: view.topAnchor),
+            searchBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchBarView.bottomAnchor.constraint(equalTo: tableView.topAnchor),
+            
+            tableView.topAnchor.constraint(equalTo: searchBarView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -65,6 +72,10 @@ class FeedViewController: BaseViewController {
 }
 
 extension FeedViewController: FeedViewProtocol {
+    func showError() {
+        hideActivityIndicator()
+    }
+    
     func updateView() {
         DispatchQueue.main.async { [weak self] in
             self?.hideActivityIndicator()
@@ -87,14 +98,14 @@ extension FeedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-            if section == 0 {
-                return presenter.movieListCount
-            } else if section == 1 {
-                return 1
-            } else {
-                return 0
-            }
+        if section == 0 {
+            return presenter.movieListCount
+        } else if section == 1 {
+            return 1
+        } else {
+            return 0
         }
+    }
     
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -108,10 +119,10 @@ extension FeedViewController: UITableViewDataSource {
             cell.startAnimating()
             return cell
         }
-        
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView,
+                   heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return UITableView.automaticDimension
         } else {
@@ -130,7 +141,9 @@ extension FeedViewController: UITableViewDataSource {
 }
 
 extension FeedViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar,
+                   textDidChange searchText: String) {
+        presenter.search(text: searchText)
     }
 }
 

@@ -10,7 +10,7 @@ import Foundation
 protocol FeedRepositoryProtocol {
     func fetchMovies(keyword: String?,
                      page: Int,
-                     completion: @escaping(Result<[MovieCellItem], CustomError>) -> Void)
+                     completion: @escaping(Result<[MovieCellItem], CustomError>) -> ())
 }
 
 final class FeedRepository {
@@ -24,15 +24,16 @@ final class FeedRepository {
 extension FeedRepository: FeedRepositoryProtocol {
     func fetchMovies(keyword: String?,
                      page: Int,
-                     completion: @escaping(Result<[MovieCellItem], CustomError>) -> Void) {
+                     completion: @escaping(Result<[MovieCellItem], CustomError>) -> ()) {
         var endPoint: EndPoint {
             if let keyword = keyword {
-                return EndPoint.searchMovies(query: keyword)
+                return EndPoint.searchMovies(query: keyword, page: page)
             } else {
                 return EndPoint.popular(page: page)
             }
         }
         service.request(endPoint: endPoint) { (result: Result<MovieNetworkList, CustomError>) in
+            print(endPoint.fullURLString())
             switch result {
             case .success(let success):
                 let movieList = success.results.map(MovieCellItem.init)

@@ -20,6 +20,8 @@ final class FeedPresenter {
     private let router: FeedRouterProtocol
     private let repository: FeedRepositoryProtocol
     
+    private var searchTask: DispatchWorkItem?
+    
     private var movies = [MovieCellItem]()
     private var isLoading = false
     private var pageToLoad = 1
@@ -41,23 +43,51 @@ final class FeedPresenter {
                 self?.view?.updateView()
                 self?.pageToLoad += 1
                 self?.isLoading = false
-            default:
-                break
+            case .failure:
+                self?.view?.showError()
             }
         }
+    }
+    
+    private func executeSearch(with text: String) {
+        if text.isEmpty {
+            breakSearch(of: searchTask)
+            return
+        }
+        if text.count < 2 {
+            return
+        }
+        searchTask?.cancel()
+        let workItem = DispatchWorkItem { [unowned self] in
+            repository.fetchMovies(keyword: text,
+                                   page: pageToLoad) { result in
+                switch result {
+                case .success(let movies):
+                    self.movies = movies
+                    self.view?.updateView()
+                default:
+                    break
+                }
+            }        }
+        searchTask = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: workItem)
+    }
+    
+    private func breakSearch(of dispatchWorkItem: DispatchWorkItem?) {
+        dispatchWorkItem?.cancel()
+        view?.updateView()
     }
 }
 
 extension FeedPresenter: FeedPresenterProtocol {
     func search(text: String) {
+        executeSearch(with: text)
     }
     
     func paginateMovieList() {
         if !self.isLoading {
             self.isLoading = true
-            DispatchQueue.global().async {
-                self.fetchMovies()
-            }
+            self.fetchMovies()
         }
     }
     

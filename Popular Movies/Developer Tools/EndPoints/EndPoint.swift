@@ -54,7 +54,7 @@ import Alamofire
 //    var pagePath: String {
 //        return "&page="
 //    }
-//}
+//}https://image.tmdb.org/t/p/w500/1Rr5SrvHxMXHu5RjKpaMba8VTzi.jpg
 
 struct Constants {
     static let baseImageURL = "https://image.tmdb.org/t/p/w500/"
@@ -65,7 +65,8 @@ struct Constants {
 
 enum EndPoint {
     case popular(page: Int)
-    case searchMovies(query: String)
+    case searchMovies(query: String, page: Int)
+    case posterImage(path: String)
     
     var path: String {
         switch self {
@@ -73,13 +74,16 @@ enum EndPoint {
             return "movie/popular"
         case .searchMovies:
             return "search/movie"
+        case .posterImage:
+            return "t/p/w500/"
         }
     }
     
     var method: HTTPMethod {
         switch self {
         case .popular,
-                .searchMovies:
+                .searchMovies,
+                .posterImage:
             return .get
         }
     }
@@ -98,8 +102,11 @@ enum EndPoint {
         switch self {
         case .popular(page: let page):
             return ["page": page]
-        case .searchMovies(query: let query):
-            return ["query": query]
+        case .searchMovies(query: let query, page: let page):
+            return ["query": query,
+                    "page": page]
+        default:
+            return [:]
         }
     }
     
