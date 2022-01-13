@@ -16,15 +16,14 @@ enum EndPoint {
         return "?api_key=748bef7b95d85a33f87a75afaba78982"
     }
     
-    var endPoint: String {
+    var endPoint: URL? {
         switch self {
         case .popularMovies(let page):
-            print(String(format: "\(baseURL)movie/popular%@%@%@%d", apiKey, language, pagePath, page))
-            return String(format: "\(baseURL)movie/popular%@%@%@%d", apiKey, language, pagePath, page)
+            return URL(string:  String(format: "\(baseURL)movie/popular%@%@%@%d", apiKey, language, pagePath, page))
         case .backdropImage(let path):
-            return basicBackdropURL + path
+            return URL(string:  basicBackdropURL + path)
         case .posterImage(let path):
-            return basicPosterURL + path
+            return URL(string: basicPosterURL + path)
         }
     }
     

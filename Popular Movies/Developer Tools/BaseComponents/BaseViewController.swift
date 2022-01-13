@@ -47,18 +47,20 @@ class BaseViewController: UIViewController {
     }
     
     private func configureActivityIndicator() {
+        let indicatorColor: UIColor = .black.withAlphaComponent(0.5)
         activityIndicatorView = NVActivityIndicatorView(frame: .zero,
-                                                        type: .lineScale,
-                                                        color: .black.withAlphaComponent(0.5))
+                                                        type: .circleStrokeSpin,
+                                                        color: indicatorColor)
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicatorView.isHidden = true
         view.addSubview(activityIndicatorView)
     }
     
     private func layoutActivityIndicator() {
+        let indicatorSide: CGFloat = 35
         NSLayoutConstraint.activate([
-            activityIndicatorView.widthAnchor.constraint(equalToConstant: 35),
-            activityIndicatorView.heightAnchor.constraint(equalToConstant: 35),
+            activityIndicatorView.widthAnchor.constraint(equalToConstant: indicatorSide),
+            activityIndicatorView.heightAnchor.constraint(equalToConstant: indicatorSide),
             activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])

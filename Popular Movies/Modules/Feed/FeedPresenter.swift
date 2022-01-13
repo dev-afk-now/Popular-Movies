@@ -11,6 +11,7 @@ protocol FeedPresenterProtocol: AnyObject {
     var movieListCount: Int { get }
     func configureView()
     func getMovieItemForCell(at index: Int) -> MovieCellItem
+    func paginateMovieList()
 }
 
 final class FeedPresenter {
@@ -19,6 +20,8 @@ final class FeedPresenter {
     private let repository: FeedRepositoryProtocol
     
     private var movies = [MovieCellItem]()
+    private var isLoading = false
+    private var pageToLoad = 1
     
     init(view: FeedViewProtocol,
          router: FeedRouterProtocol,
@@ -27,10 +30,35 @@ final class FeedPresenter {
         self.router = router
         self.repository = repository
     }
+    
+    private func fetchMovies() {
+        repository.fetchMovies(page: pageToLoad) { [weak self] result in
+            print("Page: \(self?.pageToLoad)")
+            switch result {
+            case .success(let movieList):
+                self?.movies += movieList
+                self?.view?.updateView()
+                self?.pageToLoad += 1
+                self?.isLoading = false
+            default:
+                break
+            }
+        }
+    }
 }
 
 extension FeedPresenter: FeedPresenterProtocol {
+    func paginateMovieList() {
+        if !self.isLoading {
+            self.isLoading = true
+            DispatchQueue.global().async {
+                self.fetchMovies()
+            }
+        }
+    }
+    
     func getMovieItemForCell(at index: Int) -> MovieCellItem {
+        print(movies[index])
         return movies[index]
     }
     
@@ -39,14 +67,6 @@ extension FeedPresenter: FeedPresenterProtocol {
     }
     
     func configureView() {
-        repository.fetchMovies { [weak self] result in
-            switch result {
-            case .success(let movieList):
-                self?.movies = movieList
-                self?.view?.updateView()
-            case .failure(let failure):
-                self?.view?.showError(failure.message ?? "")
-            }
-        }
+        fetchMovies()
     }
 }

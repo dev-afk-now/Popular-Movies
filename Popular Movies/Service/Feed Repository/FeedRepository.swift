@@ -8,15 +8,11 @@
 import Foundation
 
 protocol FeedRepositoryProtocol {
-    func fetchMovies(completion: @escaping(Result<[MovieCellItem], CustomError>) -> Void)
+    func fetchMovies(page: Int, completion: @escaping(Result<[MovieCellItem], CustomError>) -> Void)
 }
 
 final class FeedRepository {
     private let service: NetworkServiceProtocol
-    private var pageToLoad: Int = 1
-    
-    private lazy var listPath = URL(
-        string: EndPoint.popularMovies(page: pageToLoad).endPoint)
     
     init(service: NetworkServiceProtocol) {
         self.service = service
@@ -25,8 +21,8 @@ final class FeedRepository {
 }
 
 extension FeedRepository: FeedRepositoryProtocol {
-    func fetchMovies(completion: @escaping(Result<[MovieCellItem], CustomError>) -> Void) {
-        guard let url = listPath else {
+    func fetchMovies(page: Int, completion: @escaping(Result<[MovieCellItem], CustomError>) -> Void) {
+        guard let url = EndPoint.popularMovies(page: page).endPoint else {
             completion(.failure(CustomError(message: "Corrupted URL")))
             return
         }
@@ -34,7 +30,6 @@ extension FeedRepository: FeedRepositoryProtocol {
             print(result)
             switch result {
             case .success(let success):
-                self.pageToLoad += 1
                 let movieList = success.results.map(MovieCellItem.init)
                 // TODO: Persistence
                 completion(.success(movieList))

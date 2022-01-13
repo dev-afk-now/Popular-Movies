@@ -9,21 +9,28 @@ import UIKit
 
 protocol FeedViewProtocol: AnyObject {
     func updateView()
-    func showError(_ message: String)
 }
 
 class FeedViewController: BaseViewController {
     var presenter: FeedPresenterProtocol!
     
+    private var isLoading = false
+    
     // MARK: - Private properties -
+    
+    private lazy var searchBarView: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        return searchBar
+    }()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 100
         MovieTableCell.register(in: tableView)
+        TableLoadingCell.register(in: tableView)
         return tableView
     }()
     
@@ -54,38 +61,83 @@ class FeedViewController: BaseViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
+    
+    private func scrollViewDidScrollToEnd() {
+            if !self.isLoading {
+                self.isLoading = true
+                DispatchQueue.global().async {
+                    self.presenter.paginateMovieList()
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                        self.isLoading = false
+                    }
+                }
+            }
+        }
 }
 
 extension FeedViewController: FeedViewProtocol {
-    func showError(_ message: String) {
-        self.showAlert(with: message)
-    }
-    
     func updateView() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.hideActivityIndicator()
+            self?.tableView.reloadData()
         }
     }
 }
 
 extension FeedViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView,
+                   didSelectRowAt indexPath: IndexPath) {
         //
     }
 }
 
 extension FeedViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView,
-                   numberOfRowsInSection section: Int) -> Int {
-        presenter.movieListCount
+    func numberOfSections(in tableView: UITableView) -> Int {
+        2
     }
     
     func tableView(_ tableView: UITableView,
+                   numberOfRowsInSection section: Int) -> Int {
+            if section == 0 {
+                return presenter.movieListCount
+            } else if section == 1 {
+                return 1
+            } else {
+                return 0
+            }
+        }
+    
+    func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = MovieTableCell.cell(in: tableView, for: indexPath)
-        let cellState = presenter.getMovieItemForCell(at: indexPath.row)
-        cell.configure(with: cellState)
-        return cell
+        if indexPath.section == 0 {
+            let cellState = presenter.getMovieItemForCell(at: indexPath.row)
+            let cell = MovieTableCell.cell(in: tableView, for: indexPath)
+            cell.configure(with: cellState)
+            return cell
+        } else {
+            let cell = TableLoadingCell.cell(in: tableView, for: indexPath)
+            cell.startAnimating()
+            return cell
+        }
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return UITableView.automaticDimension
+        } else {
+            return 55 //Loading Cell height
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        if (offsetY > contentHeight - scrollView.frame.height * 4) {
+            presenter.paginateMovieList()
+        }
     }
 }
 

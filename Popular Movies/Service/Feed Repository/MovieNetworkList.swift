@@ -15,7 +15,7 @@ struct MovieNetworkItem: Codable {
     var id: Int
     var title: String
     var genres: [Int]
-    var backdropPath: String
+    var backdropPath: String?
     var rating: Double
     
     enum CodingKeys: String, CodingKey {
