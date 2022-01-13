@@ -8,7 +8,9 @@
 import Foundation
 
 protocol FeedRepositoryProtocol {
-    func fetchMovies(page: Int, completion: @escaping(Result<[MovieCellItem], CustomError>) -> Void)
+    func fetchMovies(keyword: String?,
+                     page: Int,
+                     completion: @escaping(Result<[MovieCellItem], CustomError>) -> Void)
 }
 
 final class FeedRepository {
@@ -17,17 +19,20 @@ final class FeedRepository {
     init(service: NetworkServiceProtocol) {
         self.service = service
     }
-    
 }
 
 extension FeedRepository: FeedRepositoryProtocol {
-    func fetchMovies(page: Int, completion: @escaping(Result<[MovieCellItem], CustomError>) -> Void) {
-        guard let url = EndPoint.popularMovies(page: page).endPoint else {
-            completion(.failure(CustomError(message: "Corrupted URL")))
-            return
+    func fetchMovies(keyword: String?,
+                     page: Int,
+                     completion: @escaping(Result<[MovieCellItem], CustomError>) -> Void) {
+        var endPoint: EndPoint {
+            if let keyword = keyword {
+                return EndPoint.searchMovies(query: keyword)
+            } else {
+                return EndPoint.popular(page: page)
+            }
         }
-        service.request(url: url) { (result: Result<MovieNetworkList, CustomError>) in
-            print(result)
+        service.request(endPoint: endPoint) { (result: Result<MovieNetworkList, CustomError>) in
             switch result {
             case .success(let success):
                 let movieList = success.results.map(MovieCellItem.init)

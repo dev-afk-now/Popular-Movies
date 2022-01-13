@@ -21,6 +21,7 @@ class FeedViewController: BaseViewController {
     private lazy var searchBarView: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.delegate = self
         return searchBar
     }()
     
@@ -61,19 +62,6 @@ class FeedViewController: BaseViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-    
-    private func scrollViewDidScrollToEnd() {
-            if !self.isLoading {
-                self.isLoading = true
-                DispatchQueue.global().async {
-                    self.presenter.paginateMovieList()
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        self.isLoading = false
-                    }
-                }
-            }
-        }
 }
 
 extension FeedViewController: FeedViewProtocol {
@@ -127,7 +115,7 @@ extension FeedViewController: UITableViewDataSource {
         if indexPath.section == 0 {
             return UITableView.automaticDimension
         } else {
-            return 55 //Loading Cell height
+            return 55
         }
     }
     
@@ -138,6 +126,11 @@ extension FeedViewController: UITableViewDataSource {
         if (offsetY > contentHeight - scrollView.frame.height * 4) {
             presenter.paginateMovieList()
         }
+    }
+}
+
+extension FeedViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     }
 }
 

@@ -9,16 +9,20 @@ import Foundation
 import Alamofire
 
 protocol NetworkRequestProtocol {
-    func GET<T: Decodable>(url: URL, completion: @escaping (Result<T, CustomError>) -> Void)
+    func GET<T: Decodable>(endPoint: EndPoint,
+                           completion: @escaping (Result<T, CustomError>) -> Void)
 }
 
-final class NetworkRequest {
-}
+final class NetworkRequest {}
 
 extension NetworkRequest: NetworkRequestProtocol {
-    func GET<T>(url: URL, completion: @escaping (Result<T, CustomError>) -> Void) where T : Decodable {
-        AF.request(url, method: .get, parameters: [:], encoding: URLEncoding.default).responseData { response in
-            let customError = CustomError(with: response.error)
+    func GET<T: Decodable>(endPoint: EndPoint,
+                           completion: @escaping (Result<T, CustomError>) -> Void) {
+        print(endPoint.fullURLString())
+        AF.request(endPoint.fullURLString(),
+                   method: endPoint.method,
+                   parameters: endPoint.parameters,
+                   encoding: endPoint.encoding).responseData { response in
             switch response.result {
             case .success(let data):
                 do {
@@ -33,7 +37,7 @@ extension NetworkRequest: NetworkRequestProtocol {
                     }
                 }
             case .failure:
-                completion(.failure(customError))
+                completion(.failure(.init(with: response.error)))
             }
         }
     }

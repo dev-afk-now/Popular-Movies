@@ -9,7 +9,8 @@ import Foundation
 import Alamofire
 
 protocol NetworkServiceProtocol {
-    func request<T: Decodable>(url: URL?, completion: @escaping (Result<T, CustomError>) -> Void)
+    func request<T: Decodable>(endPoint: EndPoint,
+                               completion: @escaping (Result<T, CustomError>) -> Void)
 }
 
 final class NetworkService {
@@ -21,11 +22,8 @@ final class NetworkService {
 }
 
 extension NetworkService: NetworkServiceProtocol {
-    func request<T: Decodable>(url: URL?, completion: @escaping (Result<T, CustomError>) -> Void) {
-        guard let url = url else {
-            return
-        }
-        requestService.GET(url: url) { (result: Result<T, CustomError>) -> Void in
+    func request<T: Decodable>(endPoint: EndPoint, completion: @escaping (Result<T, CustomError>) -> Void) {
+        requestService.GET(endPoint: endPoint) { (result: Result<T, CustomError>) -> Void in
             switch result {
             case .success(let success):
                 completion(.success(success))

@@ -12,6 +12,7 @@ protocol FeedPresenterProtocol: AnyObject {
     func configureView()
     func getMovieItemForCell(at index: Int) -> MovieCellItem
     func paginateMovieList()
+    func search(text: String)
 }
 
 final class FeedPresenter {
@@ -32,8 +33,8 @@ final class FeedPresenter {
     }
     
     private func fetchMovies() {
-        repository.fetchMovies(page: pageToLoad) { [weak self] result in
-            print("Page: \(self?.pageToLoad)")
+        repository.fetchMovies(keyword: nil, page: pageToLoad) { [weak self] result in
+//            print("Page: \(self?.pageToLoad)")
             switch result {
             case .success(let movieList):
                 self?.movies += movieList
@@ -48,6 +49,9 @@ final class FeedPresenter {
 }
 
 extension FeedPresenter: FeedPresenterProtocol {
+    func search(text: String) {
+    }
+    
     func paginateMovieList() {
         if !self.isLoading {
             self.isLoading = true
