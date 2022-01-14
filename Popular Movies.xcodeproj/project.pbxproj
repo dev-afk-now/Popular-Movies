@@ -7,15 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		286869681825F784BD7A0CB0 /* Pods_Popular_Movies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 985A3680CD4F1E474E4000AC /* Pods_Popular_Movies.framework */; };
+		BC554DA6731B0361A455A7BF /* Pods_Popular_Movies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 985A3680CD4F1E474E4000AC /* Pods_Popular_Movies.framework */; };
 		D50BA309278F1DF700E10833 /* MovieTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BA308278F1DF700E10833 /* MovieTableCell.swift */; };
 		D50BA30D278F20B000E10833 /* TableCellRegistrable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BA30B278F20B000E10833 /* TableCellRegistrable.swift */; };
 		D50BA30E278F20B000E10833 /* TableCellReusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BA30C278F20B000E10833 /* TableCellReusable.swift */; };
 		D50BA310278F20CF00E10833 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BA30F278F20CF00E10833 /* BaseTableViewCell.swift */; };
 		D519C971278C7D340018155F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D519C970278C7D340018155F /* AppDelegate.swift */; };
 		D519C975278C7D340018155F /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D519C974278C7D340018155F /* FeedViewController.swift */; };
-		D519C97A278C7D350018155F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D519C979278C7D350018155F /* Assets.xcassets */; };
-		D519C97D278C7D350018155F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D519C97B278C7D350018155F /* LaunchScreen.storyboard */; };
 		D57959DC278D7567003CED85 /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959DB278D7567003CED85 /* FeedPresenter.swift */; };
 		D57959DE278D75E0003CED85 /* FeedConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959DD278D75E0003CED85 /* FeedConfigurator.swift */; };
 		D57959E0278D76F9003CED85 /* FeedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959DF278D76F9003CED85 /* FeedRouter.swift */; };
@@ -67,7 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				286869681825F784BD7A0CB0 /* Pods_Popular_Movies.framework in Frameworks */,
+				BC554DA6731B0361A455A7BF /* Pods_Popular_Movies.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,8 +309,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D519C97D278C7D350018155F /* LaunchScreen.storyboard in Resources */,
-				D519C97A278C7D350018155F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,7 +449,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -508,7 +504,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

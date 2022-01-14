@@ -20,31 +20,23 @@ final class FeedPresenter {
     private let router: FeedRouterProtocol
     private let repository: FeedRepositoryProtocol
     
+    
+    private var searchText: String = ""
+    
     private var searchTask: DispatchWorkItem?
+    private var searchedResults = [MovieCellItem]()
     
-    private var movies = [MovieCellItem]()
-    private var isLoading = false
-    private var pageToLoad = 1
-    
-    private var isSearchingForPost: Bool {
-        !searchText.isEmpty
+    private var isSearching: Bool {
+        return !searchText.isEmpty
     }
     
-    private var postList: [PostCellModel] = []
-    private var searchResults: [PostCellModel] = []
-    private var dataSource: [PostCellModel] {
-        get {
-            var list = isSearchingForPost ? searchResults : postList
-            list = sortedItems(list, by: selectedSortOption)
-            return list
-        }
-        set {
-            if isSearchingForPost {
-                searchResults = newValue
-            } else {
-                postList = newValue
-            }
-        }
+    private var pageToLoad = 1
+    
+    private var isLoading = false
+    
+    private var popularMovies = [MovieCellItem]()
+    private var moviesDataSource: [MovieCellItem] {
+        isSearching ? searchedResults : popularMovies
     }
     
     init(view: FeedViewProtocol,
@@ -55,12 +47,26 @@ final class FeedPresenter {
         self.repository = repository
     }
     
-    private func fetchMovies() {
-        repository.fetchMovies(keyword: nil, page: pageToLoad) { [weak self] result in
-//            print("Page: \(self?.pageToLoad)")
+    private func fetchPopularMovies() {
+        repository.fetchPopular(page: pageToLoad) { [weak self] result in
             switch result {
             case .success(let movieList):
-                self?.movies += movieList
+                self?.popularMovies += movieList
+                self?.view?.updateView()
+                self?.pageToLoad += 1
+                self?.isLoading = false
+            case .failure:
+                self?.view?.showError()
+            }
+        }
+    }
+    
+    private func fetchMovieByKeyword(searchText: String) {
+        repository.searchMovies(keyword: searchText,
+                                page: pageToLoad) { [weak self] result in
+            switch result {
+            case .success(let movieList):
+                self?.searchedResults += movieList
                 self?.view?.updateView()
                 self?.pageToLoad += 1
                 self?.isLoading = false
@@ -71,6 +77,8 @@ final class FeedPresenter {
     }
     
     private func executeSearch(with text: String) {
+        pageToLoad = 1
+        searchedResults.removeAll()
         if text.isEmpty {
             breakSearch(of: searchTask)
             return
@@ -79,48 +87,45 @@ final class FeedPresenter {
             return
         }
         searchTask?.cancel()
-        let workItem = DispatchWorkItem { [unowned self] in
-            repository.fetchMovies(keyword: text,
-                                   page: pageToLoad) { result in
-                switch result {
-                case .success(let movies):
-                    self.movies = movies
-                    self.view?.updateView()
-                default:
-                    break
-                }
-            }        }
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.fetchMovieByKeyword(searchText: text)
+        }
         searchTask = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: workItem)
     }
     
     private func breakSearch(of dispatchWorkItem: DispatchWorkItem?) {
         dispatchWorkItem?.cancel()
-        view?.updateView()
+        fetchPopularMovies()
     }
 }
 
 extension FeedPresenter: FeedPresenterProtocol {
     func search(text: String) {
+        searchText = text
         executeSearch(with: text)
     }
     
     func paginateMovieList() {
         if !self.isLoading {
             self.isLoading = true
-            self.fetchMovies()
+            if isSearching {
+                self.fetchMovieByKeyword(searchText: searchText)
+            } else {
+                self.fetchPopularMovies()
+            }
         }
     }
     
     func getMovieItemForCell(at index: Int) -> MovieCellItem {
-        return movies[index]
+        return moviesDataSource[index]
     }
     
     var movieListCount: Int {
-        movies.count
+        moviesDataSource.count
     }
     
     func configureView() {
-        fetchMovies()
+        fetchPopularMovies()
     }
 }

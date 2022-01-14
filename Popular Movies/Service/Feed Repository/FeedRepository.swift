@@ -8,9 +8,11 @@
 import Foundation
 
 protocol FeedRepositoryProtocol {
-    func fetchMovies(keyword: String?,
-                     page: Int,
-                     completion: @escaping(Result<[MovieCellItem], CustomError>) -> ())
+    func fetchPopular(page: Int,
+                      completion: @escaping(Result<[MovieCellItem], CustomError>) -> ())
+    func searchMovies(keyword: String,
+                      page: Int,
+                      completion: @escaping(Result<[MovieCellItem], CustomError>) -> ())
 }
 
 final class FeedRepository {
@@ -22,18 +24,9 @@ final class FeedRepository {
 }
 
 extension FeedRepository: FeedRepositoryProtocol {
-    func fetchMovies(keyword: String?,
-                     page: Int,
-                     completion: @escaping(Result<[MovieCellItem], CustomError>) -> ()) {
-        var endPoint: EndPoint {
-            if let keyword = keyword {
-                return EndPoint.searchMovies(query: keyword, page: page)
-            } else {
-                return EndPoint.popular(page: page)
-            }
-        }
-        service.request(endPoint: endPoint) { (result: Result<MovieNetworkList, CustomError>) in
-            print(endPoint.fullURLString())
+    func fetchPopular(page: Int, completion: @escaping (Result<[MovieCellItem], CustomError>) -> ()) {
+        let endPoint: EndPoint = .popular(page: page)
+        requestForMovies(endPoint: endPoint) { result in
             switch result {
             case .success(let success):
                 let movieList = success.results.map(MovieCellItem.init)
@@ -42,6 +35,29 @@ extension FeedRepository: FeedRepositoryProtocol {
             case .failure(let failure):
                 completion(.failure(failure))
             }
+        }
+    }
+    
+    func searchMovies(keyword: String,
+                      page: Int,
+                      completion: @escaping (Result<[MovieCellItem], CustomError>) -> ()) {
+        let endPoint: EndPoint = .searchMovies(query: keyword, page: page)
+        requestForMovies(endPoint: endPoint) { result in
+            switch result {
+            case .success(let success):
+                let movieList = success.results.map(MovieCellItem.init)
+                // TODO: Persistence
+                completion(.success(movieList))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func requestForMovies(endPoint: EndPoint,
+                          completion: @escaping(Result<MovieNetworkList, CustomError>) -> ()) {
+        service.request(endPoint: endPoint) { result in
+            completion(result)
         }
     }
 }
