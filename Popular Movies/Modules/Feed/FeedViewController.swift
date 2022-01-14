@@ -26,6 +26,23 @@ class FeedViewController: BaseViewController {
         return searchBar
     }()
     
+    private lazy var sortButton: UIBarButtonItem = {
+        var button = UIBarButtonItem(image: UIImage(systemName: "text.append"),
+                                     style: .done,
+                                     target: self,
+                                     action: #selector(sortButtonTapped))
+        button.tintColor = .black
+        return button
+    }()
+    
+    private lazy var titleLabel: UILabel = {
+        let title = UILabel()
+        title.textColor = .black
+        title.font = UIFont(name: "Avenir", size: 20)
+        title.text = "Popular Movies"
+        return title
+    }()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -41,33 +58,49 @@ class FeedViewController: BaseViewController {
         presenter.configureView()
         configureTableView()
         setupConstraints()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        setupNavigationBar()
         showActivityIndicator()
     }
     
+    private func setupNavigationBar() {
+        navigationController?.navigationBar.scrollEdgeAppearance = UINavigationBarAppearance()
+        navigationController?.navigationBar.standardAppearance = UINavigationBarAppearance()
+        navigationItem.rightBarButtonItem = sortButton
+        navigationItem.titleView = titleLabel
+    }
+    
     private func configureTableView() {
-        tableView.backgroundColor = .red
         tableView.keyboardDismissMode = .interactive
     }
     
     private func setupConstraints() {
-        view.addSubview(tableView)
+        view.addSubview(titleLabel)
         view.addSubview(searchBarView)
+        view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
+            
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
             searchBarView.topAnchor.constraint(equalTo: view.topAnchor),
             searchBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            searchBarView.bottomAnchor.constraint(equalTo: tableView.topAnchor),
             
             tableView.topAnchor.constraint(equalTo: searchBarView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+    }
+    
+    @objc private func sortButtonTapped() {
+        showActionSheet(title: "Sort",
+                        with: presenter.sortOptionsString) {
+            [weak self] actionTitle in
+            print(actionTitle)
+            self?.presenter.sortMovies(with: actionTitle)
+        }
     }
 }
 
@@ -129,6 +162,16 @@ extension FeedViewController: UITableViewDataSource {
             return 55
         }
     }
+    func tableView(_ tableView: UITableView,
+                   willDisplay cell: UITableViewCell,
+                   forRowAt indexPath: IndexPath) {
+        print(indexPath.row)
+        print(presenter.movieListCount)
+        
+        if indexPath.row == presenter.movieListCount - 2 {
+            
+        }
+    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
@@ -147,3 +190,26 @@ extension FeedViewController: UISearchBarDelegate {
     }
 }
 
+
+enum SortOption: CaseIterable {
+    case dateAscending
+    case dateDescending
+    case popularityAscending
+    case popularityDescending
+    case none
+    
+    var description: String {
+        switch self {
+        case .dateAscending:
+            return "Date Ascending"
+        case .dateDescending:
+            return "Date Descending"
+        case .popularityAscending:
+            return "Popularity Ascending"
+        case .popularityDescending:
+            return "Popularity Descending"
+        case .none:
+            return "Default"
+        }
+    }
+}

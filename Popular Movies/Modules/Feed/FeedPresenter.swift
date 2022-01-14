@@ -9,10 +9,12 @@ import Foundation
 
 protocol FeedPresenterProtocol: AnyObject {
     var movieListCount: Int { get }
+    var sortOptionsString: [String] { get }
     func configureView()
     func getMovieItemForCell(at index: Int) -> MovieCellItem
     func paginateMovieList()
     func search(text: String)
+    func sortMovies(with sortOptionString: String)
 }
 
 final class FeedPresenter {
@@ -101,6 +103,16 @@ final class FeedPresenter {
 }
 
 extension FeedPresenter: FeedPresenterProtocol {
+    func sortMovies(with stringOption: String) {
+        let pickedOption = SortOption.allCases.first { $0.description == stringOption }
+        guard let option = pickedOption else { return }
+        // do something...
+    }
+    
+    var sortOptionsString: [String] {
+        SortOption.allCases.map{ $0.description }
+    }
+    
     func search(text: String) {
         searchText = text
         executeSearch(with: text)
