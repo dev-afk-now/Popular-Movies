@@ -16,24 +16,25 @@ protocol FeedRepositoryProtocol {
 }
 
 final class FeedRepository {
-    private let service: NetworkServiceProtocol
+    private let networkService: NetworkServiceProtocol
     private let imageService: ImageService
     
     init(networkService: NetworkServiceProtocol,
          imageService: ImageService) {
-        self.service = networkService
+        self.networkService = networkService
         self.imageService = imageService
     }
     
-    private func createMovieItems(movieList: @escaping([MovieNetworkItem]) -> ()) {
-        let movieList = success.results.map {
-            [weak self] movie -> MovieCellItem in
+    private func createMovieItems(movieList: [MovieNetworkItem],
+                                  completion: @escaping([MovieCellItem]) -> ()) {
+        let movies = movieList.map { [weak self] movie -> MovieCellItem in
             var newMovie = MovieCellItem(with: movie)
                self?.imageService.fetchImage(movie.imageURL) { local in
                    newMovie.imageURL = local
                }
             return newMovie
         }
+        completion(movies)
     }
 }
 
@@ -41,12 +42,14 @@ extension FeedRepository: FeedRepositoryProtocol {
     func fetchPopular(page: Int,
                       completion: @escaping (Result<[MovieCellItem], CustomError>) -> ()) {
         let endPoint: EndPoint = .popular(page: page)
-        requestForMovies(endPoint: endPoint) { result in
+        networkService.request(endPoint: endPoint) {
+            (result: Result<MovieNetworkList, CustomError>) in
             switch result {
             case .success(let success):
-
+                self.createMovieItems(movieList: success.results) { movies in
+                    completion(.success(movies))
+                }
                 // TODO: Persistence
-                completion(.success(movieList))
             case .failure(let failure):
                 completion(.failure(failure))
             }
@@ -57,23 +60,17 @@ extension FeedRepository: FeedRepositoryProtocol {
                       page: Int,
                       completion: @escaping (Result<[MovieCellItem], CustomError>) -> ()) {
         let endPoint: EndPoint = .searchMovies(query: keyword, page: page)
-        requestForMovies(endPoint: endPoint) { result in
+        networkService.request(endPoint: endPoint) {
+            (result: Result<MovieNetworkList, CustomError>) in
             switch result {
             case .success(let success):
-                self.createImages(contentsOf: success.results.map{ $0.imageURL })
-                let movieList = success.results.map(MovieCellItem.init)
+                self.createMovieItems(movieList: success.results) { movies in
+                    completion(.success(movies))
+                }
                 // TODO: Persistence
-                completion(.success(movieList))
             case .failure(let failure):
                 completion(.failure(failure))
             }
-        }
-    }
-    
-    func requestForMovies(endPoint: EndPoint,
-                          completion: @escaping(Result<MovieNetworkList, CustomError>) -> ()) {
-        service.request(endPoint: endPoint) { result in
-            completion(result)
         }
     }
 }

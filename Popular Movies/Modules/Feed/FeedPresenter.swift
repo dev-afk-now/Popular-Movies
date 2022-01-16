@@ -12,12 +12,12 @@ protocol FeedPresenterProtocol: AnyObject {
     var sortOptionsString: [String] { get }
     func configureView()
     func getMovieItemForCell(at index: Int) -> MovieCellItem
-    func paginateMovieList()
+    func loadMoreData()
     func search(text: String)
     func sortMovies(with sortOptionString: String)
 }
 
-final class FeedPresenter {
+final class FeedPresenter: NSObject {
     weak var view: FeedViewProtocol?
     private let router: FeedRouterProtocol
     private let repository: FeedRepositoryProtocol
@@ -31,6 +31,10 @@ final class FeedPresenter {
     private var isSearching: Bool {
         return !searchText.isEmpty
     }
+    
+    @objc dynamic var selectedSortingOption: SortOption = .mostPopular
+    
+    private var selectedSortingObservation: NSKeyValueObservation?
     
     private var pageToLoad = 1
     
@@ -47,6 +51,13 @@ final class FeedPresenter {
         self.view = view
         self.router = router
         self.repository = repository
+        super.init()
+        
+        selectedSortingObservation = observe(\FeedPresenter.selectedSortingOption,
+                 options: [.new]) { [weak self] (vc, newValue) in
+            guard let strongSelf = self else { return }
+            strongSelf.isSearching ? strongSelf.fetchMovieByKeyword(searchText: strongSelf.searchText) : strongSelf.fetchPopularMovies()
+        }
     }
     
     private func fetchPopularMovies() {
@@ -104,13 +115,13 @@ final class FeedPresenter {
 
 extension FeedPresenter: FeedPresenterProtocol {
     func sortMovies(with stringOption: String) {
-        let pickedOption = SortOption.allCases.first { $0.description == stringOption }
+        let pickedOption = SortOption.allCases.first { $0.message == stringOption }
         guard let option = pickedOption else { return }
-        // do something...
+        selectedSortingOption = option
     }
     
     var sortOptionsString: [String] {
-        SortOption.allCases.map{ $0.description }
+        SortOption.allCases.map{ $0.message }
     }
     
     func search(text: String) {
@@ -118,7 +129,7 @@ extension FeedPresenter: FeedPresenterProtocol {
         executeSearch(with: text)
     }
     
-    func paginateMovieList() {
+    func loadMoreData() {
         if !self.isLoading {
             self.isLoading = true
             if isSearching {

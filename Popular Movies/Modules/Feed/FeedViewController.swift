@@ -168,7 +168,7 @@ extension FeedViewController: UITableViewDataSource {
                    willDisplay cell: UITableViewCell,
                    forRowAt indexPath: IndexPath) {
         if indexPath.row == presenter.movieListCount - 3 {
-            presenter.paginateMovieList()
+            presenter.loadMoreData()
         }
     }
 }
@@ -181,25 +181,35 @@ extension FeedViewController: UISearchBarDelegate {
 }
 
 
-enum SortOption: CaseIterable {
-    case dateAscending
-    case dateDescending
-    case popularityAscending
-    case popularityDescending
-    case none
+@objc enum SortOption: Int, CaseIterable {
+    case mostPopular = 0
+    case highestRating = 1
+    case mostVoted = 2
+    case newest = 3
+    
+    var message: String {
+        switch self {
+        case .mostPopular:
+            return "Most Popular"
+        case .highestRating:
+            return "Highest Rating"
+        case .mostVoted:
+            return "Most Voted"
+        case .newest:
+            return "Newest"
+        }
+    }
     
     var description: String {
         switch self {
-        case .dateAscending:
-            return "Date Ascending"
-        case .dateDescending:
-            return "Date Descending"
-        case .popularityAscending:
-            return "Popularity Ascending"
-        case .popularityDescending:
-            return "Popularity Descending"
-        case .none:
-            return "Default"
+        case .mostPopular:
+            return "popularity.desc"
+        case .highestRating:
+            return "popularity.desc"
+        case .mostVoted:
+            return "vote_count.desc"
+        case .newest:
+            return "release_date.desc"
         }
     }
 }
