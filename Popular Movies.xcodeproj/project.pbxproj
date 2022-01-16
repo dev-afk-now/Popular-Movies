@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		41685724279452B100E999FC /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4168571F279452B100E999FC /* ImageService.swift */; };
+		41685725279452B100E999FC /* ImageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41685721279452B100E999FC /* ImageRequest.swift */; };
+		41685726279452B100E999FC /* HashService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41685723279452B100E999FC /* HashService.swift */; };
 		BC554DA6731B0361A455A7BF /* Pods_Popular_Movies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 985A3680CD4F1E474E4000AC /* Pods_Popular_Movies.framework */; };
 		D50BA309278F1DF700E10833 /* MovieTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BA308278F1DF700E10833 /* MovieTableCell.swift */; };
 		D50BA30D278F20B000E10833 /* TableCellRegistrable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BA30B278F20B000E10833 /* TableCellRegistrable.swift */; };
@@ -32,6 +35,9 @@
 
 /* Begin PBXFileReference section */
 		0A6376EC136BE9AF8859326A /* Pods-Popular Movies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Popular Movies.release.xcconfig"; path = "Target Support Files/Pods-Popular Movies/Pods-Popular Movies.release.xcconfig"; sourceTree = "<group>"; };
+		4168571F279452B100E999FC /* ImageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
+		41685721279452B100E999FC /* ImageRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRequest.swift; sourceTree = "<group>"; };
+		41685723279452B100E999FC /* HashService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashService.swift; sourceTree = "<group>"; };
 		645D949840643EF7D4E7538B /* Pods-Popular Movies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Popular Movies.debug.xcconfig"; path = "Target Support Files/Pods-Popular Movies/Pods-Popular Movies.debug.xcconfig"; sourceTree = "<group>"; };
 		985A3680CD4F1E474E4000AC /* Pods_Popular_Movies.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Popular_Movies.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D50BA308278F1DF700E10833 /* MovieTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableCell.swift; sourceTree = "<group>"; };
@@ -72,6 +78,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4168571D279452B100E999FC /* ImageRequest */ = {
+			isa = PBXGroup;
+			children = (
+				41685721279452B100E999FC /* ImageRequest.swift */,
+			);
+			path = ImageRequest;
+			sourceTree = "<group>";
+		};
+		4168571E279452B100E999FC /* ImageService */ = {
+			isa = PBXGroup;
+			children = (
+				4168571F279452B100E999FC /* ImageService.swift */,
+			);
+			name = ImageService;
+			path = ImageRequest/ImageService;
+			sourceTree = "<group>";
+		};
+		41685722279452B100E999FC /* HashService */ = {
+			isa = PBXGroup;
+			children = (
+				41685723279452B100E999FC /* HashService.swift */,
+			);
+			path = HashService;
+			sourceTree = "<group>";
+		};
 		C32744031165698D40B64037 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -183,6 +214,9 @@
 		D57959E5278D7CC2003CED85 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				4168571E279452B100E999FC /* ImageService */,
+				41685722279452B100E999FC /* HashService */,
+				4168571D279452B100E999FC /* ImageRequest */,
 				D5C68EC4278EEB9B0010D9FD /* Reachability Manager */,
 				D57959EF278D9E14003CED85 /* Feed Repository */,
 				D57959E9278D7E4A003CED85 /* NetworkRequest */,
@@ -362,9 +396,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D57959DE278D75E0003CED85 /* FeedConfigurator.swift in Sources */,
+				41685725279452B100E999FC /* ImageRequest.swift in Sources */,
 				D57959EE278D8418003CED85 /* EndPoint.swift in Sources */,
 				D519C975278C7D340018155F /* FeedViewController.swift in Sources */,
 				D50BA310278F20CF00E10833 /* BaseTableViewCell.swift in Sources */,
+				41685726279452B100E999FC /* HashService.swift in Sources */,
 				D5F56BEB278EDD4C006E5F8E /* UIViewController+Alert.swift in Sources */,
 				D5C68EC6278EEBBB0010D9FD /* Reachability Manager.swift in Sources */,
 				D57959F1278D9E4A003CED85 /* FeedRepository.swift in Sources */,
@@ -381,6 +417,7 @@
 				D57959F6278DA195003CED85 /* MovieNetworkList.swift in Sources */,
 				D57959E8278D7CEB003CED85 /* NetworkService.swift in Sources */,
 				D50BA30E278F20B000E10833 /* TableCellReusable.swift in Sources */,
+				41685724279452B100E999FC /* ImageService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

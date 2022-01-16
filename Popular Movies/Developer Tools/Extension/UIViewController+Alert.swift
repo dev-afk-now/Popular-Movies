@@ -20,8 +20,8 @@ extension UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    
-    func showActionSheet(title: String, with actionTitles: [String],
+    func showActionSheet(title: String,
+                         with actionTitles: [String],
                          completion: @escaping BlockWithString) {
         let optionMenu = UIAlertController(title: nil,
                                            message: title,

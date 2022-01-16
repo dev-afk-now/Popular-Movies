@@ -23,6 +23,7 @@ class FeedViewController: BaseViewController {
         let searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.delegate = self
+        searchBar.layer.borderWidth = 0
         return searchBar
     }()
     
@@ -48,6 +49,7 @@ class FeedViewController: BaseViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.separatorStyle = .none
         MovieTableCell.register(in: tableView)
         TableLoadingCell.register(in: tableView)
         return tableView
@@ -83,7 +85,7 @@ class FeedViewController: BaseViewController {
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            searchBarView.topAnchor.constraint(equalTo: view.topAnchor),
+            searchBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
@@ -165,19 +167,7 @@ extension FeedViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    willDisplay cell: UITableViewCell,
                    forRowAt indexPath: IndexPath) {
-        print(indexPath.row)
-        print(presenter.movieListCount)
-        
-        if indexPath.row == presenter.movieListCount - 2 {
-            
-        }
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        
-        if (offsetY > contentHeight - scrollView.frame.height * 4) {
+        if indexPath.row == presenter.movieListCount - 3 {
             presenter.paginateMovieList()
         }
     }

@@ -13,7 +13,10 @@ final class FeedConfigurator {
         let router = FeedRouter(context: view)
         let requestService = NetworkRequest()
         let networkService = NetworkService(requestService: requestService)
-        let repository = FeedRepository(service: networkService)
+        let imageRequest = ImageRequestImplementation()
+        let imageService = ImageServiceImplementation(requestService: imageRequest)
+        let repository = FeedRepository(networkService: networkService,
+                                        imageService: imageService)
         let presenter = FeedPresenter(view: view,
                                       router: router,
                                       repository: repository)

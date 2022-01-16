@@ -10,14 +10,14 @@ import Foundation
 struct MovieCellItem {
     var id: Int
     var title: String
-    var backdropPath: String?
+    var imageURL: URL?
     var genres: [Int]
     var rating: Double
     
     init(with networkData: MovieNetworkItem) {
         self.id = networkData.id
         self.title = networkData.title
-        self.backdropPath = networkData.backdropPath
+        self.imageURL = networkData.imageURL
         self.genres = networkData.genres
         self.rating = networkData.rating
     }

@@ -26,3 +26,12 @@ struct MovieNetworkItem: Codable {
         case rating = "vote_average"
     }
 }
+
+extension MovieNetworkItem {
+    var imageURL: URL? {
+        guard let path = backdropPath else {
+            return nil
+        }
+        return URL(string: "https://image.tmdb.org/t/p/w500\(path)")
+    }
+}
