@@ -10,7 +10,7 @@ import Foundation
 struct MovieCellItem {
     var id: Int
     var title: String
-    var imageURL: URL?
+    var imageURL: String?
     var genres: [Int]
     var rating: Double
     

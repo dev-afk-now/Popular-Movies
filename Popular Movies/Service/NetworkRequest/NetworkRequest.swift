@@ -18,7 +18,9 @@ final class NetworkRequest {}
 extension NetworkRequest: NetworkRequestProtocol {
     func GET<T: Decodable>(endPoint: EndPoint,
                            completion: @escaping (Result<T, CustomError>) -> Void) {
-        print(endPoint.fullURLString())
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            
+        
         AF.request(endPoint.fullURLString(),
                    method: endPoint.method,
                    parameters: endPoint.parameters,
@@ -39,6 +41,7 @@ extension NetworkRequest: NetworkRequestProtocol {
             case .failure:
                 completion(.failure(.init(with: response.error)))
             }
+        }
         }
     }
 }

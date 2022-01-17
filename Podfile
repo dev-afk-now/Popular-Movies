@@ -14,5 +14,5 @@ target 'Popular Movies' do
 
   # UI
   pod 'NVActivityIndicatorView'
-
+  pod 'Kingfisher'
 end

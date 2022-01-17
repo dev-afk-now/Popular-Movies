@@ -22,14 +22,19 @@ extension UIViewController {
     
     func showActionSheet(title: String,
                          with actionTitles: [String],
+                         selected index: Int?,
                          completion: @escaping BlockWithString) {
         let optionMenu = UIAlertController(title: nil,
                                            message: title,
                                            preferredStyle: .actionSheet)
-        for actionTitle in actionTitles {
+        for titleIndex in actionTitles.indices {
+            let actionTitle = actionTitles[titleIndex]
             let alertAction = UIAlertAction(title: actionTitle,
                                             style: .default) { action in
                 completion(action.title ?? "null")
+            }
+            if index == titleIndex {
+                alertAction.setValue(true, forKey: "checked")
             }
             optionMenu.addAction(alertAction)
         }

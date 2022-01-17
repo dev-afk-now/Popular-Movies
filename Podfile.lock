@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (5.5.0)
+  - Kingfisher (7.1.2)
   - netfox (1.20.0)
   - NVActivityIndicatorView (5.1.1):
     - NVActivityIndicatorView/Base (= 5.1.1)
@@ -8,6 +9,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - Kingfisher
   - netfox
   - NVActivityIndicatorView
   - ReachabilitySwift
@@ -15,16 +17,18 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - Kingfisher
     - netfox
     - NVActivityIndicatorView
     - ReachabilitySwift
 
 SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
+  Kingfisher: 44ed6a8504763f27bab46163adfac83f5deb240c
   netfox: 6b5c9724304b0cd99ca8515ac732a9f710e4ea5f
   NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
 
-PODFILE CHECKSUM: 5c618a03295306c8b544fe749bd4497914052fcd
+PODFILE CHECKSUM: f59971b1505bc0707c76413d5e6b3f277aab1ad3
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.8.4

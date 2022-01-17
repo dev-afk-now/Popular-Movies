@@ -98,7 +98,8 @@ class FeedViewController: BaseViewController {
     
     @objc private func sortButtonTapped() {
         showActionSheet(title: "Sort",
-                        with: presenter.sortOptionsString) {
+                        with: presenter.sortOptionsString,
+                        selected: presenter.selectedSortOptionIndex) {
             [weak self] actionTitle in
             print(actionTitle)
             self?.presenter.sortMovies(with: actionTitle)
@@ -127,48 +128,30 @@ extension FeedViewController: UITableViewDelegate {
 }
 
 extension FeedViewController: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        2
-    }
-    
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return presenter.movieListCount
-        } else if section == 1 {
-            return 1
-        } else {
-            return 0
-        }
+        return presenter.movieListCount
     }
     
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cellState = presenter.getMovieItemForCell(at: indexPath.row)
-            let cell = MovieTableCell.cell(in: tableView, for: indexPath)
-            cell.configure(with: cellState)
-            return cell
-        } else {
-            let cell = TableLoadingCell.cell(in: tableView, for: indexPath)
-            cell.startAnimating()
-            return cell
-        }
+        let cellState = presenter.getMovieItemForCell(at: indexPath.row)
+        let cell = MovieTableCell.cell(in: tableView, for: indexPath)
+        cell.configure(with: cellState)
+        return cell
     }
     
     func tableView(_ tableView: UITableView,
                    heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return UITableView.automaticDimension
-        } else {
-            return 55
-        }
+        return 300
     }
+    
     func tableView(_ tableView: UITableView,
                    willDisplay cell: UITableViewCell,
                    forRowAt indexPath: IndexPath) {
         if indexPath.row == presenter.movieListCount - 3 {
             presenter.loadMoreData()
+            showActivityIndicator()
         }
     }
 }
@@ -177,39 +160,5 @@ extension FeedViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar,
                    textDidChange searchText: String) {
         presenter.search(text: searchText)
-    }
-}
-
-
-@objc enum SortOption: Int, CaseIterable {
-    case mostPopular = 0
-    case highestRating = 1
-    case mostVoted = 2
-    case newest = 3
-    
-    var message: String {
-        switch self {
-        case .mostPopular:
-            return "Most Popular"
-        case .highestRating:
-            return "Highest Rating"
-        case .mostVoted:
-            return "Most Voted"
-        case .newest:
-            return "Newest"
-        }
-    }
-    
-    var description: String {
-        switch self {
-        case .mostPopular:
-            return "popularity.desc"
-        case .highestRating:
-            return "popularity.desc"
-        case .mostVoted:
-            return "vote_count.desc"
-        case .newest:
-            return "release_date.desc"
-        }
     }
 }

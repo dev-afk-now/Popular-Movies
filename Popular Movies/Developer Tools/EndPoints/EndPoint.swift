@@ -64,26 +64,22 @@ struct Constants {
 }
 
 enum EndPoint {
-    case popular(page: Int)
+    case popular(page: Int, sortBy: String)
     case searchMovies(query: String, page: Int)
-    case posterImage(path: String)
     
     var path: String {
         switch self {
         case .popular:
-            return "movie/popular"
+            return "discover/movie"
         case .searchMovies:
             return "search/movie"
-        case .posterImage:
-            return "t/p/w500/"
         }
     }
     
     var method: HTTPMethod {
         switch self {
         case .popular,
-                .searchMovies,
-                .posterImage:
+                .searchMovies:
             return .get
         }
     }
@@ -100,8 +96,9 @@ enum EndPoint {
     
     var parameters: [String: Any] {
         switch self {
-        case .popular(page: let page):
-            return ["page": page]
+        case .popular(page: let page, sortBy: let sortBy):
+            return ["sort_by": sortBy,
+                    "page": page]
         case .searchMovies(query: let query, page: let page):
             return ["query": query,
                     "page": page]

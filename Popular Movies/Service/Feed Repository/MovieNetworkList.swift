@@ -28,10 +28,10 @@ struct MovieNetworkItem: Codable {
 }
 
 extension MovieNetworkItem {
-    var imageURL: URL? {
+    var imageURL: String? {
         guard let path = backdropPath else {
             return nil
         }
-        return URL(string: "https://image.tmdb.org/t/p/w500\(path)")
+        return "https://image.tmdb.org/t/p/w500\(path)"
     }
 }

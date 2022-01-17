@@ -47,7 +47,7 @@ class BaseViewController: UIViewController {
     }
     
     private func configureActivityIndicator() {
-        let indicatorColor: UIColor = .black.withAlphaComponent(0.5)
+        let indicatorColor: UIColor = .gray
         activityIndicatorView = NVActivityIndicatorView(frame: .zero,
                                                         type: .circleStrokeSpin,
                                                         color: indicatorColor)
@@ -57,7 +57,7 @@ class BaseViewController: UIViewController {
     }
     
     private func layoutActivityIndicator() {
-        let indicatorSide: CGFloat = 35
+        let indicatorSide: CGFloat = 55
         NSLayoutConstraint.activate([
             activityIndicatorView.widthAnchor.constraint(equalToConstant: indicatorSide),
             activityIndicatorView.heightAnchor.constraint(equalToConstant: indicatorSide),

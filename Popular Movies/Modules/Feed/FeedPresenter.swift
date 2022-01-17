@@ -10,6 +10,7 @@ import Foundation
 protocol FeedPresenterProtocol: AnyObject {
     var movieListCount: Int { get }
     var sortOptionsString: [String] { get }
+    var selectedSortOptionIndex: Int? { get }
     func configureView()
     func getMovieItemForCell(at index: Int) -> MovieCellItem
     func loadMoreData()
@@ -17,7 +18,7 @@ protocol FeedPresenterProtocol: AnyObject {
     func sortMovies(with sortOptionString: String)
 }
 
-final class FeedPresenter: NSObject {
+final class FeedPresenter {
     weak var view: FeedViewProtocol?
     private let router: FeedRouterProtocol
     private let repository: FeedRepositoryProtocol
@@ -32,9 +33,7 @@ final class FeedPresenter: NSObject {
         return !searchText.isEmpty
     }
     
-    @objc dynamic var selectedSortingOption: SortOption = .mostPopular
-    
-    private var selectedSortingObservation: NSKeyValueObservation?
+    private var selectedSortOption: SortOption = .mostPopular
     
     private var pageToLoad = 1
     
@@ -51,17 +50,11 @@ final class FeedPresenter: NSObject {
         self.view = view
         self.router = router
         self.repository = repository
-        super.init()
-        
-        selectedSortingObservation = observe(\FeedPresenter.selectedSortingOption,
-                 options: [.new]) { [weak self] (vc, newValue) in
-            guard let strongSelf = self else { return }
-            strongSelf.isSearching ? strongSelf.fetchMovieByKeyword(searchText: strongSelf.searchText) : strongSelf.fetchPopularMovies()
-        }
     }
     
     private func fetchPopularMovies() {
-        repository.fetchPopular(page: pageToLoad) { [weak self] result in
+        repository.fetchPopular(page: pageToLoad,
+                                sortBy: selectedSortOption.rawValue) { [weak self] result in
             switch result {
             case .success(let movieList):
                 self?.popularMovies += movieList
@@ -104,7 +97,8 @@ final class FeedPresenter: NSObject {
             self?.fetchMovieByKeyword(searchText: text)
         }
         searchTask = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: workItem)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5,
+                                      execute: workItem)
     }
     
     private func breakSearch(of dispatchWorkItem: DispatchWorkItem?) {
@@ -114,10 +108,17 @@ final class FeedPresenter: NSObject {
 }
 
 extension FeedPresenter: FeedPresenterProtocol {
+    var selectedSortOptionIndex: Int? {
+        sortOptionsString.firstIndex(of: selectedSortOption.message)
+    }
+    
     func sortMovies(with stringOption: String) {
         let pickedOption = SortOption.allCases.first { $0.message == stringOption }
         guard let option = pickedOption else { return }
-        selectedSortingOption = option
+        popularMovies.removeAll()
+        pageToLoad = 1
+        selectedSortOption = option
+        fetchPopularMovies()
     }
     
     var sortOptionsString: [String] {
