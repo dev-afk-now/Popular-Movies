@@ -20,6 +20,6 @@ final class BaseNavigationController: UINavigationController {
     }
     
     private func configure() {
-        navigationBar.isTranslucent = true
+        navigationBar.isTranslucent = false
     }
 }

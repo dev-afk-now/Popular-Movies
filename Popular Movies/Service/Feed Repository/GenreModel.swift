@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct NetworkGenreData: Decodable {
+struct NetworkGenreData: Codable {
     var genres: [MovieGenre]
 }
 
-struct MovieGenre: Decodable {
+struct MovieGenre: Codable {
     var id: Int
     var name: String
 }

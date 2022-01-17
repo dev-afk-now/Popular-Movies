@@ -8,6 +8,7 @@
 import Foundation
 
 protocol FeedRepositoryProtocol {
+    func fetchMovieGenres()
     func fetchPopular(page: Int,
                       sortBy: String,
                       completion: @escaping (Result<[MovieCellItem], CustomError>) -> ())
@@ -25,6 +26,20 @@ final class FeedRepository {
 }
 
 extension FeedRepository: FeedRepositoryProtocol {
+    func fetchMovieGenres() {
+        networkService.request(endPoint: .genres) { (result: Result<NetworkGenreData, CustomError>) in
+            switch result {
+            case .success(let success):
+                print(success.genres)
+                // TODO: Persistence
+//                completion(.success(movies))
+            default:
+                break
+//                completion(.failure(failure))
+            }
+        }
+    }
+    
     func fetchPopular(page: Int,
                       sortBy: String,
                       completion: @escaping (Result<[MovieCellItem], CustomError>) -> ()) {

@@ -23,7 +23,6 @@ final class FeedPresenter {
     private let router: FeedRouterProtocol
     private let repository: FeedRepositoryProtocol
     
-    
     private var searchText: String = ""
     
     private var searchTask: DispatchWorkItem?
@@ -53,6 +52,7 @@ final class FeedPresenter {
     }
     
     private func fetchPopularMovies() {
+        print("start popular")
         repository.fetchPopular(page: pageToLoad,
                                 sortBy: selectedSortOption.rawValue) { [weak self] result in
             switch result {
@@ -61,6 +61,7 @@ final class FeedPresenter {
                 self?.view?.updateView()
                 self?.pageToLoad += 1
                 self?.isLoading = false
+                print("finish popular")
             case .failure:
                 self?.view?.showError()
             }
@@ -97,13 +98,17 @@ final class FeedPresenter {
             self?.fetchMovieByKeyword(searchText: text)
         }
         searchTask = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5,
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1,
                                       execute: workItem)
     }
     
     private func breakSearch(of dispatchWorkItem: DispatchWorkItem?) {
         dispatchWorkItem?.cancel()
         fetchPopularMovies()
+    }
+    
+    private func fetchMovieGenres() {
+        repository.fetchMovieGenres()
     }
 }
 
@@ -150,6 +155,13 @@ extension FeedPresenter: FeedPresenterProtocol {
     }
     
     func configureView() {
-        fetchPopularMovies()
+        let group = DispatchGroup()
+        DispatchQueue.global(qos: .background).async(group: group) { [weak self] in
+            guard let strongSelf = self else { return }
+            group.enter()
+            strongSelf.fetchMovieGenres()
+            strongSelf.fetchPopularMovies()
+            group.leave()
+        }
     }
 }

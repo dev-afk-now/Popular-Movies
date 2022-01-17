@@ -22,7 +22,9 @@ final class NetworkService {
 }
 
 extension NetworkService: NetworkServiceProtocol {
-    func request<T: Decodable>(endPoint: EndPoint, completion: @escaping (Result<T, CustomError>) -> ()) {
+    func request<T: Decodable>(endPoint: EndPoint,
+                               completion: @escaping (Result<T, CustomError>) -> ()) {
+        print(endPoint.fullURLString())
         requestService.GET(endPoint: endPoint) { (result: Result<T, CustomError>) -> () in
             switch result {
             case .success(let success):
