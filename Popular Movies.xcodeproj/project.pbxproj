@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		41A1AA192796174A001C8AE8 /* ServerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A1AA182796174A001C8AE8 /* ServerError.swift */; };
+		41A1AA1C279617EB001C8AE8 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A1AA1B279617EB001C8AE8 /* CustomError.swift */; };
 		CABA3327BD13285226032DC6 /* Pods_Popular_Movies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22124C63175E0DE076800B60 /* Pods_Popular_Movies.framework */; };
 		D50BA309278F1DF700E10833 /* MovieTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BA308278F1DF700E10833 /* MovieTableCell.swift */; };
 		D50BA30D278F20B000E10833 /* TableCellRegistrable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BA30B278F20B000E10833 /* TableCellRegistrable.swift */; };
@@ -37,6 +39,8 @@
 /* Begin PBXFileReference section */
 		22124C63175E0DE076800B60 /* Pods_Popular_Movies.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Popular_Movies.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		331974A1A385D3B3CEB6C4A2 /* Pods-Popular Movies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Popular Movies.release.xcconfig"; path = "Target Support Files/Pods-Popular Movies/Pods-Popular Movies.release.xcconfig"; sourceTree = "<group>"; };
+		41A1AA182796174A001C8AE8 /* ServerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerError.swift; sourceTree = "<group>"; };
+		41A1AA1B279617EB001C8AE8 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		D50BA308278F1DF700E10833 /* MovieTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableCell.swift; sourceTree = "<group>"; };
 		D50BA30B278F20B000E10833 /* TableCellRegistrable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCellRegistrable.swift; sourceTree = "<group>"; };
 		D50BA30C278F20B000E10833 /* TableCellReusable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCellReusable.swift; sourceTree = "<group>"; };
@@ -80,6 +84,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		41A1AA1A279617DA001C8AE8 /* Custom Error */ = {
+			isa = PBXGroup;
+			children = (
+				41A1AA1B279617EB001C8AE8 /* CustomError.swift */,
+			);
+			path = "Custom Error";
+			sourceTree = "<group>";
+		};
 		44064626CA881C5EAFF0CC03 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -179,8 +191,9 @@
 		D57959E1278D785E003CED85 /* Developer Tools */ = {
 			isa = PBXGroup;
 			children = (
-				D50BA311278F20DE00E10833 /* Extension */,
+				41A1AA1A279617DA001C8AE8 /* Custom Error */,
 				D50BA30A278F1FAE00E10833 /* TableCell */,
+				D50BA311278F20DE00E10833 /* Extension */,
 				D57959EC278D83DF003CED85 /* EndPoints */,
 				D57959E2278D79AD003CED85 /* BaseComponents */,
 			);
@@ -213,6 +226,7 @@
 			isa = PBXGroup;
 			children = (
 				D57959E7278D7CEB003CED85 /* NetworkService.swift */,
+				41A1AA182796174A001C8AE8 /* ServerError.swift */,
 			);
 			path = NetworkService;
 			sourceTree = "<group>";
@@ -391,10 +405,12 @@
 				D57959F1278D9E4A003CED85 /* FeedRepository.swift in Sources */,
 				D51164CA27957EF0000B775F /* ImageManager.swift in Sources */,
 				D5C4F173278EE6670010EEB5 /* BaseViewController.swift in Sources */,
+				41A1AA192796174A001C8AE8 /* ServerError.swift in Sources */,
 				D50BA309278F1DF700E10833 /* MovieTableCell.swift in Sources */,
 				D57959EB278D7E7C003CED85 /* NetworkRequest.swift in Sources */,
 				D51164C52795624E000B775F /* SortOption.swift in Sources */,
 				D57959E4278D79AD003CED85 /* BaseNavigationController.swift in Sources */,
+				41A1AA1C279617EB001C8AE8 /* CustomError.swift in Sources */,
 				D57959E0278D76F9003CED85 /* FeedRouter.swift in Sources */,
 				D57959F4278DA0E8003CED85 /* MovieCellItem.swift in Sources */,
 				D57959DC278D7567003CED85 /* FeedPresenter.swift in Sources */,

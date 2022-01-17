@@ -5,7 +5,6 @@
 //  Created by devmac on 11.01.2022.
 //
 
-import Foundation
 import Alamofire
 
 protocol NetworkRequestProtocol {
@@ -18,9 +17,7 @@ final class NetworkRequest {}
 extension NetworkRequest: NetworkRequestProtocol {
     func GET<T: Decodable>(endPoint: EndPoint,
                            completion: @escaping (Result<T, CustomError>) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            
-        
+        print(endPoint.fullURLString())
         AF.request(endPoint.fullURLString(),
                    method: endPoint.method,
                    parameters: endPoint.parameters,
@@ -28,8 +25,9 @@ extension NetworkRequest: NetworkRequestProtocol {
             switch response.result {
             case .success(let data):
                 do {
-                    let data = try JSONDecoder().decode(T.self, from: data)
-                    completion(.success(data))
+                let parsedObject = try JSONDecoder().decode(T.self, from: data)
+                    print(parsedObject)
+                    completion(.success(parsedObject))
                 } catch {
                     do {
                         let serverError = try JSONDecoder().decode(ServerErrorModel.self, from: data)
@@ -42,8 +40,5 @@ extension NetworkRequest: NetworkRequestProtocol {
                 completion(.failure(.init(with: response.error)))
             }
         }
-        }
     }
 }
-
-
