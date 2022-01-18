@@ -18,6 +18,7 @@ protocol FeedPresenterProtocol: AnyObject {
     func loadMoreData()
     func search(text: String)
     func sortMovies(with sortOptionString: String)
+    func movieItemSelected(at index: Int)
 }
 
 final class FeedPresenter {
@@ -121,6 +122,10 @@ final class FeedPresenter {
 }
 
 extension FeedPresenter: FeedPresenterProtocol {
+    func movieItemSelected(at index: Int) {
+        router.showDetail(moviesDataSource[index].id)
+    }
+    
     var selectedSortOptionIndex: Int? {
         sortOptionsString.firstIndex(of: selectedSortOption.message)
     }

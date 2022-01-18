@@ -14,19 +14,32 @@ protocol DetailPresenterProtocol: AnyObject {
 final class DetailPresenter {
     weak private var view: DetailViewProtocol?
     private let router: DetailRouterProtocol
-    private let id: Int
+    private let repository: DetailRepositoryProtocol
+    private let movieId: Int
     
     init(view: DetailViewProtocol,
          router: DetailRouterProtocol,
-         id: Int) {
+         repository: DetailRepositoryProtocol,
+         movieId: Int) {
         self.view = view
         self.router = router
-        self.id = id
+        self.repository = repository
+        self.movieId = movieId
+    }
+    
+    private func fetchMovie(by movieId: Int,
+                            completion: EmptyBlock?) {
+        repository.fetchMovie(by: movieId) { result in
+            print(result)
+            completion?()
+        }
     }
 }
 
 extension DetailPresenter: DetailPresenterProtocol {
     func configureView() {
-        
+        fetchMovie(by: movieId) {
+            //
+        }
     }
 }

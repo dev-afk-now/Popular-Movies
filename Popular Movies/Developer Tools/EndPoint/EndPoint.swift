@@ -6,7 +6,7 @@
 //
 
 import Alamofire
-
+//https://api.themoviedb.org/3/movie/550?api_key=748bef7b95d85a33f87a75afaba78982&language=en-US
 struct Constants {
     static let baseURL = "https://api.themoviedb.org/3/"
     static let apiKey = "748bef7b95d85a33f87a75afaba78982"
@@ -17,6 +17,7 @@ enum EndPoint {
     case popular(page: Int, sortBy: String)
     case searchMovies(query: String, page: Int)
     case genres
+    case detail(movieId: Int)
     
     var path: String {
         switch self {
@@ -26,6 +27,8 @@ enum EndPoint {
             return "search/movie"
         case .genres:
             return "genre/movie/list"
+        case .detail(let movieID):
+            return "movie/\(movieID)"
         }
     }
     
@@ -33,7 +36,8 @@ enum EndPoint {
         switch self {
         case .popular,
                 .searchMovies,
-                .genres:
+                .genres,
+                .detail:
             return .get
         }
     }
@@ -42,7 +46,8 @@ enum EndPoint {
         switch self {
         case .popular,
                 .searchMovies,
-                .genres:
+                .genres,
+                .detail:
             return URLEncoding.default
         default:
             return JSONEncoding.default

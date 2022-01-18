@@ -26,6 +26,14 @@ class DetailViewController: BaseViewController {
 //        title.text = "Popular Movies"
 //        return title
 //    }()
+    private lazy var sortButton: UIBarButtonItem = {
+        var button = UIBarButtonItem(image: UIImage(systemName: "text.append"),
+                                     style: .done,
+                                     target: self,
+                                     action: nil)
+        button.tintColor = UIColor.black
+        return button
+    }()
     
 //    private lazy var tableView: UITableView = {
 //        let tableView = UITableView()
@@ -40,12 +48,15 @@ class DetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter.configureView()
+        view.backgroundColor = .red
+        setupNavigationBar()
     }
     
     private func setupNavigationBar() {
 //        navigationController?.navigationBar.scrollEdgeAppearance = UINavigationBarAppearance()
 //        navigationController?.navigationBar.standardAppearance = UINavigationBarAppearance()
-//        navigationItem.rightBarButtonItem = sortButton
+//        navigationItem.leftBarButtonItem = sortButton
 //        navigationItem.titleView = titleLabel
     }
     

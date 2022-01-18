@@ -101,6 +101,11 @@ class FeedViewController: BaseViewController {
         ])
     }
     
+    override func connectionDissapeared() {
+        super.connectionDissapeared()
+        // TODO: do presenter.configureViewOfflineMode
+    }
+    
     @objc private func sortButtonTapped() {
         showActionSheet(title: "Sort",
                         with: presenter.sortOptionsString,
@@ -128,7 +133,7 @@ extension FeedViewController: FeedViewProtocol {
 extension FeedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    didSelectRowAt indexPath: IndexPath) {
-        //
+        presenter.movieItemSelected(at: indexPath.row)
     }
 }
 
