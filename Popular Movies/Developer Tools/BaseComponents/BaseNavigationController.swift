@@ -21,6 +21,5 @@ final class BaseNavigationController: UINavigationController {
     
     private func configure() {
         navigationBar.isTranslucent = false
-        navigationBar.barTintColor = .black
     }
 }

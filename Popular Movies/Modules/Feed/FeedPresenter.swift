@@ -5,14 +5,19 @@
 //  Created by devmac on 11.01.2022.
 //
 
+typealias EmptyBlock = () -> Void
+
 import Foundation
 
 protocol FeedPresenterProtocol: AnyObject {
     var movieListCount: Int { get }
+    var sortOptionsString: [String] { get }
+    var selectedSortOptionIndex: Int? { get }
     func configureView()
     func getMovieItemForCell(at index: Int) -> MovieCellItem
-    func paginateMovieList()
+    func loadMoreData()
     func search(text: String)
+    func sortMovies(with sortOptionString: String)
 }
 
 final class FeedPresenter {
@@ -20,9 +25,25 @@ final class FeedPresenter {
     private let router: FeedRouterProtocol
     private let repository: FeedRepositoryProtocol
     
-    private var movies = [MovieCellItem]()
-    private var isLoading = false
+    private var searchText: String = ""
+    
+    private var searchTask: DispatchWorkItem?
+    private var searchedResults = [MovieCellItem]()
+    
+    private var isSearching: Bool {
+        return !searchText.isEmpty
+    }
+    
+    private var selectedSortOption: SortOption = .mostPopular
+    
     private var pageToLoad = 1
+    
+    private var isLoading = false
+    
+    private var popularMovies = [MovieCellItem]()
+    private var moviesDataSource: [MovieCellItem] {
+        isSearching ? searchedResults : popularMovies
+    }
     
     init(view: FeedViewProtocol,
          router: FeedRouterProtocol,
@@ -32,45 +53,131 @@ final class FeedPresenter {
         self.repository = repository
     }
     
-    private func fetchMovies() {
-        repository.fetchMovies(keyword: nil, page: pageToLoad) { [weak self] result in
-//            print("Page: \(self?.pageToLoad)")
+    private func fetchPopularMovies(completion: EmptyBlock? = nil) {
+        repository.fetchPopular(page: pageToLoad,
+                                sortBy: selectedSortOption.rawValue) { [weak self] result in
             switch result {
             case .success(let movieList):
-                self?.movies += movieList
-                self?.view?.updateView()
+                self?.popularMovies += movieList
                 self?.pageToLoad += 1
                 self?.isLoading = false
-            default:
-                break
+                completion?()
+            case .failure:
+                self?.view?.showError()
             }
         }
+    }
+    
+    private func fetchMovieByKeyword(searchText: String,
+                                     completion: EmptyBlock? = nil) {
+        repository.searchMovies(keyword: searchText,
+                                page: pageToLoad) { [weak self] result in
+            switch result {
+            case .success(let movieList):
+                self?.searchedResults += movieList
+                self?.pageToLoad += 1
+                self?.isLoading = false
+                completion?()
+            case .failure:
+                self?.view?.showError()
+            }
+        }
+    }
+    
+    private func updateView() {
+        view?.updateView()
+    }
+    
+    private func executeSearch(with text: String) {
+        pageToLoad = 1
+        searchedResults.removeAll()
+        if text.isEmpty {
+            breakSearch(of: searchTask)
+            return
+        }
+        if text.count < 2 {
+            return
+        }
+        updateView()
+        searchTask?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.fetchMovieByKeyword(searchText: text) {
+                self?.updateView()
+            }
+        }
+        searchTask = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1,
+                                      execute: workItem)
+    }
+    
+    private func breakSearch(of dispatchWorkItem: DispatchWorkItem?) {
+        dispatchWorkItem?.cancel()
+        fetchPopularMovies(completion: updateView)
+    }
+    
+    private func fetchMovieGenres(completion: @escaping () -> () = { }) {
+        repository.fetchMovieGenres(completion: completion)
     }
 }
 
 extension FeedPresenter: FeedPresenterProtocol {
-    func search(text: String) {
+    var selectedSortOptionIndex: Int? {
+        sortOptionsString.firstIndex(of: selectedSortOption.message)
     }
     
-    func paginateMovieList() {
+    func sortMovies(with stringOption: String) {
+        let pickedOption = SortOption.allCases.first { $0.message == stringOption }
+        guard let option = pickedOption else { return }
+        popularMovies.removeAll()
+        pageToLoad = 1
+        selectedSortOption = option
+        fetchPopularMovies(completion: updateView)
+    }
+    
+    var sortOptionsString: [String] {
+        SortOption.allCases.map{ $0.message }
+    }
+    
+    func search(text: String) {
+        searchText = text
+        executeSearch(with: text)
+    }
+    
+    func loadMoreData() {
         if !self.isLoading {
             self.isLoading = true
-            DispatchQueue.global().async {
-                self.fetchMovies()
+            if isSearching {
+                self.fetchMovieByKeyword(searchText: searchText,
+                                         completion: updateView)
+            } else {
+                self.fetchPopularMovies(completion: updateView)
             }
         }
     }
     
     func getMovieItemForCell(at index: Int) -> MovieCellItem {
-        print(movies[index])
-        return movies[index]
+        return moviesDataSource[index]
     }
     
     var movieListCount: Int {
-        movies.count
+        moviesDataSource.count
     }
     
     func configureView() {
-        fetchMovies()
+        let group = DispatchGroup()
+        let requests = [fetchMovieGenres,
+                        fetchPopularMovies]
+        
+        for item in requests {
+            group.enter()
+            item {
+                print(String(describing: item))
+                group.leave()
+            }
+        }
+        
+        group.notify(queue: .main) {
+            self.updateView()
+        }
     }
 }

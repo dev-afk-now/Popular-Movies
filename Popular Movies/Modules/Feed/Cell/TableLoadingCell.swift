@@ -30,12 +30,13 @@ final class TableLoadingCell: BaseTableViewCell {
     }
     
     private func setupSubviews() {
+        let activityIndicatorSide: CGFloat = 35
         self.addSubview(activityIndicatorView)
         NSLayoutConstraint.activate([
             activityIndicatorView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             activityIndicatorView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            activityIndicatorView.widthAnchor.constraint(equalToConstant: 35),
-            activityIndicatorView.heightAnchor.constraint(equalToConstant: 35),
+            activityIndicatorView.widthAnchor.constraint(equalToConstant: activityIndicatorSide),
+            activityIndicatorView.heightAnchor.constraint(equalToConstant: activityIndicatorSide),
         ])
     }
 }
