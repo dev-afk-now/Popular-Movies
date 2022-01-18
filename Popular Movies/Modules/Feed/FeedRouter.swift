@@ -22,7 +22,8 @@ final class FeedRouter {
 
 extension FeedRouter: FeedRouterProtocol {
     func showDetail(_ id: Int) {
-        let module = DetailConfigurator.create()
-        self.context.navigationController?.pushViewController(module, animated: true)
+        let module = DetailConfigurator.create(id)
+        context.navigationController?.pushViewController(module,
+                                                         animated: true)
     }
 }

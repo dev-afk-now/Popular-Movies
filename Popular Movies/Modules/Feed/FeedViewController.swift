@@ -124,7 +124,7 @@ extension FeedViewController: FeedViewProtocol {
 extension FeedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    didSelectRowAt indexPath: IndexPath) {
-        //
+        presenter.movieItemClicked(at: indexPath.row)
     }
 }
 
