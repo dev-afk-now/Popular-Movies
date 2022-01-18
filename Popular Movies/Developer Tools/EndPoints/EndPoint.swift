@@ -32,7 +32,8 @@ enum EndPoint {
     var method: HTTPMethod {
         switch self {
         case .popular,
-                .searchMovies, .genres:
+                .searchMovies,
+                .genres:
             return .get
         }
     }
@@ -40,7 +41,8 @@ enum EndPoint {
     var encoding: ParameterEncoding {
         switch self {
         case .popular,
-                .searchMovies:
+                .searchMovies,
+                .genres:
             return URLEncoding.default
         default:
             return JSONEncoding.default

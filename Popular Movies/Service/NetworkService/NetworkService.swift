@@ -7,29 +7,22 @@
 
 import Alamofire
 
-protocol NetworkServiceProtocol {
-    func request<T: Decodable>(endPoint: EndPoint,
-                               completion: @escaping (Result<T, CustomError>) -> ())
-}
-
 final class NetworkService {
-    private static let shared = NetworkService()
+    static let shared = NetworkService()
     
     private init() {}
-}
-
-extension NetworkService: NetworkServiceProtocol {
+    
     func request<T: Decodable>(endPoint: EndPoint,
                                completion: @escaping (Result<T, CustomError>) -> ()) {
         AF.request(endPoint.fullURLString(),
                    method: endPoint.method,
                    parameters: endPoint.parameters,
                    encoding: endPoint.encoding).responseData { response in
+            print(endPoint.fullURLString())
             switch response.result {
             case .success(let data):
                 do {
                     let parsedObject = try JSONDecoder().decode(T.self, from: data)
-                    print(parsedObject)
                     completion(.success(parsedObject))
                 } catch {
                     do {

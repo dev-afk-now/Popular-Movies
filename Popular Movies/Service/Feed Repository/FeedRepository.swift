@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FeedRepositoryProtocol {
-    func fetchMovieGenres()
+    func fetchMovieGenres(completion: EmptyBlock?)
     func fetchPopular(page: Int,
                       sortBy: String,
                       completion: @escaping (Result<[MovieCellItem], CustomError>) -> ())
@@ -17,34 +17,18 @@ protocol FeedRepositoryProtocol {
                       completion: @escaping(Result<[MovieCellItem], CustomError>) -> ())
 }
 
-final class FeedRepository {
-    private let networkService: NetworkServiceProtocol
-    
-    init(networkService: NetworkServiceProtocol) {
-        self.networkService = networkService
-    }
-}
+final class FeedRepository {}
 
 extension FeedRepository: FeedRepositoryProtocol {
-    func fetchMovieGenres() {
-        networkService.request(endPoint: .genres) { (result: Result<NetworkGenreData, CustomError>) in
-            switch result {
-            case .success(let success):
-                print(success.genres)
-                // TODO: Persistence
-//                completion(.success(movies))
-            default:
-                break
-//                completion(.failure(failure))
-            }
-        }
+    func fetchMovieGenres(completion: EmptyBlock? = nil) {
+        GenreManager.shared.fetchGenreData(completion: completion)
     }
     
     func fetchPopular(page: Int,
                       sortBy: String,
                       completion: @escaping (Result<[MovieCellItem], CustomError>) -> ()) {
         let endPoint: EndPoint = .popular(page: page, sortBy: sortBy)
-        networkService.request(endPoint: endPoint) {
+        NetworkService.shared.request(endPoint: endPoint) {
             (result: Result<MovieNetworkList, CustomError>) in
             switch result {
             case .success(let success):
@@ -61,7 +45,7 @@ extension FeedRepository: FeedRepositoryProtocol {
                       page: Int,
                       completion: @escaping (Result<[MovieCellItem], CustomError>) -> ()) {
         let endPoint: EndPoint = .searchMovies(query: keyword, page: page)
-        networkService.request(endPoint: endPoint) {
+        NetworkService.shared.request(endPoint: endPoint) {
             (result: Result<MovieNetworkList, CustomError>) in
             switch result {
             case .success(let success):
