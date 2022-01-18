@@ -39,7 +39,8 @@ class FeedViewController: BaseViewController {
     private lazy var titleLabel: UILabel = {
         let title = UILabel()
         title.textColor = .black
-        title.font = UIFont(name: "Avenir", size: 20)
+        title.font = UIFont(name: "Avenir",
+                            size: 20)
         title.text = "Popular Movies"
         return title
     }()
