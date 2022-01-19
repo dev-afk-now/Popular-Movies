@@ -7,11 +7,12 @@
 
 import Foundation
 
-struct NetworkDetailData: Decodable {
+struct NetworkDetailData: Codable {
     var id: Int
     var title: String
     var overview: String?
     var genres: [NetworkGenreData]
+    var productionCountries: [CountryModel]
     var posterPath: String?
     var rating: Double
     var releaseDate: String
@@ -21,6 +22,7 @@ struct NetworkDetailData: Decodable {
         case title
         case overview
         case genres
+        case productionCountries = "production_countries"
         case posterPath = "poster_path"
         case rating = "vote_average"
         case releaseDate = "release_date"

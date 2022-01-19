@@ -19,12 +19,21 @@ class HeadlineTableCell: BaseTableViewCell {
         return label
     }()
     
+    private lazy var genresLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.font = UIFont(name: "Futura Medium", size: 22)
+        label.textColor = .gray
+        label.textAlignment = .left
+        return label
+    }()
+    
     override init(style: UITableViewCell.CellStyle,
                   reuseIdentifier: String?) {
         super.init(style: style,
                    reuseIdentifier: reuseIdentifier)
         setupSubviews()
-        self.backgroundColor = UIColor.green
     }
     
     required init?(coder: NSCoder) {
@@ -32,7 +41,13 @@ class HeadlineTableCell: BaseTableViewCell {
     }
     
     func configure(with movieData: DetailModel) {
-        headlineLabel.text = movieData.title + "\n" + movieData.dateOfReleaseString
+        headlineLabel.text = (movieData.title +
+                              "\n") +
+                              (movieData.productionCountries.map{$0.name}
+                              ).joined(separator: ", ") + ", " +
+                              (movieData.dateOfReleaseString)
+        genresLabel.text = movieData.genres.map{$0.name}.joined(separator: ", ")
+                              
     }
     
     private func setupSubviews() {
@@ -40,13 +55,18 @@ class HeadlineTableCell: BaseTableViewCell {
         let horizontalInset: CGFloat = 12
         
         self.addSubview(headlineLabel)
+        self.addSubview(genresLabel)
         
         NSLayoutConstraint.activate([
             
             headlineLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: horizontalInset),
             headlineLabel.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -horizontalInset),
             headlineLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: verticalInset),
-            headlineLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -verticalInset)
+            
+            genresLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: horizontalInset),
+            genresLabel.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -horizontalInset),
+            genresLabel.topAnchor.constraint(equalTo: headlineLabel.bottomAnchor),
+            genresLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -verticalInset)
         ])
     }
 }

@@ -9,8 +9,6 @@ import UIKit
 
 enum DetailCellType {
     case headlineCell
-    case genresCell
-    case ratingCell
     case descriptionCell
 }
 
@@ -47,8 +45,6 @@ final class DetailPresenter {
     
     private func prepareCellDataSource() {
         let cellList: [DetailCellType] = [.headlineCell,
-                                          .genresCell,
-                                          .ratingCell,
                                           .descriptionCell]
         cellsToDrow = cellList
     }

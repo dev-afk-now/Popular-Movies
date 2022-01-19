@@ -26,6 +26,7 @@ final class NetworkService {
                     completion(.success(parsedObject))
                 } catch {
                     do {
+                        print(error)
                         let serverError = try JSONDecoder().decode(ServerErrorModel.self, from: data)
                         completion(.failure(CustomError.init(with: serverError)))
                     } catch {

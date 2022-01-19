@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 protocol DetailViewProtocol: AnyObject {
     func updateView()
 }
@@ -40,6 +38,27 @@ class DetailViewController: BaseViewController {
         return view
     }()
     
+    private lazy var bottomGradientView: UIView = {
+        let view = UIView(frame: CGRect(x: .zero,
+                                        y: .zero,
+                                        width: view.bounds.width,
+                                        height: 100))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.makeGradient(colors: [UIColor.clear,
+                                   UIColor.black.withAlphaComponent(0.016),
+                                   UIColor.black.withAlphaComponent(0.03125),
+                                   UIColor.black.withAlphaComponent(0.0625),
+                                   UIColor.black.withAlphaComponent(0.125),
+                                   UIColor.black.withAlphaComponent(0.25),
+                                   UIColor.black.withAlphaComponent(0.45)
+                                  ],
+                          startPoint: CGPoint(x: 0, y: 0),
+                          endPoint: CGPoint(x: 0, y: 1))
+        return view
+    }()
+    
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -49,6 +68,7 @@ class DetailViewController: BaseViewController {
         tableView.backgroundColor = .white
         tableView.sectionHeaderHeight = view.bounds.width * 1.2
         HeadlineTableCell.register(in: tableView)
+        DescriptionTableCell.register(in: tableView)
         return tableView
     }()
 
@@ -57,6 +77,7 @@ class DetailViewController: BaseViewController {
         setupNavigationBar()
         presenter.configureView()
         setupConstraints()
+        layoutGradientView()
     }
     
     private func setupNavigationBar() {
@@ -86,6 +107,17 @@ class DetailViewController: BaseViewController {
         ])
     }
     
+    private func layoutGradientView() {
+        view.addSubview(bottomGradientView)
+        
+        NSLayoutConstraint.activate([
+            bottomGradientView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomGradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomGradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            bottomGradientView.heightAnchor.constraint(equalToConstant: 100)
+        ])
+    }
+    
     @objc private func backBarButtonTapped() {
         presenter.closeButtonTapped()
     }
@@ -109,7 +141,7 @@ extension DetailViewController: UITableViewDelegate {
 extension DetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        1
+        presenter.cellDataSource.count
     }
     
     func tableView(_ tableView: UITableView,
@@ -118,15 +150,20 @@ extension DetailViewController: UITableViewDataSource {
         guard let movieModel = presenter.getMovieData() else {
             return UITableViewCell()
         }
-        let cell = HeadlineTableCell.cell(in: tableView, for: indexPath)
-        cell.configure(with: movieModel)
-        return cell
-//        switch cellType {
-//        case .headlineCell:
-//
-//        default:
-//            return UITableViewCell()
-//        }
+        switch cellType {
+        case .headlineCell:
+            let cell = HeadlineTableCell.cell(in: tableView,
+                                              for: indexPath)
+            cell.configure(with: movieModel)
+            return cell
+        case .descriptionCell:
+            let cell = DescriptionTableCell.cell(in: tableView,
+                                              for: indexPath)
+            cell.configure(with: movieModel)
+            return cell
+        default:
+            return UITableViewCell()
+        }
     }
     func tableView(_ tableView: UITableView,
                    viewForHeaderInSection section: Int) -> UIView? {

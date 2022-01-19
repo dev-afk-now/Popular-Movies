@@ -57,6 +57,26 @@ class FeedViewController: BaseViewController {
         return tableView
     }()
     
+    private lazy var bottomGradientView: UIView = {
+        let view = UIView(frame: CGRect(x: .zero,
+                                        y: .zero,
+                                        width: view.bounds.width,
+                                        height: 100))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.makeGradient(colors: [UIColor.clear,
+                                   UIColor.black.withAlphaComponent(0.016),
+                                   UIColor.black.withAlphaComponent(0.03125),
+                                   UIColor.black.withAlphaComponent(0.0625),
+                                   UIColor.black.withAlphaComponent(0.125),
+                                   UIColor.black.withAlphaComponent(0.25),
+                                   UIColor.black.withAlphaComponent(0.45)
+                                  ],
+                          startPoint: CGPoint(x: 0, y: 0),
+                          endPoint: CGPoint(x: 0, y: 1))
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.configureView()
@@ -64,6 +84,7 @@ class FeedViewController: BaseViewController {
         setupConstraints()
         setupNavigationBar()
         showActivityIndicator()
+        layoutGradientView()
     }
     
     private func setupNavigationBar() {
@@ -96,6 +117,16 @@ class FeedViewController: BaseViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+    private func layoutGradientView() {
+        view.addSubview(bottomGradientView)
+        
+        NSLayoutConstraint.activate([
+            bottomGradientView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomGradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomGradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            bottomGradientView.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
     

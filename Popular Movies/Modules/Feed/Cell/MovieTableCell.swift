@@ -40,13 +40,11 @@ final class MovieTableCell: BaseTableViewCell {
     
     private lazy var headlineLabel: UILabel = {
         let label = UILabel()
-//        label.backgroundColor = .black.withAlphaComponent(0.25)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.font = UIFont(name: "Futura Medium", size: 22)
         label.textColor = .white
         label.textAlignment = .left
-        label.viewDropShadow()
         return label
     }()
     
@@ -56,40 +54,92 @@ final class MovieTableCell: BaseTableViewCell {
         image.image = UIImage(systemName: "star.fill")
         image.tintColor = .white
         image.contentMode = .scaleToFill
-        image.viewDropShadow()
         return image
     }()
     
     private lazy var ratingLabel: UILabel = {
         let label = UILabel()
-//        label.backgroundColor = .black.withAlphaComponent(0.25)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.font = UIFont(name: "Futura Medium", size: 20)
         label.textAlignment = .left
-        label.viewDropShadow()
         return label
     }()
     
     private lazy var genresLabel: UILabel = {
         let label = UILabel()
-//        label.backgroundColor = .black.withAlphaComponent(0.25)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.numberOfLines = 0
         label.font = UIFont(name: "Futura Medium", size: 18)
         label.textAlignment = .left
-        label.viewDropShadow()
         return label
+    }()
+    
+    private lazy var topGradientView: UIView = {
+        let view = UIView(frame: CGRect(x: .zero,
+                                        y: .zero,
+                                        width: 400,
+                                        height: 150))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.makeGradient(colors: [UIColor.clear,
+                                   UIColor.black.withAlphaComponent(0.016),
+                                   UIColor.black.withAlphaComponent(0.03125),
+                                   UIColor.black.withAlphaComponent(0.0625),
+                                   UIColor.black.withAlphaComponent(0.125),
+                                   UIColor.black.withAlphaComponent(0.25),
+                                   UIColor.black.withAlphaComponent(0.45)
+                                  ],
+                          startPoint: CGPoint(x: 0, y: 1),
+                          endPoint: CGPoint(x: 0, y: 0))
+        return view
+    }()
+    
+    private lazy var bottomGradientView: UIView = {
+        let view = UIView(frame: CGRect(x: .zero,
+                                        y: .zero,
+                                        width: 400,
+                                        height: 150))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.makeGradient(colors: [UIColor.clear,
+                                   UIColor.black.withAlphaComponent(0.016),
+                                   UIColor.black.withAlphaComponent(0.03125),
+                                   UIColor.black.withAlphaComponent(0.0625),
+                                   UIColor.black.withAlphaComponent(0.125),
+                                   UIColor.black.withAlphaComponent(0.25),
+                                   UIColor.black.withAlphaComponent(0.45)
+                                  ],
+                          startPoint: CGPoint(x: 0, y: 0),
+                          endPoint: CGPoint(x: 0, y: 1))
+        return view
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        layoutGradientView()
         setupSubviews()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func layoutGradientView() {
+        posterImage.addSubview(topGradientView)
+        posterImage.addSubview(bottomGradientView)
+        
+        NSLayoutConstraint.activate([
+            bottomGradientView.leadingAnchor.constraint(equalTo: posterImage.leadingAnchor),
+            bottomGradientView.trailingAnchor.constraint(equalTo: posterImage.trailingAnchor),
+            bottomGradientView.bottomAnchor.constraint(equalTo: posterImage.bottomAnchor),
+            bottomGradientView.heightAnchor.constraint(equalToConstant: 150),
+            
+            topGradientView.leadingAnchor.constraint(equalTo: posterImage.leadingAnchor),
+            topGradientView.trailingAnchor.constraint(equalTo: posterImage.trailingAnchor),
+            topGradientView.topAnchor.constraint(equalTo: posterImage.topAnchor)
+        ])
     }
     
     private func setupSubviews() {
@@ -125,9 +175,9 @@ final class MovieTableCell: BaseTableViewCell {
             
             ratingLabel.topAnchor.constraint(greaterThanOrEqualTo: headlineLabel.bottomAnchor, constant: verticalInset),
             ratingLabel.bottomAnchor.constraint(equalTo: genresLabel.topAnchor,
-                                                constant: -verticalInset),
+                                                constant: -verticalInset / 2),
             
-            genresLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: verticalInset),
+            genresLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: verticalInset / 2),
             genresLabel.leadingAnchor.constraint(equalTo: posterImage.leadingAnchor, constant: horizontalInset),
             genresLabel.trailingAnchor.constraint(lessThanOrEqualTo: posterImage.trailingAnchor, constant: -horizontalInset),
             genresLabel.bottomAnchor.constraint(equalTo: posterImage.bottomAnchor, constant: -verticalInset),

@@ -44,7 +44,7 @@ extension FeedRepository: FeedRepositoryProtocol {
     func searchMovies(keyword: String,
                       page: Int,
                       completion: @escaping (Result<[MovieCellItem], CustomError>) -> ()) {
-        let endPoint: EndPoint = .searchMovies(query: keyword, page: page)
+        let endPoint: EndPoint = .searchMovies(query: keyword.replacingOccurrences(of: " ", with: "%20"), page: page)
         NetworkService.shared.request(endPoint: endPoint) {
             (result: Result<MovieNetworkList, CustomError>) in
             switch result {
