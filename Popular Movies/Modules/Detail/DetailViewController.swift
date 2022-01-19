@@ -21,7 +21,6 @@ class DetailViewController: BaseViewController {
         print("detail loaded")
         view.backgroundColor = .red
     }
-
 }
 
 extension DetailViewController: DetailViewProtocol {

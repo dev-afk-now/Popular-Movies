@@ -22,8 +22,9 @@ class FeedViewController: BaseViewController {
     private lazy var searchBarView: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.backgroundColor = .white
         searchBar.delegate = self
-        searchBar.layer.borderWidth = 0
+        searchBar.backgroundImage = UIImage()
         return searchBar
     }()
     
@@ -66,8 +67,11 @@ class FeedViewController: BaseViewController {
     }
     
     private func setupNavigationBar() {
-        navigationController?.navigationBar.scrollEdgeAppearance = UINavigationBarAppearance()
-        navigationController?.navigationBar.standardAppearance = UINavigationBarAppearance()
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        let appearance = UINavigationBarAppearance()
+          appearance.backgroundColor = .white
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationItem.rightBarButtonItem = sortButton
         navigationItem.titleView = titleLabel
     }
@@ -97,6 +101,11 @@ class FeedViewController: BaseViewController {
         ])
     }
     
+    override func connectionDissapeared() {
+        super.connectionDissapeared()
+        // TODO: do presenter.configureViewOfflineMode
+    }
+    
     @objc private func sortButtonTapped() {
         showActionSheet(title: "Sort",
                         with: presenter.sortOptionsString,
@@ -124,7 +133,7 @@ extension FeedViewController: FeedViewProtocol {
 extension FeedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    didSelectRowAt indexPath: IndexPath) {
-        presenter.movieItemClicked(at: indexPath.row)
+        presenter.movieItemSelected(at: indexPath.row)
     }
 }
 

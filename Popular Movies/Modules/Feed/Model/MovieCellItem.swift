@@ -22,3 +22,11 @@ struct MovieCellItem {
         self.rating = networkData.rating
     }
 }
+
+extension MovieCellItem {
+    var genreArrayString: [String] {
+        genres.map {
+            GenreManager.shared.getNameForGenre($0) ?? "Undefined"
+        }
+    }
+}

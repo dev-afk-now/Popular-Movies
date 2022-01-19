@@ -5,6 +5,8 @@
 //  Created by devmac on 11.01.2022.
 //
 
+typealias EmptyBlock = () -> Void
+
 import Foundation
 
 protocol FeedPresenterProtocol: AnyObject {
@@ -16,14 +18,13 @@ protocol FeedPresenterProtocol: AnyObject {
     func loadMoreData()
     func search(text: String)
     func sortMovies(with sortOptionString: String)
-    func movieItemClicked(at index: Int)
+    func movieItemSelected(at index: Int)
 }
 
 final class FeedPresenter {
     weak var view: FeedViewProtocol?
     private let router: FeedRouterProtocol
     private let repository: FeedRepositoryProtocol
-    
     
     private var searchText: String = ""
     
@@ -53,34 +54,39 @@ final class FeedPresenter {
         self.repository = repository
     }
     
-    private func fetchPopularMovies() {
+    private func fetchPopularMovies(completion: EmptyBlock? = nil) {
         repository.fetchPopular(page: pageToLoad,
                                 sortBy: selectedSortOption.rawValue) { [weak self] result in
             switch result {
             case .success(let movieList):
                 self?.popularMovies += movieList
-                self?.view?.updateView()
                 self?.pageToLoad += 1
                 self?.isLoading = false
+                completion?()
             case .failure:
                 self?.view?.showError()
             }
         }
     }
     
-    private func fetchMovieByKeyword(searchText: String) {
+    private func fetchMovieByKeyword(searchText: String,
+                                     completion: EmptyBlock? = nil) {
         repository.searchMovies(keyword: searchText,
                                 page: pageToLoad) { [weak self] result in
             switch result {
             case .success(let movieList):
                 self?.searchedResults += movieList
-                self?.view?.updateView()
                 self?.pageToLoad += 1
                 self?.isLoading = false
+                completion?()
             case .failure:
                 self?.view?.showError()
             }
         }
+    }
+    
+    private func updateView() {
+        view?.updateView()
     }
     
     private func executeSearch(with text: String) {
@@ -93,23 +99,30 @@ final class FeedPresenter {
         if text.count < 2 {
             return
         }
+        updateView()
         searchTask?.cancel()
         let workItem = DispatchWorkItem { [weak self] in
-            self?.fetchMovieByKeyword(searchText: text)
+            self?.fetchMovieByKeyword(searchText: text) {
+                self?.updateView()
+            }
         }
         searchTask = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5,
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1,
                                       execute: workItem)
     }
     
     private func breakSearch(of dispatchWorkItem: DispatchWorkItem?) {
         dispatchWorkItem?.cancel()
-        fetchPopularMovies()
+        fetchPopularMovies(completion: updateView)
+    }
+    
+    private func fetchMovieGenres(completion: @escaping () -> () = { }) {
+        repository.fetchMovieGenres(completion: completion)
     }
 }
 
 extension FeedPresenter: FeedPresenterProtocol {
-    func movieItemClicked(at index: Int) {
+    func movieItemSelected(at index: Int) {
         router.showDetail(moviesDataSource[index].id)
     }
     
@@ -123,7 +136,7 @@ extension FeedPresenter: FeedPresenterProtocol {
         popularMovies.removeAll()
         pageToLoad = 1
         selectedSortOption = option
-        fetchPopularMovies()
+        fetchPopularMovies(completion: updateView)
     }
     
     var sortOptionsString: [String] {
@@ -139,9 +152,10 @@ extension FeedPresenter: FeedPresenterProtocol {
         if !self.isLoading {
             self.isLoading = true
             if isSearching {
-                self.fetchMovieByKeyword(searchText: searchText)
+                self.fetchMovieByKeyword(searchText: searchText,
+                                         completion: updateView)
             } else {
-                self.fetchPopularMovies()
+                self.fetchPopularMovies(completion: updateView)
             }
         }
     }
@@ -155,6 +169,20 @@ extension FeedPresenter: FeedPresenterProtocol {
     }
     
     func configureView() {
-        fetchPopularMovies()
+        let group = DispatchGroup()
+        let requests = [fetchMovieGenres,
+                        fetchPopularMovies]
+        
+        for item in requests {
+            group.enter()
+            item {
+                print(String(describing: item))
+                group.leave()
+            }
+        }
+        
+        group.notify(queue: .main) {
+            self.updateView()
+        }
     }
 }

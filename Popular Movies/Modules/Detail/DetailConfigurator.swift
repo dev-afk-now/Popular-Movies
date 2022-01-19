@@ -8,12 +8,14 @@
 import UIKit
 
 final class DetailConfigurator {
-    static func create(_ id: Int) -> UIViewController {
+    static func create(movieId: Int) -> UIViewController {
         let view = DetailViewController()
+        let repository = DetailRepository()
         let router = DetailRouter(context: view)
         let presenter = DetailPresenter(view: view,
                                         router: router,
-                                        id: id)
+                                        repository: repository,
+                                        movieId: movieId)
         view.presenter = presenter
         return view
     }

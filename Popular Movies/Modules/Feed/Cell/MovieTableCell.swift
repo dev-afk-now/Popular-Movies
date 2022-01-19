@@ -10,7 +10,6 @@ import UIKit
 final class MovieTableCell: BaseTableViewCell {
     
     // MARK: - Private -
-    private lazy var aspectRatio: CGFloat = 2.7
     
     private lazy var containerView: UIView = {
         var view = UIView()
@@ -41,33 +40,46 @@ final class MovieTableCell: BaseTableViewCell {
     
     private lazy var headlineLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .black.withAlphaComponent(0.25)
+//        label.backgroundColor = .black.withAlphaComponent(0.25)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.font = UIFont(name: "Futura Medium", size: 20)
+        label.font = UIFont(name: "Futura Medium", size: 22)
         label.textColor = .white
         label.textAlignment = .left
+        label.viewDropShadow()
         return label
+    }()
+    
+    private lazy var starImage: UIImageView = {
+        let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.image = UIImage(systemName: "star.fill")
+        image.tintColor = .white
+        image.contentMode = .scaleToFill
+        image.viewDropShadow()
+        return image
     }()
     
     private lazy var ratingLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .black.withAlphaComponent(0.25)
+//        label.backgroundColor = .black.withAlphaComponent(0.25)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.font = UIFont(name: "Futura Medium", size: 18)
+        label.font = UIFont(name: "Futura Medium", size: 20)
         label.textAlignment = .left
+        label.viewDropShadow()
         return label
     }()
     
     private lazy var genresLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .black.withAlphaComponent(0.25)
+//        label.backgroundColor = .black.withAlphaComponent(0.25)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.numberOfLines = 0
         label.font = UIFont(name: "Futura Medium", size: 18)
         label.textAlignment = .left
+        label.viewDropShadow()
         return label
     }()
     
@@ -90,6 +102,7 @@ final class MovieTableCell: BaseTableViewCell {
         containerView.addSubview(headlineLabel)
         containerView.addSubview(genresLabel)
         containerView.addSubview(ratingLabel)
+        containerView.addSubview(starImage)
         
         NSLayoutConstraint.activate([
             containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: containerInset),
@@ -106,12 +119,17 @@ final class MovieTableCell: BaseTableViewCell {
             headlineLabel.trailingAnchor.constraint(lessThanOrEqualTo: posterImage.trailingAnchor, constant: -horizontalInset),
             headlineLabel.topAnchor.constraint(equalTo: posterImage.topAnchor, constant: verticalInset),
             
+            starImage.centerYAnchor.constraint(equalTo: ratingLabel.centerYAnchor),
+            starImage.leadingAnchor.constraint(equalTo: posterImage.leadingAnchor, constant: horizontalInset),
+            starImage.trailingAnchor.constraint(equalTo: ratingLabel.leadingAnchor),
+            
             ratingLabel.topAnchor.constraint(greaterThanOrEqualTo: headlineLabel.bottomAnchor, constant: verticalInset),
-            ratingLabel.bottomAnchor.constraint(equalTo: genresLabel.topAnchor, constant: -verticalInset),
-            ratingLabel.leadingAnchor.constraint(equalTo: posterImage.leadingAnchor, constant: horizontalInset),
+            ratingLabel.bottomAnchor.constraint(equalTo: genresLabel.topAnchor,
+                                                constant: -verticalInset),
             
             genresLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: verticalInset),
             genresLabel.leadingAnchor.constraint(equalTo: posterImage.leadingAnchor, constant: horizontalInset),
+            genresLabel.trailingAnchor.constraint(lessThanOrEqualTo: posterImage.trailingAnchor, constant: -horizontalInset),
             genresLabel.bottomAnchor.constraint(equalTo: posterImage.bottomAnchor, constant: -verticalInset),
         ])
     }
@@ -120,8 +138,8 @@ final class MovieTableCell: BaseTableViewCell {
     func configure(with movie: MovieCellItem) {
         headlineLabel.text = movie.title
         ratingLabel.text = String(movie.rating)
+        genresLabel.text = movie.genreArrayString.joined(separator: ", ")
         guard let poster = movie.imageURL else {
-            posterImage.image = UIImage(named: "placeholder")
             return
         }
         posterImage.setImage(urlString: poster)
