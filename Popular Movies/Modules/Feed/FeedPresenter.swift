@@ -181,8 +181,8 @@ extension FeedPresenter: FeedPresenterProtocol {
             }
         }
         
-        group.notify(queue: .main) {
-            self.updateView()
+        group.notify(queue: .main) { [weak self] in
+            self?.updateView()
         }
     }
 }

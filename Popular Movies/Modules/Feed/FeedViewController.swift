@@ -43,6 +43,7 @@ class FeedViewController: BaseViewController {
         title.font = UIFont(name: "Avenir",
                             size: 20)
         title.text = "Popular Movies"
+        title.textAlignment = .center
         return title
     }()
     
@@ -53,7 +54,6 @@ class FeedViewController: BaseViewController {
         tableView.dataSource = self
         tableView.separatorStyle = .none
         MovieTableCell.register(in: tableView)
-        TableLoadingCell.register(in: tableView)
         return tableView
     }()
     
@@ -86,9 +86,7 @@ class FeedViewController: BaseViewController {
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
-            
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            titleLabel.widthAnchor.constraint(equalToConstant: view.bounds.width / 1.5),
             
             searchBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

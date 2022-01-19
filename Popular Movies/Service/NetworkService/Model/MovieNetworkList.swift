@@ -17,6 +17,7 @@ struct MovieNetworkItem: Codable {
     var genres: [Int]
     var backdropPath: String?
     var rating: Double
+    var releaseDate: String
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -24,11 +25,12 @@ struct MovieNetworkItem: Codable {
         case genres = "genre_ids"
         case backdropPath = "backdrop_path"
         case rating = "vote_average"
+        case releaseDate = "release_date"
     }
 }
 
 extension MovieNetworkItem {
-    var imageURL: String? {
+    var imagePath: String? {
         guard let path = backdropPath else {
             return nil
         }

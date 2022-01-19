@@ -22,6 +22,6 @@ final class DetailRouter {
 
 extension DetailRouter: DetailRouterProtocol {
     func closeCurrentViewController() {
-        context.dismiss(animated: true)
+        context.navigationController?.popViewController(animated: true)
     }
 }

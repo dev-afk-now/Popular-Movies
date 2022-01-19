@@ -136,7 +136,7 @@ final class MovieTableCell: BaseTableViewCell {
     
     // MARK: - Internal -
     func configure(with movie: MovieCellItem) {
-        headlineLabel.text = movie.title
+        headlineLabel.text = movie.title + ", " + movie.dateOfReleaseString
         ratingLabel.text = String(movie.rating)
         genresLabel.text = movie.genreArrayString.joined(separator: ", ")
         guard let poster = movie.imageURL else {
