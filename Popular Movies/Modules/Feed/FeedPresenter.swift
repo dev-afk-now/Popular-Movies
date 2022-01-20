@@ -59,7 +59,10 @@ final class FeedPresenter {
     
     deinit {
         NotificationCenter.default.removeObserver(self,
-                                                  name: ReachabilityManager.shared.lostConnectionNotificationName,
+                                                  name: .connectionLost,
+                                                  object: ReachabilityManager.shared)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: .connectionReastablished,
                                                   object: ReachabilityManager.shared)
     }
     
@@ -142,16 +145,26 @@ final class FeedPresenter {
     // MARK: - Private methods -
     private func startRecieveConnectionNotification() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(connectionDissapeared),
-                                               name: ReachabilityManager.shared.lostConnectionNotificationName,
+                                               selector: #selector(connectionDisappeared),
+                                               name: .connectionLost,
+                                               object: ReachabilityManager.shared)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(connectionAppeared),
+                                               name: .connectionReastablished,
                                                object: ReachabilityManager.shared)
     }
     
     // MARK: - Actions -
-    @objc func connectionDissapeared() {
-        
+    @objc func connectionDisappeared() {
         isReachable = false
         fetchSavedMovies {
+            self.updateView()
+        }
+    }
+    
+    @objc func connectionAppeared() {
+        isReachable = true
+        fetchPopularMovies {
             self.updateView()
         }
     }
@@ -212,7 +225,6 @@ extension FeedPresenter: FeedPresenterProtocol {
         for item in requests {
             group.enter()
             item {
-                print(String(describing: item))
                 group.leave()
             }
         }

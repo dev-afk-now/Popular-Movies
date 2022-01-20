@@ -34,15 +34,22 @@ class BaseViewController: UIViewController {
 
     deinit {
         NotificationCenter.default.removeObserver(self,
-                                                  name: ReachabilityManager.shared.lostConnectionNotificationName,
+                                                  name: .connectionLost,
+                                                  object: ReachabilityManager.shared)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: .connectionReastablished,
                                                   object: ReachabilityManager.shared)
     }
     
     // MARK: - Private methods -
     private func startRecieveConnectionNotification() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(connectionDissapeared),
-                                               name: ReachabilityManager.shared.lostConnectionNotificationName,
+                                               selector: #selector(connectionDisappeared),
+                                               name: .connectionLost,
+                                               object: ReachabilityManager.shared)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(connectionAppeared),
+                                               name: .connectionReastablished,
                                                object: ReachabilityManager.shared)
     }
     
@@ -76,7 +83,9 @@ class BaseViewController: UIViewController {
     }
     
     // MARK: - Actions -
-    @objc private func connectionDissapeared() {
+    @objc func connectionDisappeared() {
         showAlert(with: noConnectionMessage)
     }
+    
+    @objc func connectionAppeared() {}
 }

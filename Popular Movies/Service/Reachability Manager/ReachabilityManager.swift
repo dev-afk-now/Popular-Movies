@@ -1,5 +1,5 @@
 //
-//  Reachability Manager.swift
+//  ReachabilityManager.swift
 //  Popular Movies
 //
 //  Created by devmac on 12.01.2022.
@@ -8,9 +8,19 @@
 import Foundation
 import Reachability
 
+extension Notification.Name {
+    static var connectionLost: Notification.Name {
+        return .init("connectionDisappeared")
+    }
+
+    static var connectionReastablished: Notification.Name {
+        return .init("connectionReastablished")
+    }
+
+}
+
 final class ReachabilityManager {
     static let shared = ReachabilityManager()
-    let lostConnectionNotificationName = NSNotification.Name("connectionDisappeared")
     
     private let reachability = try! Reachability()
     
@@ -30,9 +40,15 @@ final class ReachabilityManager {
         
         let reachability = note.object as! Reachability
         
-        if reachability.connection == .unavailable {
-            NotificationCenter.default.post(name: lostConnectionNotificationName,
+        switch reachability.connection {
+        case .cellular, .wifi:
+            NotificationCenter.default.post(name: .connectionReastablished,
                                             object: self)
+        case .unavailable:
+            NotificationCenter.default.post(name: .connectionLost,
+                                            object: self)
+        default: break
         }
+        
     }
 }

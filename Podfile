@@ -15,4 +15,5 @@ target 'Popular Movies' do
   # UI
   pod 'NVActivityIndicatorView'
   pod 'Kingfisher'
+  pod "youtube-ios-player-helper"
 end

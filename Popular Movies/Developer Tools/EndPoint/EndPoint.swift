@@ -18,6 +18,7 @@ enum EndPoint {
     case searchMovies(query: String, page: Int)
     case genres
     case detail(movieId: Int)
+    case videos(movieId: Int)
     
     var path: String {
         switch self {
@@ -27,8 +28,10 @@ enum EndPoint {
             return "search/movie"
         case .genres:
             return "genre/movie/list"
-        case .detail(let movieID):
-            return "movie/\(movieID)"
+        case .detail(let movieId):
+            return "movie/\(movieId)"
+        case .videos(let movieId):
+            return "movie/\(movieId)/videos"
         }
     }
     
@@ -37,7 +40,8 @@ enum EndPoint {
         case .popular,
                 .searchMovies,
                 .genres,
-                .detail:
+                .detail,
+                .videos:
             return .get
         }
     }
@@ -47,7 +51,8 @@ enum EndPoint {
         case .popular,
                 .searchMovies,
                 .genres,
-                .detail:
+                .detail,
+                .videos:
             return URLEncoding.default
         default:
             return JSONEncoding.default

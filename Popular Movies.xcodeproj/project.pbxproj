@@ -34,6 +34,8 @@
 		D53A0722279989A70037E559 /* GenrePersistentAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53A0721279989A70037E559 /* GenrePersistentAdapter.swift */; };
 		D53A072927998A6C0037E559 /* GenrePersistentData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53A072727998A6C0037E559 /* GenrePersistentData+CoreDataClass.swift */; };
 		D53A072A27998A6C0037E559 /* GenrePersistentData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53A072827998A6C0037E559 /* GenrePersistentData+CoreDataProperties.swift */; };
+		D53A074C2799A6970037E559 /* VideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53A074B2799A6970037E559 /* VideoData.swift */; };
+		D53A074E2799ABD90037E559 /* VideoTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53A074D2799ABD90037E559 /* VideoTableCell.swift */; };
 		D57959DC278D7567003CED85 /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959DB278D7567003CED85 /* FeedPresenter.swift */; };
 		D57959DE278D75E0003CED85 /* FeedConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959DD278D75E0003CED85 /* FeedConfigurator.swift */; };
 		D57959E0278D76F9003CED85 /* FeedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57959DF278D76F9003CED85 /* FeedRouter.swift */; };
@@ -50,7 +52,7 @@
 		D59EF0F32796F9F400B8370B /* DetailRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59EF0F22796F9F400B8370B /* DetailRouter.swift */; };
 		D59EF0F52796FA8000B8370B /* DetailConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59EF0F42796FA8000B8370B /* DetailConfigurator.swift */; };
 		D5C4F173278EE6670010EEB5 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C4F172278EE6670010EEB5 /* BaseViewController.swift */; };
-		D5C68EC6278EEBBB0010D9FD /* Reachability Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C68EC5278EEBBB0010D9FD /* Reachability Manager.swift */; };
+		D5C68EC6278EEBBB0010D9FD /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C68EC5278EEBBB0010D9FD /* ReachabilityManager.swift */; };
 		D5F56BEB278EDD4C006E5F8E /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F56BEA278EDD4C006E5F8E /* UIViewController+Alert.swift */; };
 		D5F9146F2797FEF1006B3761 /* DetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F9146E2797FEF1006B3761 /* DetailModel.swift */; };
 		D5F9147227981501006B3761 /* HeadlineTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F9147127981501006B3761 /* HeadlineTableCell.swift */; };
@@ -89,6 +91,8 @@
 		D53A0721279989A70037E559 /* GenrePersistentAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenrePersistentAdapter.swift; sourceTree = "<group>"; };
 		D53A072727998A6C0037E559 /* GenrePersistentData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GenrePersistentData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		D53A072827998A6C0037E559 /* GenrePersistentData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GenrePersistentData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		D53A074B2799A6970037E559 /* VideoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoData.swift; sourceTree = "<group>"; };
+		D53A074D2799ABD90037E559 /* VideoTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTableCell.swift; sourceTree = "<group>"; };
 		D57959DB278D7567003CED85 /* FeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenter.swift; sourceTree = "<group>"; };
 		D57959DD278D75E0003CED85 /* FeedConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedConfigurator.swift; sourceTree = "<group>"; };
 		D57959DF278D76F9003CED85 /* FeedRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRouter.swift; sourceTree = "<group>"; };
@@ -105,7 +109,7 @@
 		D59EF0F22796F9F400B8370B /* DetailRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRouter.swift; sourceTree = "<group>"; };
 		D59EF0F42796FA8000B8370B /* DetailConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailConfigurator.swift; sourceTree = "<group>"; };
 		D5C4F172278EE6670010EEB5 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
-		D5C68EC5278EEBBB0010D9FD /* Reachability Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reachability Manager.swift"; sourceTree = "<group>"; };
+		D5C68EC5278EEBBB0010D9FD /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
 		D5F56BEA278EDD4C006E5F8E /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		D5F9146E2797FEF1006B3761 /* DetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailModel.swift; sourceTree = "<group>"; };
 		D5F9147127981501006B3761 /* HeadlineTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadlineTableCell.swift; sourceTree = "<group>"; };
@@ -348,6 +352,7 @@
 				D57959F5278DA195003CED85 /* MovieNetworkList.swift */,
 				414660BF27974CD700235FEC /* NetworkDetailData.swift */,
 				412A179C2798B91500C1CED0 /* CountryModel.swift */,
+				D53A074B2799A6970037E559 /* VideoData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -368,7 +373,7 @@
 		D5C68EC4278EEB9B0010D9FD /* Reachability Manager */ = {
 			isa = PBXGroup;
 			children = (
-				D5C68EC5278EEBBB0010D9FD /* Reachability Manager.swift */,
+				D5C68EC5278EEBBB0010D9FD /* ReachabilityManager.swift */,
 			);
 			path = "Reachability Manager";
 			sourceTree = "<group>";
@@ -386,6 +391,7 @@
 			children = (
 				D5F9147127981501006B3761 /* HeadlineTableCell.swift */,
 				412A179E2798BDFA00C1CED0 /* DescriptionTableCell.swift */,
+				D53A074D2799ABD90037E559 /* VideoTableCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -515,13 +521,15 @@
 				D59EF0EA2796D04500B8370B /* MovieGenre.swift in Sources */,
 				D57959DE278D75E0003CED85 /* FeedConfigurator.swift in Sources */,
 				D59EF0EF2796F00900B8370B /* DetailViewController.swift in Sources */,
+				D53A074E2799ABD90037E559 /* VideoTableCell.swift in Sources */,
 				D57959EE278D8418003CED85 /* EndPoint.swift in Sources */,
 				D59EF0E62796CD2A00B8370B /* GenreManager.swift in Sources */,
 				D519C975278C7D340018155F /* FeedViewController.swift in Sources */,
 				D50BA310278F20CF00E10833 /* BaseTableViewCell.swift in Sources */,
 				D5F56BEB278EDD4C006E5F8E /* UIViewController+Alert.swift in Sources */,
-				D5C68EC6278EEBBB0010D9FD /* Reachability Manager.swift in Sources */,
+				D5C68EC6278EEBBB0010D9FD /* ReachabilityManager.swift in Sources */,
 				D57959F1278D9E4A003CED85 /* FeedRepository.swift in Sources */,
+				D53A074C2799A6970037E559 /* VideoData.swift in Sources */,
 				D5F9147227981501006B3761 /* HeadlineTableCell.swift in Sources */,
 				D5F9146F2797FEF1006B3761 /* DetailModel.swift in Sources */,
 				D59EF0F52796FA8000B8370B /* DetailConfigurator.swift in Sources */,

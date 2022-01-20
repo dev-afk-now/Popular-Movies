@@ -14,7 +14,7 @@ class DescriptionTableCell: BaseTableViewCell {
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 15
-        view.layer.shadowColor = UIColor.black.withAlphaComponent(0.75).cgColor
+        view.layer.shadowColor = UIColor.black.withAlphaComponent(0.25).cgColor
         view.layer.shadowOpacity = 1
         view.layer.shadowOffset = .zero
         view.layer.shadowRadius = 5

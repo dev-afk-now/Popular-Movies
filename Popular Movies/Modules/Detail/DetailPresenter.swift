@@ -10,6 +10,7 @@ import UIKit
 enum DetailCellType {
     case headlineCell
     case descriptionCell
+    case trailerCell
 }
 
 struct DetailSectionModel {
@@ -21,6 +22,7 @@ protocol DetailPresenterProtocol: AnyObject {
     func getMovieData() -> DetailModel?
     func closeButtonTapped()
     var cellDataSource: [DetailCellType] { get }
+    var trailerPath: String { get }
 }
 
 final class DetailPresenter {
@@ -29,6 +31,8 @@ final class DetailPresenter {
     private let repository: DetailRepositoryProtocol
     private let movieId: Int
     private var movieDataSource: DetailModel?
+    
+    private var trailerDataSource: VideoData?
     
     private var cellsToDrow = [DetailCellType]()
     
@@ -45,12 +49,13 @@ final class DetailPresenter {
     
     private func prepareCellDataSource() {
         let cellList: [DetailCellType] = [.headlineCell,
-                                          .descriptionCell]
+                                          .trailerCell,
+                                          .descriptionCell
+                                          ]
         cellsToDrow = cellList
     }
     
-    private func fetchMovie(by movieId: Int,
-                            completion: EmptyBlock?) {
+    private func fetchMovie(completion: EmptyBlock?) {
         repository.fetchMovie(by: movieId) { [weak self] result in
             switch result {
             case .success(let movieObject):
@@ -61,9 +66,21 @@ final class DetailPresenter {
             }
         }
     }
+    
+    private func fetchVideo(completion: EmptyBlock?) {
+        repository.fetchVideo(by: movieId) { [weak self] video in
+            self?.trailerDataSource = video
+            completion?()
+        }
+    }
+    // MARK: - Private methods -
 }
 
 extension DetailPresenter: DetailPresenterProtocol {
+    var trailerPath: String {
+        return trailerDataSource?.key ?? ""
+    }
+    
     var cellDataSource: [DetailCellType] {
         return cellsToDrow
     }
@@ -77,8 +94,18 @@ extension DetailPresenter: DetailPresenterProtocol {
     }
     
     func configureView() {
-        fetchMovie(by: movieId) {
-            self.view?.updateView()
+        let group = DispatchGroup()
+        let requests = [fetchMovie, fetchVideo]
+        
+        for item in requests {
+            group.enter()
+            item {
+                group.leave()
+            }
+        }
+        
+        group.notify(queue: .main) { [weak self] in
+            self?.view?.updateView()
         }
     }
 }

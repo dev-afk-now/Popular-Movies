@@ -70,6 +70,7 @@ class DetailViewController: BaseViewController {
         tableView.tableHeaderView = posterImage
         HeadlineTableCell.register(in: tableView)
         DescriptionTableCell.register(in: tableView)
+        VideoTableCell.register(in: tableView)
         return tableView
     }()
 
@@ -163,6 +164,11 @@ extension DetailViewController: UITableViewDataSource {
                                               for: indexPath)
             cell.configure(with: movieModel)
             return cell
+        case .trailerCell:
+            let cell = VideoTableCell.cell(in: tableView,
+                                              for: indexPath)
+            cell.configure(with: presenter.trailerPath)
+            return cell
         default:
             return UITableViewCell()
         }
@@ -170,6 +176,13 @@ extension DetailViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView,
                    heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        let cellType = presenter.cellDataSource[indexPath.row]
+        switch cellType {
+        case .trailerCell:
+            return 250
+        default:
+            return UITableView.automaticDimension
+        }
+        
     }
 }
