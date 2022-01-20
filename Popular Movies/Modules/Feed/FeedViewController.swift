@@ -41,8 +41,7 @@ class FeedViewController: BaseViewController {
     private lazy var titleLabel: UILabel = {
         let title = UILabel()
         title.textColor = .black
-        title.font = UIFont(name: "Avenir",
-                            size: 20)
+        title.font = .applicatonFont(.avenirMedium, size: 18)
         title.text = "Popular Movies"
         title.textAlignment = .center
         return title
@@ -130,11 +129,6 @@ class FeedViewController: BaseViewController {
             bottomGradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             bottomGradientView.heightAnchor.constraint(equalToConstant: 100)
         ])
-    }
-    
-    override func connectionDissapeared() {
-        super.connectionDissapeared()
-        // TODO: do presenter.configureViewOfflineMode
     }
     
     @objc private func sortButtonTapped() {

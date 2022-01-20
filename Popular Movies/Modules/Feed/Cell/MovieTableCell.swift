@@ -43,7 +43,7 @@ final class MovieTableCell: BaseTableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.font = UIFont(name: "Futura Medium", size: 22)
+        label.font = .applicatonFont(.futuraMedium, size: 22)
         label.textColor = .white
         label.textAlignment = .left
         return label
@@ -62,7 +62,7 @@ final class MovieTableCell: BaseTableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.font = UIFont(name: "Futura Medium", size: 20)
+        label.font = .applicatonFont(.futuraMedium, size: 20)
         label.textAlignment = .left
         return label
     }()
@@ -72,7 +72,7 @@ final class MovieTableCell: BaseTableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Futura Medium", size: 18)
+        label.font = .applicatonFont(.futuraMedium, size: 18)
         label.textAlignment = .left
         return label
     }()

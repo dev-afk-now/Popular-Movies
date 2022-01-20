@@ -13,7 +13,7 @@ class HeadlineTableCell: BaseTableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.font = UIFont(name: "Avenir Heavy", size: 25)
+        label.font = .applicatonFont(.avenirHeavy, size: 25)
         label.textColor = .black
         label.textAlignment = .left
         return label
@@ -23,7 +23,7 @@ class HeadlineTableCell: BaseTableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.font = UIFont(name: "Avenir Heavy", size: 22)
+        label.font = .applicatonFont(.avenirHeavy, size: 22)
         label.textColor = .gray
         label.textAlignment = .left
         return label
@@ -33,7 +33,7 @@ class HeadlineTableCell: BaseTableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.font = UIFont(name: "Avenir Medium", size: 22)
+        label.font = .applicatonFont(.avenirMedium, size: 22)
         label.textColor = .gray
         label.textAlignment = .left
         return label
@@ -43,7 +43,7 @@ class HeadlineTableCell: BaseTableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.font = UIFont(name: "Avenir Heavy Oblique", size: 22)
+        label.font = .applicatonFont(.avenirHeavyOblique, size: 22)
         label.textColor = .gray
         label.textAlignment = .left
         label.backgroundColor = .lightGray.withAlphaComponent(0.5)
@@ -71,7 +71,7 @@ class HeadlineTableCell: BaseTableViewCell {
         ).joined(separator: ", ") + ", " +
         (movieData.dateOfReleaseString)
         genresLabel.text = movieData.genres.map{$0.name}.joined(separator: ", ")
-        taglineLabel.text = movieData.tagline
+        taglineLabel.text = String(format: "'%@'", movieData.tagline ?? "")
         
     }
     

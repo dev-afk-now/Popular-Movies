@@ -15,11 +15,16 @@ protocol FeedRepositoryProtocol {
     func searchMovies(keyword: String,
                       page: Int,
                       completion: @escaping(Result<[MovieCellItem], CustomError>) -> ())
+    func fetchDataBaseObjects(completion: @escaping([MovieCellItem]) -> ())
 }
 
 final class FeedRepository {}
 
 extension FeedRepository: FeedRepositoryProtocol {
+    func fetchDataBaseObjects(completion: @escaping ([MovieCellItem]) -> ()) {
+        completion(MoviePersistentAdapter.shared.pullDatabasePostObjects().map { MovieCellItem.init(from: $0) })
+    }
+    
     func fetchMovieGenres(completion: EmptyBlock? = nil) {
         GenreManager.shared.fetchGenreData(completion: completion)
     }
@@ -33,7 +38,7 @@ extension FeedRepository: FeedRepositoryProtocol {
             switch result {
             case .success(let success):
                 let movies = success.results.map(MovieCellItem.init)
-                // TODO: Persistence
+                MoviePersistentAdapter.shared.generateDatabasePostObjects(from: movies)
                 completion(.success(movies))
             case .failure(let failure):
                 completion(.failure(failure))
@@ -50,7 +55,7 @@ extension FeedRepository: FeedRepositoryProtocol {
             switch result {
             case .success(let success):
                 let movies = success.results.map(MovieCellItem.init)
-                // TODO: Persistence
+                MoviePersistentAdapter.shared.generateDatabasePostObjects(from: movies)
                 completion(.success(movies))
             case .failure(let failure):
                 completion(.failure(failure))
@@ -58,13 +63,3 @@ extension FeedRepository: FeedRepositoryProtocol {
         }
     }
 }
-
-//                PostPersistentAdapter.shared.generateDatabasePostObjects(from: posts)
-
-//                let list = PostPersistentAdapter.shared.pullDatabasePostObjects()
-//                let posts: [PostCellModel] = list.map { PostCellModel(from: $0) }
-//                if list.isEmpty {
-//                    completion(.failure(failure))
-//                } else {
-//                    completion(.success(posts))
-//                }

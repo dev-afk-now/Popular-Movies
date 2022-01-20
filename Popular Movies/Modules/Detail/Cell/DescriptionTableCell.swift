@@ -25,7 +25,7 @@ class DescriptionTableCell: BaseTableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.font = UIFont(name: "Avenir Book Oblique", size: 22)
+        label.font = .applicatonFont(.avenirBookOblique, size: 22)
         label.textColor = .black
         label.textAlignment = .left
         return label
