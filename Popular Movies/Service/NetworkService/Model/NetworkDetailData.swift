@@ -14,6 +14,7 @@ struct NetworkDetailData: Codable {
     var genres: [NetworkGenreData]
     var productionCountries: [CountryModel]
     var posterPath: String?
+    var tagline: String?
     var rating: Double
     var releaseDate: String
     
@@ -22,6 +23,7 @@ struct NetworkDetailData: Codable {
         case title
         case overview
         case genres
+        case tagline
         case productionCountries = "production_countries"
         case posterPath = "poster_path"
         case rating = "vote_average"

@@ -9,4 +9,20 @@ import UIKit
 
 class BaseTableViewCell: UITableViewCell,
                          TableCellRegistrable,
-                         TableCellReusable {}
+                         TableCellReusable {
+    
+    override init(style: UITableViewCell.CellStyle,
+                  reuseIdentifier: String?) {
+        super.init(style: style,
+                   reuseIdentifier: reuseIdentifier)
+        commomInit()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func commomInit() {
+        selectionStyle = .none
+    }
+}

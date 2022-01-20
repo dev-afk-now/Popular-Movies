@@ -13,6 +13,7 @@ struct DetailModel: Decodable {
     var genres: [MovieGenre]
     var productionCountries: [CountryModel]
     var overview: String
+    var tagline: String?
     var posterPath: String?
     var rating: Double
     var releaseDate: String
@@ -23,6 +24,7 @@ struct DetailModel: Decodable {
         self.productionCountries = networkDetail.productionCountries
         self.genres = networkDetail.genres.map(MovieGenre.init)
         self.overview = networkDetail.overview ?? ""
+        self.tagline = networkDetail.tagline
         self.posterPath = networkDetail.imagePath
         self.rating = networkDetail.rating
         self.releaseDate = networkDetail.releaseDate

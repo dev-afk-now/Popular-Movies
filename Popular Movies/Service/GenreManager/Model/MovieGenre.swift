@@ -15,4 +15,9 @@ struct MovieGenre: Codable {
         id = networkItem.id
         name = networkItem.name
     }
+    
+    init(from model: GenrePersistentData) {
+        self.id = Int(model.id)
+        self.name = model.name ?? ""
+    }
 }

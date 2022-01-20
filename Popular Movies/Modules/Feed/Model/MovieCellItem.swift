@@ -23,6 +23,15 @@ struct MovieCellItem {
         self.rating = networkData.rating
         self.releaseDate = networkData.releaseDate
     }
+    
+    init(from model: MoviePersistentData) {
+        self.id = Int(model.id)
+        self.title = model.title ?? ""
+        self.imageURL = model.imageURL ?? ""
+        self.rating = model.rating
+        self.releaseDate = model.releaseDate ?? ""
+        self.genres = model.genres ?? []
+    }
 }
 
 extension MovieCellItem {

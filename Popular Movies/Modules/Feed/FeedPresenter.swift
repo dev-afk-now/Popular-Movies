@@ -40,6 +40,7 @@ final class FeedPresenter {
     private var pageToLoad = 1
     
     private var isLoading = false
+    private var isReachable: Bool = true
     
     private var popularMovies = [MovieCellItem]()
     private var moviesDataSource: [MovieCellItem] {
@@ -52,6 +53,14 @@ final class FeedPresenter {
         self.view = view
         self.router = router
         self.repository = repository
+        startRecieveConnectionNotification()
+    }
+    
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self,
+                                                  name: ReachabilityManager.shared.lostConnectionNotificationName,
+                                                  object: ReachabilityManager.shared)
     }
     
     private func fetchPopularMovies(completion: EmptyBlock? = nil) {
@@ -90,6 +99,9 @@ final class FeedPresenter {
     }
     
     private func executeSearch(with text: String) {
+        if !isReachable {
+            return 
+        }
         pageToLoad = 1
         searchedResults.removeAll()
         if text.isEmpty {
@@ -116,8 +128,32 @@ final class FeedPresenter {
         fetchPopularMovies(completion: updateView)
     }
     
-    private func fetchMovieGenres(completion: @escaping () -> () = { }) {
+    private func fetchMovieGenres(completion: EmptyBlock? = nil) {
         repository.fetchMovieGenres(completion: completion)
+    }
+    
+    private func fetchSavedMovies(completion: EmptyBlock?) {
+        repository.fetchDataBaseObjects { movies in
+            self.popularMovies = movies
+            completion?()
+        }
+    }
+    
+    // MARK: - Private methods -
+    private func startRecieveConnectionNotification() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(connectionDissapeared),
+                                               name: ReachabilityManager.shared.lostConnectionNotificationName,
+                                               object: ReachabilityManager.shared)
+    }
+    
+    // MARK: - Actions -
+    @objc func connectionDissapeared() {
+        
+        isReachable = false
+        fetchSavedMovies {
+            self.updateView()
+        }
     }
 }
 
@@ -132,7 +168,7 @@ extension FeedPresenter: FeedPresenterProtocol {
     
     func sortMovies(with stringOption: String) {
         let pickedOption = SortOption.allCases.first { $0.message == stringOption }
-        guard let option = pickedOption else { return }
+        guard let option = pickedOption, isReachable else { return }
         popularMovies.removeAll()
         pageToLoad = 1
         selectedSortOption = option
@@ -149,7 +185,7 @@ extension FeedPresenter: FeedPresenterProtocol {
     }
     
     func loadMoreData() {
-        if !self.isLoading {
+        if !self.isLoading, isReachable {
             self.isLoading = true
             if isSearching {
                 self.fetchMovieByKeyword(searchText: searchText,

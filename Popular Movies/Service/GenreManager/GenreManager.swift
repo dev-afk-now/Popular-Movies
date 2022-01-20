@@ -22,9 +22,12 @@ final class GenreManager {
                 case .success(let genreData):
                     print(genreData)
                     self.genres = genreData.genres.map(MovieGenre.init)
+                    GenrePersistentAdapter.shared.generateDatabaseGenreObjects(from: self.genres)
                     completion?()
-                default:
-                    break
+                case .failure:
+                    self.genres = GenrePersistentAdapter.shared.pullDatabasePostObjects().map {
+                        MovieGenre.init(from: $0)
+                    }
                 }
             }
         }

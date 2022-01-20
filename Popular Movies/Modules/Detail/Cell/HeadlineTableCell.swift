@@ -13,8 +13,18 @@ class HeadlineTableCell: BaseTableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.font = UIFont(name: "Futura Medium", size: 25)
+        label.font = .applicatonFont(.avenirHeavy, size: 25)
         label.textColor = .black
+        label.textAlignment = .left
+        return label
+    }()
+    
+    private lazy var secondaryInfoLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.font = .applicatonFont(.avenirHeavy, size: 22)
+        label.textColor = .gray
         label.textAlignment = .left
         return label
     }()
@@ -23,9 +33,23 @@ class HeadlineTableCell: BaseTableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.font = UIFont(name: "Futura Medium", size: 22)
+        label.font = .applicatonFont(.avenirMedium, size: 22)
         label.textColor = .gray
         label.textAlignment = .left
+        return label
+    }()
+    
+    private lazy var taglineLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.font = .applicatonFont(.avenirHeavyOblique, size: 22)
+        label.textColor = .gray
+        label.textAlignment = .left
+        label.backgroundColor = .lightGray.withAlphaComponent(0.5)
+        label.layer.cornerRadius = 10
+        label.textAlignment = .center
+        label.clipsToBounds = true
         return label
     }()
     
@@ -41,32 +65,55 @@ class HeadlineTableCell: BaseTableViewCell {
     }
     
     func configure(with movieData: DetailModel) {
-        headlineLabel.text = (movieData.title +
-                              "\n") +
-                              (movieData.productionCountries.map{$0.name}
-                              ).joined(separator: ", ") + ", " +
-                              (movieData.dateOfReleaseString)
+        headlineLabel.text = movieData.title
+        
+        secondaryInfoLabel.text = (movieData.productionCountries.map{$0.name}
+        ).joined(separator: ", ") + ", " +
+        (movieData.dateOfReleaseString)
         genresLabel.text = movieData.genres.map{$0.name}.joined(separator: ", ")
-                              
+        taglineLabel.text = String(format: "'%@'", movieData.tagline ?? "")
+        
     }
     
     private func setupSubviews() {
         let verticalInset: CGFloat = 16
         let horizontalInset: CGFloat = 12
         
+        self.backgroundColor = .white
         self.addSubview(headlineLabel)
+        self.addSubview(secondaryInfoLabel)
         self.addSubview(genresLabel)
+        self.addSubview(taglineLabel)
         
         NSLayoutConstraint.activate([
             
-            headlineLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: horizontalInset),
-            headlineLabel.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -horizontalInset),
-            headlineLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: verticalInset),
+            headlineLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor,
+                                                   constant: horizontalInset),
+            headlineLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor,
+                                                    constant: -horizontalInset),
+            headlineLabel.topAnchor.constraint(equalTo: self.topAnchor,
+                                               constant: verticalInset),
             
-            genresLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: horizontalInset),
-            genresLabel.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -horizontalInset),
-            genresLabel.topAnchor.constraint(equalTo: headlineLabel.bottomAnchor),
-            genresLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -verticalInset)
+            secondaryInfoLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor,
+                                                        constant: horizontalInset),
+            secondaryInfoLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor,
+                                                         constant: -horizontalInset),
+            secondaryInfoLabel.topAnchor.constraint(equalTo: headlineLabel.bottomAnchor),
+            
+            genresLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor,
+                                                 constant: horizontalInset),
+            genresLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor,
+                                                  constant: -horizontalInset),
+            genresLabel.topAnchor.constraint(equalTo: secondaryInfoLabel.bottomAnchor),
+            
+            taglineLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor,
+                                                 constant: horizontalInset),
+            taglineLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor,
+                                                  constant: -horizontalInset),
+            taglineLabel.topAnchor.constraint(equalTo: genresLabel.bottomAnchor,
+                                              constant: verticalInset / 2),
+            taglineLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor,
+                                                constant: -verticalInset / 2)
         ])
     }
 }

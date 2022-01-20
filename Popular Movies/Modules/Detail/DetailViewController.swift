@@ -26,15 +26,17 @@ class DetailViewController: BaseViewController {
     private lazy var titleLabel: UILabel = {
         let title = UILabel()
         title.textColor = .black
-        title.font = UIFont(name: "Avenir",
-                            size: 20)
+        title.font = .applicatonFont(.avenirMedium, size: 18)
         title.text = "Popular Movies"
         title.textAlignment = .center
         return title
     }()
     
     private lazy var posterImage: UIImageView = {
-        var view = UIImageView()
+        var view = UIImageView(frame: CGRect(x: 0,
+                                             y: 0,
+                                             width: view.bounds.width,
+                                             height: view.bounds.width * 1.2))
         return view
     }()
     
@@ -65,8 +67,7 @@ class DetailViewController: BaseViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.backgroundColor = .white
-        tableView.sectionHeaderHeight = view.bounds.width * 1.2
+        tableView.tableHeaderView = posterImage
         HeadlineTableCell.register(in: tableView)
         DescriptionTableCell.register(in: tableView)
         return tableView
@@ -74,11 +75,13 @@ class DetailViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        showActivityIndicator()
         setupNavigationBar()
         presenter.configureView()
         setupConstraints()
         layoutGradientView()
     }
+    
     
     private func setupNavigationBar() {
         navigationController?.navigationBar.setBackgroundImage(UIImage(),
@@ -94,7 +97,6 @@ class DetailViewController: BaseViewController {
     private func setupConstraints() {
         let imageHeight = view.bounds.width / 1.5
         view.addSubview(tableView)
-        view.addSubview(posterImage)
         view.addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
@@ -125,18 +127,18 @@ class DetailViewController: BaseViewController {
 
 extension DetailViewController: DetailViewProtocol {
     func updateView() {
+        hideActivityIndicator()
         guard let movieData = presenter.getMovieData() else {
             return
         }
         posterImage.setImage(urlString: movieData.posterPath ?? "")
+        tableView.tableHeaderView = posterImage
         titleLabel.text = movieData.title
         tableView.reloadData()
     }
 }
 
-extension DetailViewController: UITableViewDelegate {
-    
-}
+extension DetailViewController: UITableViewDelegate { }
 
 extension DetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView,
@@ -164,10 +166,6 @@ extension DetailViewController: UITableViewDataSource {
         default:
             return UITableViewCell()
         }
-    }
-    func tableView(_ tableView: UITableView,
-                   viewForHeaderInSection section: Int) -> UIView? {
-        return posterImage
     }
     
     func tableView(_ tableView: UITableView,

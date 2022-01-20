@@ -23,6 +23,7 @@ class FeedViewController: BaseViewController {
         let searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.backgroundColor = .white
+        searchBar.searchTextField.textColor = .black
         searchBar.delegate = self
         searchBar.backgroundImage = UIImage()
         return searchBar
@@ -40,8 +41,7 @@ class FeedViewController: BaseViewController {
     private lazy var titleLabel: UILabel = {
         let title = UILabel()
         title.textColor = .black
-        title.font = UIFont(name: "Avenir",
-                            size: 20)
+        title.font = .applicatonFont(.avenirMedium, size: 18)
         title.text = "Popular Movies"
         title.textAlignment = .center
         return title
@@ -49,6 +49,7 @@ class FeedViewController: BaseViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.backgroundColor = .white
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
@@ -128,11 +129,6 @@ class FeedViewController: BaseViewController {
             bottomGradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             bottomGradientView.heightAnchor.constraint(equalToConstant: 100)
         ])
-    }
-    
-    override func connectionDissapeared() {
-        super.connectionDissapeared()
-        // TODO: do presenter.configureViewOfflineMode
     }
     
     @objc private func sortButtonTapped() {
