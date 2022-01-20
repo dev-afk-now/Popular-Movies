@@ -23,6 +23,7 @@ class FeedViewController: BaseViewController {
         let searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.backgroundColor = .white
+        searchBar.searchTextField.textColor = .black
         searchBar.delegate = self
         searchBar.backgroundImage = UIImage()
         return searchBar
@@ -49,6 +50,7 @@ class FeedViewController: BaseViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.backgroundColor = .white
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self

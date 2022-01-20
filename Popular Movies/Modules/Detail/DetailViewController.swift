@@ -65,7 +65,6 @@ class DetailViewController: BaseViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.backgroundColor = .white
         tableView.sectionHeaderHeight = view.bounds.width * 1.2
         HeadlineTableCell.register(in: tableView)
         DescriptionTableCell.register(in: tableView)
