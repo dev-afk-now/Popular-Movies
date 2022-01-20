@@ -8,6 +8,7 @@
 import UIKit
 
 protocol FeedRouterProtocol: AnyObject {
+    func showDetail(_ id: Int)
 }
 
 final class FeedRouter {
@@ -19,5 +20,9 @@ final class FeedRouter {
     }
 }
 
-extension FeedRouter: FeedRouterProtocol{
+extension FeedRouter: FeedRouterProtocol {
+    func showDetail(_ movieId: Int) {
+        let module = DetailConfigurator.create(movieId: movieId)
+        self.context.navigationController?.pushViewController(module, animated: true)
+    }
 }

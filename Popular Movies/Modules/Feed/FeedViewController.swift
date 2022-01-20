@@ -40,8 +40,10 @@ class FeedViewController: BaseViewController {
     private lazy var titleLabel: UILabel = {
         let title = UILabel()
         title.textColor = .black
-        title.font = UIFont(name: "Avenir", size: 20)
+        title.font = UIFont(name: "Avenir",
+                            size: 20)
         title.text = "Popular Movies"
+        title.textAlignment = .center
         return title
     }()
     
@@ -52,8 +54,27 @@ class FeedViewController: BaseViewController {
         tableView.dataSource = self
         tableView.separatorStyle = .none
         MovieTableCell.register(in: tableView)
-        TableLoadingCell.register(in: tableView)
         return tableView
+    }()
+    
+    private lazy var bottomGradientView: UIView = {
+        let view = UIView(frame: CGRect(x: .zero,
+                                        y: .zero,
+                                        width: view.bounds.width,
+                                        height: 100))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.makeGradient(colors: [UIColor.clear,
+                                   UIColor.black.withAlphaComponent(0.016),
+                                   UIColor.black.withAlphaComponent(0.03125),
+                                   UIColor.black.withAlphaComponent(0.0625),
+                                   UIColor.black.withAlphaComponent(0.125),
+                                   UIColor.black.withAlphaComponent(0.25),
+                                   UIColor.black.withAlphaComponent(0.45)
+                                  ],
+                          startPoint: CGPoint(x: 0, y: 0),
+                          endPoint: CGPoint(x: 0, y: 1))
+        return view
     }()
     
     override func viewDidLoad() {
@@ -63,6 +84,7 @@ class FeedViewController: BaseViewController {
         setupConstraints()
         setupNavigationBar()
         showActivityIndicator()
+        layoutGradientView()
     }
     
     private func setupNavigationBar() {
@@ -85,9 +107,7 @@ class FeedViewController: BaseViewController {
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
-            
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            titleLabel.widthAnchor.constraint(equalToConstant: view.bounds.width / 1.5),
             
             searchBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -98,6 +118,21 @@ class FeedViewController: BaseViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+    }
+    private func layoutGradientView() {
+        view.addSubview(bottomGradientView)
+        
+        NSLayoutConstraint.activate([
+            bottomGradientView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomGradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomGradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            bottomGradientView.heightAnchor.constraint(equalToConstant: 100)
+        ])
+    }
+    
+    override func connectionDissapeared() {
+        super.connectionDissapeared()
+        // TODO: do presenter.configureViewOfflineMode
     }
     
     @objc private func sortButtonTapped() {
@@ -127,7 +162,7 @@ extension FeedViewController: FeedViewProtocol {
 extension FeedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    didSelectRowAt indexPath: IndexPath) {
-        //
+        presenter.movieItemSelected(at: indexPath.row)
     }
 }
 

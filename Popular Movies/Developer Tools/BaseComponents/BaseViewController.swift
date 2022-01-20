@@ -76,7 +76,7 @@ class BaseViewController: UIViewController {
     }
     
     // MARK: - Actions -
-    @objc private func connectionDissapeared() {
+    @objc func connectionDissapeared() {
         showAlert(with: noConnectionMessage)
     }
 }
