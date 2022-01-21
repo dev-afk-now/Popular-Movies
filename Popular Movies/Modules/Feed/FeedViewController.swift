@@ -7,6 +7,23 @@
 
 import UIKit
 
+extension UISearchBar {
+    func setIconColor(_ color: UIColor) {
+        for subView in self.subviews {
+            for subSubView in subView.subviews {
+                let view = subSubView as? UITextInputTraits
+                if view != nil {
+                    let textField = view as? UITextField
+                    let glassIconView = textField?.leftView as? UIImageView
+                    glassIconView?.image = glassIconView?.image?.withRenderingMode(.alwaysTemplate)
+                    glassIconView?.tintColor = color
+                    break
+                }
+            }
+        }
+    }
+}
+
 protocol FeedViewProtocol: AnyObject {
     func updateView()
 }
@@ -22,8 +39,13 @@ class FeedViewController: BaseViewController {
         let searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.backgroundColor = .white
+        searchBar.tintColor = .black
         searchBar.searchTextField.textColor = .black
         searchBar.delegate = self
+        searchBar.setImage(UIImage(),
+                           for: .search,
+                           state: .normal)
+        searchBar.placeholder = "Search"
         searchBar.backgroundImage = UIImage()
         return searchBar
     }()

@@ -97,6 +97,8 @@ class DetailViewController: BaseViewController {
     
     private func setupConstraints() {
         let imageHeight = view.bounds.width / 1.5
+        
+        view.backgroundColor = .white
         view.addSubview(tableView)
         view.addSubview(titleLabel)
         
