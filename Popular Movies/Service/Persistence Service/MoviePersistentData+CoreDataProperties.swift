@@ -2,7 +2,7 @@
 //  MoviePersistentData+CoreDataProperties.swift
 //  Popular Movies
 //
-//  Created by devmac on 20.01.2022.
+//  Created by devmac on 21.01.2022.
 //
 //
 
@@ -16,12 +16,12 @@ extension MoviePersistentData {
         return NSFetchRequest<MoviePersistentData>(entityName: "MoviePersistentData")
     }
 
+    @NSManaged public var genres: [Int]?
     @NSManaged public var id: Int64
-    @NSManaged public var title: String?
     @NSManaged public var imageURL: String?
     @NSManaged public var rating: Double
     @NSManaged public var releaseDate: String?
-    @NSManaged public var genres: [Int]?
+    @NSManaged public var title: String?
 
 }
 

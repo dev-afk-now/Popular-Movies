@@ -22,7 +22,8 @@ final class FeedRepository {}
 
 extension FeedRepository: FeedRepositoryProtocol {
     func fetchDataBaseObjects(completion: @escaping ([MovieCellItem]) -> ()) {
-        completion(MoviePersistentAdapter.shared.pullDatabasePostObjects().map { MovieCellItem.init(from: $0) })
+        completion(MoviePersistentAdapter.shared.pullDatabasePostObjects().map {
+            MovieCellItem.init(from: $0) })
     }
     
     func fetchMovieGenres(completion: EmptyBlock? = nil) {

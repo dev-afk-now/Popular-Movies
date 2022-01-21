@@ -73,7 +73,6 @@ final class DetailPresenter {
             completion?()
         }
     }
-    // MARK: - Private methods -
 }
 
 extension DetailPresenter: DetailPresenterProtocol {

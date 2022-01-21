@@ -99,6 +99,7 @@ final class FeedPresenter {
     
     private func updateView() {
         view?.updateView()
+        view?.hideLoading()
         isLoading = false
     }
     
@@ -148,8 +149,10 @@ final class FeedPresenter {
     
     private func fetchSavedMovies(completion: EmptyBlock?) {
         isLoading = true
+        popularMovies.removeAll()
         repository.fetchDataBaseObjects { movies in
             self.popularMovies = movies
+            self.updateView()
             completion?()
         }
     }
@@ -192,7 +195,8 @@ extension FeedPresenter: FeedPresenterProtocol {
     
     func sortMovies(with stringOption: String) {
         let pickedOption = SortOption.allCases.first { $0.message == stringOption }
-        guard let option = pickedOption, isReachable else { return }
+        guard isReachable,
+              let option = pickedOption else { return }
         popularMovies.removeAll()
         pageToLoad = 1
         selectedSortOption = option
@@ -209,6 +213,7 @@ extension FeedPresenter: FeedPresenterProtocol {
     }
     
     func loadMoreData() {
+        view?.showLoading()
         if !self.isLoading, isReachable {
             self.isLoading = true
             if isSearching {

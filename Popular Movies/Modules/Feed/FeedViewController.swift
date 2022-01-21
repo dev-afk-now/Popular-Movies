@@ -7,25 +7,10 @@
 
 import UIKit
 
-extension UISearchBar {
-    func setIconColor(_ color: UIColor) {
-        for subView in self.subviews {
-            for subSubView in subView.subviews {
-                let view = subSubView as? UITextInputTraits
-                if view != nil {
-                    let textField = view as? UITextField
-                    let glassIconView = textField?.leftView as? UIImageView
-                    glassIconView?.image = glassIconView?.image?.withRenderingMode(.alwaysTemplate)
-                    glassIconView?.tintColor = color
-                    break
-                }
-            }
-        }
-    }
-}
-
 protocol FeedViewProtocol: AnyObject {
     func updateView()
+    func showLoading()
+    func hideLoading()
 }
 
 class FeedViewController: BaseViewController {
@@ -164,9 +149,16 @@ class FeedViewController: BaseViewController {
 }
 
 extension FeedViewController: FeedViewProtocol {
+    func showLoading() {
+        showActivityIndicator()
+    }
+    
+    func hideLoading() {
+        hideActivityIndicator()
+    }
+    
     func updateView() {
         DispatchQueue.main.async { [weak self] in
-            self?.hideActivityIndicator()
             self?.tableView.reloadData()
         }
     }
@@ -203,7 +195,6 @@ extension FeedViewController: UITableViewDataSource {
                    forRowAt indexPath: IndexPath) {
         if indexPath.row == presenter.movieListCount - 3 {
             presenter.loadMoreData()
-            showActivityIndicator()
         }
     }
 }

@@ -23,7 +23,7 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="MoviePersistentData" positionX="-63" positionY="-18" width="128" height="119"/>
         <element name="GenrePersistentData" positionX="-36" positionY="54" width="128" height="59"/>
+        <element name="MoviePersistentData" positionX="-63" positionY="-18" width="128" height="119"/>
     </elements>
 </model>
