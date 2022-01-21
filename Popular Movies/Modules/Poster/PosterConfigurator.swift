@@ -10,11 +10,12 @@ import Foundation
 import UIKit
 
 final class PosterConfigurator {
-    static func create() -> UIViewController {
-        let view = PosterViewProtocol()
-        let router = PosterRouterProtocol(context: view)
-        let presenter = PosterPresenterProtocol(view: view,
-                                           router: router)
+    static func create(imageData: Data) -> UIViewController {
+        let view = PosterViewController()
+        let router = PosterRouter(context: view)
+        let presenter = PosterPresenter(view: view,
+                                        router: router,
+                                        imageData: imageData)
         view.presenter = presenter
         let navigationVC = UINavigationController(rootViewController: view)
         return navigationVC

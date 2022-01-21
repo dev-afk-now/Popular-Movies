@@ -93,6 +93,7 @@ class DetailViewController: BaseViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationItem.leftBarButtonItem = backBarButton
         navigationItem.titleView = titleLabel
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     private func setupConstraints() {
@@ -153,6 +154,9 @@ extension DetailViewController: UITableViewDelegate {
             break
         }
     }
+}
+
+extension DetailViewController: UIGestureRecognizerDelegate {
 }
 
 extension DetailViewController: UITableViewDataSource {

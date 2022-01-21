@@ -21,7 +21,7 @@ struct MovieCellItem {
         self.imageURL = networkData.imagePath
         self.genres = networkData.genres
         self.rating = networkData.rating
-        self.releaseDate = networkData.releaseDate
+        self.releaseDate = networkData.releaseDate ?? ""
     }
     
     init(from model: MoviePersistentData) {

@@ -8,6 +8,7 @@
 import UIKit
 
 protocol PosterRouterProtocol: AnyObject {
+    func closeCurrentViewController()
 }
 
 final class PosterRouter {
@@ -20,4 +21,7 @@ final class PosterRouter {
 }
 
 extension PosterRouter: PosterRouterProtocol {
+    func closeCurrentViewController() {
+        context.dismiss(animated: true)
+    }
 }
