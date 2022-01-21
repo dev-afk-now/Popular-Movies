@@ -9,7 +9,6 @@ import UIKit
 
 protocol FeedViewProtocol: AnyObject {
     func updateView()
-    func showError()
 }
 
 class FeedViewController: BaseViewController {
@@ -143,10 +142,6 @@ class FeedViewController: BaseViewController {
 }
 
 extension FeedViewController: FeedViewProtocol {
-    func showError() {
-        hideActivityIndicator()
-    }
-    
     func updateView() {
         DispatchQueue.main.async { [weak self] in
             self?.hideActivityIndicator()

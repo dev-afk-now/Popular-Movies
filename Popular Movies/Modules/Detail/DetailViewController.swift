@@ -139,7 +139,19 @@ extension DetailViewController: DetailViewProtocol {
     }
 }
 
-extension DetailViewController: UITableViewDelegate { }
+extension DetailViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView,
+                   didSelectRowAt indexPath: IndexPath) {
+        let cellType = presenter.cellDataSource[indexPath.row]
+        switch cellType {
+        case .trailerCell:
+            let cell = tableView.cellForRow(at: indexPath) as! VideoTableCell
+            cell.playStopVideo()
+        default:
+            break
+        }
+    }
+}
 
 extension DetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView,

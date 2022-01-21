@@ -67,6 +67,7 @@ final class FeedPresenter {
     }
     
     private func fetchPopularMovies(completion: EmptyBlock? = nil) {
+        
         repository.fetchPopular(page: pageToLoad,
                                 sortBy: selectedSortOption.rawValue) { [weak self] result in
             switch result {
@@ -75,8 +76,8 @@ final class FeedPresenter {
                 self?.pageToLoad += 1
                 self?.isLoading = false
                 completion?()
-            case .failure:
-                self?.view?.showError()
+            default:
+                completion?()
             }
         }
     }
@@ -91,8 +92,8 @@ final class FeedPresenter {
                 self?.pageToLoad += 1
                 self?.isLoading = false
                 completion?()
-            case .failure:
-                self?.view?.showError()
+            default:
+                completion?()
             }
         }
     }
@@ -101,9 +102,15 @@ final class FeedPresenter {
         view?.updateView()
     }
     
+    private func performLocalSearch() {
+        searchedResults = popularMovies.filter{ $0.title.contains(searchText) }
+        updateView()
+    }
+    
     private func executeSearch(with text: String) {
         if !isReachable {
-            return 
+            performLocalSearch()
+            return
         }
         pageToLoad = 1
         searchedResults.removeAll()
@@ -164,9 +171,7 @@ final class FeedPresenter {
     
     @objc func connectionAppeared() {
         isReachable = true
-        fetchPopularMovies {
-            self.updateView()
-        }
+        loadMoreData()
     }
 }
 

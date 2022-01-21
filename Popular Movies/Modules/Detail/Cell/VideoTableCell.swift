@@ -9,20 +9,30 @@ import UIKit
 import youtube_ios_player_helper
 
 final class VideoTableCell: BaseTableViewCell {
+    
+    private var isPlaying = false
+    
     private lazy var videoView: YTPlayerView = {
         var view = YTPlayerView()
         view.delegate = self
+        view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
     func configure(with urlString: String) {
         videoView.load(withVideoId: urlString)
-        playVideo()
     }
     
-    func playVideo() {
-        videoView.playVideo()
+    func playStopVideo() {
+        switch isPlaying {
+        case true:
+            videoView.pauseVideo()
+            isPlaying = false
+        case false:
+            videoView.playVideo()
+            isPlaying = true
+        }
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -47,8 +57,4 @@ final class VideoTableCell: BaseTableViewCell {
     }
 }
 
-extension VideoTableCell: YTPlayerViewDelegate {
-    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
-        
-    }
-}
+extension VideoTableCell: YTPlayerViewDelegate {}
