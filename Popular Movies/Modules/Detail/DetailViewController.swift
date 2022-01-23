@@ -37,6 +37,10 @@ class DetailViewController: BaseViewController {
                                              y: 0,
                                              width: view.bounds.width,
                                              height: view.bounds.width * 1.2))
+        view.isUserInteractionEnabled = true
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self,
+                               action: #selector(didTapView))
+        view.addGestureRecognizer(tapGestureRecognizer)
         return view
     }()
     
@@ -105,7 +109,6 @@ class DetailViewController: BaseViewController {
         
         NSLayoutConstraint.activate([
             titleLabel.widthAnchor.constraint(equalToConstant: imageHeight),
-            
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -122,6 +125,12 @@ class DetailViewController: BaseViewController {
             bottomGradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             bottomGradientView.heightAnchor.constraint(equalToConstant: 100)
         ])
+    }
+    
+    @objc private func didTapView(_ sender: UITapGestureRecognizer) {
+        presenter.posterImageTapped(
+            imageData: posterImage.image?.jpegData(compressionQuality: 1)
+        )
     }
     
     @objc private func backBarButtonTapped() {
@@ -149,15 +158,14 @@ extension DetailViewController: UITableViewDelegate {
         switch cellType {
         case .trailerCell:
             let cell = tableView.cellForRow(at: indexPath) as! VideoTableCell
-            cell.playStopVideo()
+            cell.playPauseVideo()
         default:
             break
         }
     }
 }
 
-extension DetailViewController: UIGestureRecognizerDelegate {
-}
+extension DetailViewController: UIGestureRecognizerDelegate { }
 
 extension DetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView,

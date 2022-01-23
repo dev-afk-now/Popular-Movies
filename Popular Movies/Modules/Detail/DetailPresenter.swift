@@ -13,16 +13,14 @@ enum DetailCellType {
     case trailerCell
 }
 
-struct DetailSectionModel {
-    let cells: [DetailCellType]
-}
 
 protocol DetailPresenterProtocol: AnyObject {
+    var cellDataSource: [DetailCellType] { get }
+    var trailerPath: String { get }
     func configureView()
     func getMovieData() -> DetailModel?
     func closeButtonTapped()
-    var cellDataSource: [DetailCellType] { get }
-    var trailerPath: String { get }
+    func posterImageTapped(imageData: Data?)
 }
 
 final class DetailPresenter {
@@ -34,7 +32,7 @@ final class DetailPresenter {
     
     private var trailerDataSource: VideoData?
     
-    private var cellsToDrow = [DetailCellType]()
+    private var cellsToDraw = [DetailCellType]()
     
     init(view: DetailViewProtocol,
          router: DetailRouterProtocol,
@@ -52,7 +50,7 @@ final class DetailPresenter {
                                           .trailerCell,
                                           .descriptionCell
                                           ]
-        cellsToDrow = cellList
+        cellsToDraw = cellList
     }
     
     private func fetchMovie(completion: EmptyBlock?) {
@@ -76,12 +74,17 @@ final class DetailPresenter {
 }
 
 extension DetailPresenter: DetailPresenterProtocol {
+    func posterImageTapped(imageData: Data?) {
+        guard let data = imageData else { return }
+        router.showPoster(with: data)
+    }
+    
     var trailerPath: String {
         return trailerDataSource?.key ?? ""
     }
     
     var cellDataSource: [DetailCellType] {
-        return cellsToDrow
+        return cellsToDraw
     }
     
     func closeButtonTapped() {

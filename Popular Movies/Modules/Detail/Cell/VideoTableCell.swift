@@ -24,7 +24,7 @@ final class VideoTableCell: BaseTableViewCell {
         videoView.load(withVideoId: urlString)
     }
     
-    func playStopVideo() {
+    func playPauseVideo() {
         switch isPlaying {
         case true:
             videoView.pauseVideo()

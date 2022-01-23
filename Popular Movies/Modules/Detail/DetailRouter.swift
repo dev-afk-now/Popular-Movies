@@ -8,7 +8,8 @@
 import UIKit
 
 protocol DetailRouterProtocol: AnyObject {
-    func  closeCurrentViewController()
+    func closeCurrentViewController()
+    func showPoster(with imageData: Data)
 }
 
 final class DetailRouter {
@@ -21,6 +22,12 @@ final class DetailRouter {
 }
 
 extension DetailRouter: DetailRouterProtocol {
+    func showPoster(with imageData: Data) {
+        let module = PosterConfigurator.create(imageData: imageData)
+        module.modalPresentationStyle = .overFullScreen
+        context.present(module, animated: true)
+    }
+    
     func closeCurrentViewController() {
         context.navigationController?.popViewController(animated: true)
     }

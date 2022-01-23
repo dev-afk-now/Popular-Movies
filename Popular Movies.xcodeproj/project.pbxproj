@@ -136,12 +136,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		414660BC2797490000235FEC /* Detail Repository */ = {
+		414660BC2797490000235FEC /* DetailRepository */ = {
 			isa = PBXGroup;
 			children = (
 				414660BD2797491700235FEC /* DetailRepository.swift */,
 			);
-			path = "Detail Repository";
+			path = DetailRepository;
 			sourceTree = "<group>";
 		};
 		41A1AA1A279617DA001C8AE8 /* Custom Error */ = {
@@ -150,6 +150,15 @@
 				41A1AA1B279617EB001C8AE8 /* CustomError.swift */,
 			);
 			path = "Custom Error";
+			sourceTree = "<group>";
+		};
+		41D41466279DCCC200B16B99 /* Adapter */ = {
+			isa = PBXGroup;
+			children = (
+				D53A0713279962C40037E559 /* MoviePersistentAdapter.swift */,
+				D53A0721279989A70037E559 /* GenrePersistentAdapter.swift */,
+			);
+			path = Adapter;
 			sourceTree = "<group>";
 		};
 		44064626CA881C5EAFF0CC03 /* Frameworks */ = {
@@ -217,9 +226,9 @@
 		D519C96F278C7D340018155F /* Popular Movies */ = {
 			isa = PBXGroup;
 			children = (
+				D519C970278C7D340018155F /* AppDelegate.swift */,
 				D57959E1278D785E003CED85 /* Developer Tools */,
 				D57959E5278D7CC2003CED85 /* Service */,
-				D519C970278C7D340018155F /* AppDelegate.swift */,
 				D57959D9278D750C003CED85 /* Modules */,
 				D519C979278C7D350018155F /* Assets.xcassets */,
 				D519C97B278C7D350018155F /* LaunchScreen.storyboard */,
@@ -228,19 +237,18 @@
 			path = "Popular Movies";
 			sourceTree = "<group>";
 		};
-		D53A070B2799613B0037E559 /* Persistence Service */ = {
+		D53A070B2799613B0037E559 /* PersistenceService */ = {
 			isa = PBXGroup;
 			children = (
+				41D41466279DCCC200B16B99 /* Adapter */,
+				D53A0715279966950037E559 /* PersistenceService.swift */,
 				D5DEBE7D279ACCE50018278D /* MoviePersistentData+CoreDataClass.swift */,
 				D5DEBE7E279ACCE50018278D /* MoviePersistentData+CoreDataProperties.swift */,
 				D53A072727998A6C0037E559 /* GenrePersistentData+CoreDataClass.swift */,
 				D53A072827998A6C0037E559 /* GenrePersistentData+CoreDataProperties.swift */,
 				D53A070C279961700037E559 /* MoviePersistentData.xcdatamodeld */,
-				D53A0713279962C40037E559 /* MoviePersistentAdapter.swift */,
-				D53A0715279966950037E559 /* PersistenceService.swift */,
-				D53A0721279989A70037E559 /* GenrePersistentAdapter.swift */,
 			);
-			path = "Persistence Service";
+			path = PersistenceService;
 			sourceTree = "<group>";
 		};
 		D57959D9278D750C003CED85 /* Modules */ = {
@@ -291,12 +299,12 @@
 		D57959E5278D7CC2003CED85 /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				D53A070B2799613B0037E559 /* Persistence Service */,
-				414660BC2797490000235FEC /* Detail Repository */,
+				D53A070B2799613B0037E559 /* PersistenceService */,
+				414660BC2797490000235FEC /* DetailRepository */,
 				D59EF0E42796CD1600B8370B /* GenreManager */,
 				D51164C827957EE4000B775F /* ImageManager */,
-				D5C68EC4278EEB9B0010D9FD /* Reachability Manager */,
-				D57959EF278D9E14003CED85 /* Feed Repository */,
+				D5C68EC4278EEB9B0010D9FD /* ReachabilityManager */,
+				D57959EF278D9E14003CED85 /* FeedRepository */,
 				D57959E6278D7CD3003CED85 /* NetworkService */,
 			);
 			path = Service;
@@ -319,12 +327,12 @@
 			path = EndPoint;
 			sourceTree = "<group>";
 		};
-		D57959EF278D9E14003CED85 /* Feed Repository */ = {
+		D57959EF278D9E14003CED85 /* FeedRepository */ = {
 			isa = PBXGroup;
 			children = (
 				D57959F0278D9E4A003CED85 /* FeedRepository.swift */,
 			);
-			path = "Feed Repository";
+			path = FeedRepository;
 			sourceTree = "<group>";
 		};
 		D57959F2278DA0D0003CED85 /* Model */ = {
@@ -379,12 +387,12 @@
 			path = Detail;
 			sourceTree = "<group>";
 		};
-		D5C68EC4278EEB9B0010D9FD /* Reachability Manager */ = {
+		D5C68EC4278EEB9B0010D9FD /* ReachabilityManager */ = {
 			isa = PBXGroup;
 			children = (
 				D5C68EC5278EEBBB0010D9FD /* ReachabilityManager.swift */,
 			);
-			path = "Reachability Manager";
+			path = ReachabilityManager;
 			sourceTree = "<group>";
 		};
 		D5DEBE81279AD4E10018278D /* Poster */ = {
