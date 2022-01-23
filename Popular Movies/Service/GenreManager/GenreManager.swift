@@ -29,7 +29,7 @@ final class GenreManager {
                 case .failure:
                     self.genres = GenrePersistentAdapter
                         .shared
-                        .pullDatabasePostObjects()
+                        .pullDatabaseGenreObjects()
                         .map { MovieGenre.init(from: $0) }
                 }
             }

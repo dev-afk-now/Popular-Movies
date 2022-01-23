@@ -22,8 +22,11 @@ final class FeedRepository {}
 
 extension FeedRepository: FeedRepositoryProtocol {
     func fetchDataBaseObjects(completion: @escaping ([MovieCellItem]) -> ()) {
-        completion(MoviePersistentAdapter.shared.pullDatabasePostObjects().map {
-            MovieCellItem.init(from: $0) })
+        completion(MoviePersistentAdapter
+                    .shared
+                    .pullDatabaseMovieObjects()
+                    .map { MovieCellItem.init(from: $0) }
+        )
     }
     
     func fetchMovieGenres(completion: EmptyBlock? = nil) {
@@ -39,7 +42,9 @@ extension FeedRepository: FeedRepositoryProtocol {
             switch result {
             case .success(let success):
                 let movies = success.results.map(MovieCellItem.init)
-                MoviePersistentAdapter.shared.generateDatabasePostObjects(from: movies)
+                MoviePersistentAdapter
+                    .shared
+                    .generateDatabaseMovieObjects(from: movies)
                 completion(.success(movies))
             case .failure(let failure):
                 completion(.failure(failure))
@@ -57,7 +62,9 @@ extension FeedRepository: FeedRepositoryProtocol {
             switch result {
             case .success(let success):
                 let movies = success.results.map(MovieCellItem.init)
-                MoviePersistentAdapter.shared.generateDatabasePostObjects(from: movies)
+                MoviePersistentAdapter
+                    .shared
+                    .generateDatabaseMovieObjects(from: movies)
                 completion(.success(movies))
             case .failure(let failure):
                 completion(.failure(failure))

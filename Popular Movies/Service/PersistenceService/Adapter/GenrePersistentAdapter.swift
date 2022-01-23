@@ -23,7 +23,7 @@ final class GenrePersistentAdapter {
         PersistentService.shared.save()
     }
     
-    func pullDatabasePostObjects() -> [GenrePersistentData] {
+    func pullDatabaseGenreObjects() -> [GenrePersistentData] {
         return PersistentService.shared.fetchObjects(entity: GenrePersistentData.self)
     }
 }

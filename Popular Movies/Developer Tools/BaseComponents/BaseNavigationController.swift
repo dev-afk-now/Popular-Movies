@@ -1,6 +1,6 @@
 //
 //  BaseNavigationController.swift
-//  Posts.demo
+//  PopularMovies.demo
 //
 //  Created by devmac on 14.12.2021.
 //

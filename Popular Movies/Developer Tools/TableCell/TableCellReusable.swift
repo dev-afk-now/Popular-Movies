@@ -1,6 +1,6 @@
 //
 //  TableCellReusable.swift
-//  Posts.demo
+//  PopularMovies.demo
 //
 //  Created by devmac on 22.12.2021.
 //
