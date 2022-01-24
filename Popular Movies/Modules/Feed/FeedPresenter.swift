@@ -34,9 +34,7 @@ final class FeedPresenter {
     private var searchTask: DispatchWorkItem?
     private var searchedResults = [MovieCellItem]()
     
-    private var isSearching: Bool {
-        return !searchText.isEmpty
-    }
+    private var isUsingSearchedResults = false
     
     private var selectedSortOption: SortOption = .mostPopular
     
@@ -47,7 +45,7 @@ final class FeedPresenter {
     
     private var popularMovies = [MovieCellItem]()
     private var moviesDataSource: [MovieCellItem] {
-        isSearching ? searchedResults : popularMovies
+        isUsingSearchedResults ? searchedResults : popularMovies
     }
     
     // MARK: - LifeCycle -
@@ -111,6 +109,7 @@ final class FeedPresenter {
     
     private func performLocalSearch(with text: String) {
         searchedResults = popularMovies.filter{ $0.title.contains(text) }
+        isUsingSearchedResults = true
         internalUpdateView()
     }
     
@@ -131,6 +130,7 @@ final class FeedPresenter {
         let workItem = DispatchWorkItem { [weak self] in
             self?.view?.showLoading()
             self?.fetchMovieByKeyword(searchText: text) {
+                self?.isUsingSearchedResults = true
                 self?.internalUpdateView()
             }
         }
@@ -142,6 +142,7 @@ final class FeedPresenter {
     private func breakSearch(of dispatchWorkItem: DispatchWorkItem?) {
         dispatchWorkItem?.cancel()
         clearSearch()
+        isUsingSearchedResults = false
         internalUpdateView()
     }
     
@@ -150,9 +151,9 @@ final class FeedPresenter {
     }
     
     private func fetchSavedMovies(completion: EmptyBlock?) {
-        isLoading = true
         popularMovies.removeAll()
         repository.fetchDataBaseObjects { movies in
+            print(movies.count)
             self.popularMovies = movies
             self.internalUpdateView()
             completion?()
@@ -192,6 +193,7 @@ final class FeedPresenter {
 // MARK: - Extension -
 extension FeedPresenter: FeedPresenterProtocol {
     func movieItemSelected(at index: Int) {
+        searchTask?.cancel()
         router.showDetail(moviesDataSource[index].id)
     }
     
@@ -222,11 +224,14 @@ extension FeedPresenter: FeedPresenterProtocol {
         view?.showLoading()
         if !self.isLoading, isReachable {
             self.isLoading = true
-            if isSearching {
+            if isUsingSearchedResults {
                 self.fetchMovieByKeyword(searchText: searchText,
                                          completion: internalUpdateView)
             } else {
-                self.fetchPopularMovies(completion: internalUpdateView)
+                self.fetchPopularMovies { [weak self] in
+                    self?.isUsingSearchedResults = false
+                    self?.internalUpdateView()
+                }
             }
         } else {
             view?.hideLoading()
@@ -242,18 +247,15 @@ extension FeedPresenter: FeedPresenterProtocol {
     }
     
     func configureView() {
-        
         let group = DispatchGroup()
         let requests = [fetchMovieGenres,
                         fetchPopularMovies]
-        
         for item in requests {
             group.enter()
             item {
                 group.leave()
             }
         }
-        
         group.notify(queue: .main) { [weak self] in
             self?.internalUpdateView()
         }

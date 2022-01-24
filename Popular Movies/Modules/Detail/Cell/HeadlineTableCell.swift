@@ -45,9 +45,9 @@ class HeadlineTableCell: BaseTableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.font = .applicatonFont(.avenirHeavyOblique, size: 22)
-        label.textColor = .gray
+        label.textColor = .black
         label.textAlignment = .left
-        label.backgroundColor = .lightGray.withAlphaComponent(0.5)
+        label.backgroundColor = .lightGray.withAlphaComponent(0.25)
         label.layer.cornerRadius = 10
         label.textAlignment = .center
         label.clipsToBounds = true
@@ -66,10 +66,9 @@ class HeadlineTableCell: BaseTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Private methods -
+    // MARK: - Public methods -
     func configure(with movieData: DetailModel) {
         headlineLabel.text = movieData.title
-        
         secondaryInfoLabel.text = (movieData.productionCountries.map{$0.name}
         ).joined(separator: ", ") + ", " +
         (movieData.dateOfReleaseString)
@@ -77,7 +76,7 @@ class HeadlineTableCell: BaseTableViewCell {
         taglineLabel.text = String(format: "'%@'", movieData.tagline ?? "")
     }
     
-    // MARK: - Public methods -
+    // MARK: - Private methods -
     private func setupSubviews() {
         let verticalInset: CGFloat = 16
         let horizontalInset: CGFloat = 12
@@ -89,7 +88,6 @@ class HeadlineTableCell: BaseTableViewCell {
         self.addSubview(taglineLabel)
         
         NSLayoutConstraint.activate([
-            
             headlineLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor,
                                                    constant: horizontalInset),
             headlineLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor,

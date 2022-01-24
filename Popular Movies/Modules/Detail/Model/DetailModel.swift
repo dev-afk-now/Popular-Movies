@@ -29,7 +29,9 @@ struct DetailModel: Decodable {
         self.rating = networkDetail.rating
         self.releaseDate = networkDetail.releaseDate
     }
-    
+}
+
+extension DetailModel {
     var dateOfReleaseString: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"

@@ -17,6 +17,10 @@ final class MoviePersistentAdapter {
     }
     
     func generateDatabasePostObject(from movieModel: MovieCellItem) {
+        let storedObjects = pullDatabasePostObjects()
+        guard (storedObjects.first { movieModel.id == $0.id }) == nil else {
+            return
+        }
         let object = MoviePersistentData(context: PersistentService.shared.context)
         print("created: \(movieModel.id)")
         object.id = movieModel.id.int64value
@@ -29,7 +33,6 @@ final class MoviePersistentAdapter {
     }
     
     func pullDatabasePostObjects() -> [MoviePersistentData] {
-        print(PersistentService.shared.fetchObjects(entity: MoviePersistentData.self).count)
         return PersistentService.shared.fetchObjects(entity: MoviePersistentData.self)
     }
 }

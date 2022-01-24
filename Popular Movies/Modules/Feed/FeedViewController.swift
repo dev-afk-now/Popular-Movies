@@ -21,8 +21,6 @@ class FeedViewController: BaseViewController {
     
     
     // MARK: - Private properties -
-    private var isLoading = false
-    
     private lazy var searchBarView: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -105,7 +103,6 @@ class FeedViewController: BaseViewController {
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .white
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationItem.rightBarButtonItem = sortButton
         navigationItem.titleView = titleLabel
     }
     
@@ -146,6 +143,21 @@ class FeedViewController: BaseViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.image = itemsIsEmpty ? noResultsImage : nil
         tableView.backgroundView = imageView
+    }
+    
+    private func setupNavigationBarSortButton(_ isVisible: Bool) {
+        navigationItem.setRightBarButton(isVisible ? sortButton : nil,
+                                         animated: true)
+    }
+    
+    override func connectionDisappeared() {
+        super.connectionDisappeared()
+        setupNavigationBarSortButton(true)
+    }
+    
+    override func connectionAppeared() {
+        super.connectionAppeared()
+        setupNavigationBarSortButton(true)
     }
     
     // MARK: - Actions -

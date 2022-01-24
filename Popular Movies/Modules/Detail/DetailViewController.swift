@@ -37,8 +37,8 @@ class DetailViewController: BaseViewController {
     
     private lazy var posterImage: UIImageView = {
         let imageSideLength: CGFloat = view.bounds.width
-        var view = UIImageView(frame: CGRect(x: 0,
-                                             y: 0,
+        var view = UIImageView(frame: CGRect(x: .zero,
+                                             y: .zero,
                                              width: imageSideLength,
                                              height: imageSideLength))
         view.isUserInteractionEnabled = true
@@ -68,7 +68,6 @@ class DetailViewController: BaseViewController {
         return view
     }()
     
-    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -83,7 +82,6 @@ class DetailViewController: BaseViewController {
     }()
     
     // MARK: - LifeCycle -
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         showActivityIndicator()
@@ -94,7 +92,6 @@ class DetailViewController: BaseViewController {
     }
     
     // MARK: - Private methods -
-    
     private func setupNavigationBar() {
         navigationController?.navigationBar.setBackgroundImage(UIImage(),
                                                                for: UIBarMetrics.default)
