@@ -9,6 +9,7 @@ import UIKit
 
 class DescriptionTableCell: BaseTableViewCell {
     
+    // MARK: - Private properties -
     private lazy var containerView: UIView = {
         var view = UIView()
         view.backgroundColor = .white
@@ -20,7 +21,7 @@ class DescriptionTableCell: BaseTableViewCell {
         view.layer.shadowRadius = 5
         return view
     }()
-
+    
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -30,8 +31,8 @@ class DescriptionTableCell: BaseTableViewCell {
         label.textAlignment = .left
         return label
     }()
-
     
+    // MARK: - Init -
     override init(style: UITableViewCell.CellStyle,
                   reuseIdentifier: String?) {
         super.init(style: style,
@@ -43,10 +44,12 @@ class DescriptionTableCell: BaseTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public methods -
     func configure(with movieData: DetailModel) {
         descriptionLabel.text = "Overview:\n" + movieData.overview
     }
     
+    // MARK: - Private methods -
     private func setupSubviews() {
         let verticalInset: CGFloat = 16
         let horizontalInset: CGFloat = 12
@@ -58,18 +61,18 @@ class DescriptionTableCell: BaseTableViewCell {
             containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             containerView.topAnchor.constraint(equalTo: self.topAnchor,
-                                                  constant: verticalInset),
+                                               constant: verticalInset),
             containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
                                                   constant: -verticalInset),
-            
+
             descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                       constant: horizontalInset),
             descriptionLabel.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor,
-                                                    constant: -horizontalInset),
+                                                       constant: -horizontalInset),
             descriptionLabel.topAnchor.constraint(equalTo: containerView.topAnchor,
                                                   constant: verticalInset),
             descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                                  constant: -verticalInset)
+                                                     constant: -verticalInset)
         ])
     }
 }

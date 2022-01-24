@@ -17,7 +17,12 @@ final class MoviePersistentAdapter {
     }
     
     func generateDatabaseMovieObject(from movieModel: MovieCellItem) {
+        let storedObjects = pullDatabaseMovieObjects()
+        guard (storedObjects.first { movieModel.id == $0.id }) == nil else {
+            return
+        }
         let object = MoviePersistentData(context: PersistentService.shared.context)
+        print("created: \(movieModel.id)")
         object.id = movieModel.id.int64value
         object.releaseDate = movieModel.releaseDate
         object.rating = movieModel.rating

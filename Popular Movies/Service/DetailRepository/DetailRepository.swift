@@ -25,7 +25,6 @@ extension DetailRepository: DetailRepositoryProtocol {
             (result: Result<VideoDataContainer, CustomError>) in
             switch result {
             case .success(let videoObject):
-                print(videoObject)
                 completion(videoObject.results.first { $0.type == "Trailer" })
             default:
                 break

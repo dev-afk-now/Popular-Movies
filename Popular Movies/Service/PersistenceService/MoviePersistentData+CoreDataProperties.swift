@@ -2,7 +2,7 @@
 //  MoviePersistentData+CoreDataProperties.swift
 //  Popular Movies
 //
-//  Created by devmac on 21.01.2022.
+//  Created by Никита Дубовик on 24.01.2022.
 //
 //
 

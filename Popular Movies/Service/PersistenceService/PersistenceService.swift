@@ -11,8 +11,11 @@ import CoreData
 final class PersistentService {
     static let shared = PersistentService()
     var context: NSManagedObjectContext {
-        container.viewContext
+        let viewContext = container.viewContext
+        viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return viewContext
     }
+    
     lazy var container: NSPersistentContainer = {
         let persistentContatiner = NSPersistentContainer(name: "MoviePersistentData")
         persistentContatiner.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -37,6 +40,10 @@ final class PersistentService {
     }
     
     func save() {
-        try? context.save()
+        do {
+        try context.save()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }

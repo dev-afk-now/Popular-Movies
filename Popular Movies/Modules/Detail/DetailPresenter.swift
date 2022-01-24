@@ -7,13 +7,6 @@
 
 import UIKit
 
-enum DetailCellType {
-    case headlineCell
-    case descriptionCell
-    case trailerCell
-}
-
-
 protocol DetailPresenterProtocol: AnyObject {
     var cellDataSource: [DetailCellType] { get }
     var trailerPath: String { get }
@@ -24,7 +17,11 @@ protocol DetailPresenterProtocol: AnyObject {
 }
 
 final class DetailPresenter {
-    weak private var view: DetailViewProtocol?
+    
+    // MARK: - Public properties -
+    weak var view: DetailViewProtocol?
+    
+    // MARK: - Private properties -
     private let router: DetailRouterProtocol
     private let repository: DetailRepositoryProtocol
     private let movieId: Int
@@ -34,6 +31,7 @@ final class DetailPresenter {
     
     private var cellsToDraw = [DetailCellType]()
     
+    // MARK: - Init -
     init(view: DetailViewProtocol,
          router: DetailRouterProtocol,
          repository: DetailRepositoryProtocol,
@@ -45,6 +43,7 @@ final class DetailPresenter {
         prepareCellDataSource()
     }
     
+    // MARK: - Private properties -
     private func prepareCellDataSource() {
         let cellList: [DetailCellType] = [.headlineCell,
                                           .trailerCell,
@@ -54,8 +53,8 @@ final class DetailPresenter {
     }
     
     private func fetchMovie(completion: EmptyBlock?) {
-        repository.fetchMovie(by: movieId) { [weak self] result in
-            switch result {
+        repository.fetchMovie(by: movieId) { [weak self] movieList in
+            switch movieList {
             case .success(let movieObject):
                 self?.movieDataSource = movieObject
                 completion?()
@@ -66,13 +65,14 @@ final class DetailPresenter {
     }
     
     private func fetchVideo(completion: EmptyBlock?) {
-        repository.fetchVideo(by: movieId) { [weak self] video in
-            self?.trailerDataSource = video
+        repository.fetchVideo(by: movieId) { [weak self] videoData in
+            self?.trailerDataSource = videoData
             completion?()
         }
     }
 }
 
+// MARK: - Extension -
 extension DetailPresenter: DetailPresenterProtocol {
     func posterImageTapped(imageData: Data?) {
         guard let data = imageData else { return }
@@ -88,7 +88,7 @@ extension DetailPresenter: DetailPresenterProtocol {
     }
     
     func closeButtonTapped() {
-        router.closeCurrentViewController()
+        return router.closeCurrentViewController()
     }
     
     func getMovieData() -> DetailModel? {
@@ -105,7 +105,6 @@ extension DetailPresenter: DetailPresenterProtocol {
                 group.leave()
             }
         }
-        
         group.notify(queue: .main) { [weak self] in
             self?.view?.updateView()
         }

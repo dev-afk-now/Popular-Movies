@@ -5,8 +5,6 @@
 //  Created by devmac on 21.01.2022.
 //
 
-import Foundation
-
 import UIKit
 
 final class PosterConfigurator {

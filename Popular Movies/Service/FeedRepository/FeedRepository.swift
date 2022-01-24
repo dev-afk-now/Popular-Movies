@@ -40,14 +40,12 @@ extension FeedRepository: FeedRepositoryProtocol {
         NetworkService.shared.request(endPoint: endPoint) {
             (result: Result<MovieNetworkList, CustomError>) in
             switch result {
-            case .success(let success):
-                let movies = success.results.map(MovieCellItem.init)
-                MoviePersistentAdapter
-                    .shared
-                    .generateDatabaseMovieObjects(from: movies)
+            case .success(let movieObjects):
+                let movies = movieObjects.results.map(MovieCellItem.init)
+                MoviePersistentAdapter.shared.generateDatabaseMovieObjects(from: movies)
                 completion(.success(movies))
-            case .failure(let failure):
-                completion(.failure(failure))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
@@ -60,14 +58,12 @@ extension FeedRepository: FeedRepositoryProtocol {
         NetworkService.shared.request(endPoint: endPoint) {
             (result: Result<MovieNetworkList, CustomError>) in
             switch result {
-            case .success(let success):
-                let movies = success.results.map(MovieCellItem.init)
-                MoviePersistentAdapter
-                    .shared
-                    .generateDatabaseMovieObjects(from: movies)
+            case .success(let movieObjects):
+                let movies = movieObjects.results.map(MovieCellItem.init)
+                MoviePersistentAdapter.shared.generateDatabaseMovieObjects(from: movies)
                 completion(.success(movies))
-            case .failure(let failure):
-                completion(.failure(failure))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
