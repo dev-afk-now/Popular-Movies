@@ -12,9 +12,12 @@ protocol PosterViewProtocol: AnyObject {
 }
 
 class PosterViewController: UIViewController {
+    
+    // MARK: - Public properties -
     var presenter: PosterPresenterProtocol!
     
-    private lazy var imageAspectRatio: CGFloat = 1
+    // MARK: - Private properties -
+    private var imageAspectRatio: CGFloat = 1
     
     private lazy var backBarButton: UIBarButtonItem = {
         var button = UIBarButtonItem(title: "Close",
@@ -32,11 +35,11 @@ class PosterViewController: UIViewController {
         scrollView.maximumZoomScale = 4
         scrollView.minimumZoomScale = 1
         let tapGestureRecognizer = UITapGestureRecognizer(target: self,
-                               action: #selector(didDoubleTapView))
+                                                          action: #selector(didDoubleTapView))
         tapGestureRecognizer.numberOfTapsRequired = 2
         scrollView.addGestureRecognizer(tapGestureRecognizer)
         let swipeGestureRecognizer = UISwipeGestureRecognizer(target: self,
-                                                                  action: #selector(didSwipe))
+                                                              action: #selector(didSwipe))
         swipeGestureRecognizer.direction = .down
         scrollView.addGestureRecognizer(swipeGestureRecognizer)
         return scrollView
@@ -48,12 +51,14 @@ class PosterViewController: UIViewController {
         return imageView
     }()
     
+    // MARK: - Init -
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubview()
         setupNavigationBar()
     }
     
+    // MARK: - Private methods -
     private func setupNavigationBar() {
         navigationItem.rightBarButtonItem = backBarButton
     }
@@ -74,16 +79,17 @@ class PosterViewController: UIViewController {
         ])
     }
     
+    private func setViewZoomScale(_ scaleValue: CGFloat) {
+        scrollView.setZoomScale(scaleValue, animated: true)
+    }
+    
+    // MARK: - Actions -
     @objc private func backBarButtonTapped() {
         presenter.closeView()
     }
     
     @objc private func didDoubleTapView(_ sender: UITapGestureRecognizer) {
-        if scrollView.zoomScale > 1 {
-            scrollView.setZoomScale(1, animated: true)
-        } else {
-            scrollView.setZoomScale(2, animated: true)
-        }
+        setViewZoomScale(scrollView.zoomScale > 1 ? 1 : 2)
     }
     
     @objc private func didSwipe() {
@@ -91,6 +97,7 @@ class PosterViewController: UIViewController {
     }
 }
 
+// MARK: - Extensions -
 extension PosterViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         posterImageView

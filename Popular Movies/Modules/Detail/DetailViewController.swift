@@ -12,8 +12,11 @@ protocol DetailViewProtocol: AnyObject {
 }
 
 class DetailViewController: BaseViewController {
+    
+    // MARK: - Public properties -
     var presenter: DetailPresenterProtocol!
     
+    // MARK: - Private properties -
     private lazy var backBarButton: UIBarButtonItem = {
         var button = UIBarButtonItem(image: UIImage(systemName: "chevron.left"),
                                      style: .plain,
@@ -33,13 +36,14 @@ class DetailViewController: BaseViewController {
     }()
     
     private lazy var posterImage: UIImageView = {
+        let imageSideLength: CGFloat = view.bounds.width
         var view = UIImageView(frame: CGRect(x: 0,
                                              y: 0,
-                                             width: view.bounds.width,
-                                             height: view.bounds.width * 1.2))
+                                             width: imageSideLength,
+                                             height: imageSideLength))
         view.isUserInteractionEnabled = true
         let tapGestureRecognizer = UITapGestureRecognizer(target: self,
-                               action: #selector(didTapView))
+                                                          action: #selector(didTapView))
         view.addGestureRecognizer(tapGestureRecognizer)
         return view
     }()
@@ -77,7 +81,9 @@ class DetailViewController: BaseViewController {
         VideoTableCell.register(in: tableView)
         return tableView
     }()
-
+    
+    // MARK: - LifeCycle -
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         showActivityIndicator()
@@ -87,13 +93,14 @@ class DetailViewController: BaseViewController {
         layoutGradientView()
     }
     
+    // MARK: - Private methods -
     
     private func setupNavigationBar() {
         navigationController?.navigationBar.setBackgroundImage(UIImage(),
                                                                for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         let appearance = UINavigationBarAppearance()
-          appearance.backgroundColor = .white
+        appearance.backgroundColor = .white
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationItem.leftBarButtonItem = backBarButton
         navigationItem.titleView = titleLabel
@@ -127,6 +134,7 @@ class DetailViewController: BaseViewController {
         ])
     }
     
+    // MARK: - Actions -
     @objc private func didTapView(_ sender: UITapGestureRecognizer) {
         presenter.posterImageTapped(
             imageData: posterImage.image?.jpegData(compressionQuality: 1)
@@ -138,6 +146,7 @@ class DetailViewController: BaseViewController {
     }
 }
 
+// MARK: - Extensions -
 extension DetailViewController: DetailViewProtocol {
     func updateView() {
         hideActivityIndicator()
@@ -187,16 +196,14 @@ extension DetailViewController: UITableViewDataSource {
             return cell
         case .descriptionCell:
             let cell = DescriptionTableCell.cell(in: tableView,
-                                              for: indexPath)
+                                                 for: indexPath)
             cell.configure(with: movieModel)
             return cell
         case .trailerCell:
             let cell = VideoTableCell.cell(in: tableView,
-                                              for: indexPath)
+                                           for: indexPath)
             cell.configure(with: presenter.trailerPath)
             return cell
-        default:
-            return UITableViewCell()
         }
     }
     
@@ -209,6 +216,5 @@ extension DetailViewController: UITableViewDataSource {
         default:
             return UITableView.automaticDimension
         }
-        
     }
 }

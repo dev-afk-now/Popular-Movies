@@ -13,7 +13,7 @@ protocol PosterPresenterProtocol: AnyObject {
 }
 
 final class PosterPresenter {
-    weak private var view: PosterViewProtocol?
+    weak var view: PosterViewProtocol?
     private let router: PosterRouterProtocol
     
     private let imageData: Data

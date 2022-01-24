@@ -8,7 +8,8 @@
 import UIKit
 
 class HeadlineTableCell: BaseTableViewCell {
-
+    
+    // MARK: - Private properties -
     private lazy var headlineLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -53,6 +54,7 @@ class HeadlineTableCell: BaseTableViewCell {
         return label
     }()
     
+    // MARK: - Init -
     override init(style: UITableViewCell.CellStyle,
                   reuseIdentifier: String?) {
         super.init(style: style,
@@ -64,6 +66,7 @@ class HeadlineTableCell: BaseTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Private methods -
     func configure(with movieData: DetailModel) {
         headlineLabel.text = movieData.title
         
@@ -72,9 +75,9 @@ class HeadlineTableCell: BaseTableViewCell {
         (movieData.dateOfReleaseString)
         genresLabel.text = movieData.genres.map{$0.name}.joined(separator: ", ")
         taglineLabel.text = String(format: "'%@'", movieData.tagline ?? "")
-        
     }
     
+    // MARK: - Public methods -
     private func setupSubviews() {
         let verticalInset: CGFloat = 16
         let horizontalInset: CGFloat = 12

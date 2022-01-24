@@ -24,7 +24,11 @@ protocol DetailPresenterProtocol: AnyObject {
 }
 
 final class DetailPresenter {
-    weak private var view: DetailViewProtocol?
+    
+    // MARK: - Public properties -
+    weak var view: DetailViewProtocol?
+    
+    // MARK: - Private properties -
     private let router: DetailRouterProtocol
     private let repository: DetailRepositoryProtocol
     private let movieId: Int
@@ -34,6 +38,7 @@ final class DetailPresenter {
     
     private var cellsToDraw = [DetailCellType]()
     
+    // MARK: - Init -
     init(view: DetailViewProtocol,
          router: DetailRouterProtocol,
          repository: DetailRepositoryProtocol,
@@ -45,6 +50,7 @@ final class DetailPresenter {
         prepareCellDataSource()
     }
     
+    // MARK: - Private properties -
     private func prepareCellDataSource() {
         let cellList: [DetailCellType] = [.headlineCell,
                                           .trailerCell,
@@ -73,6 +79,7 @@ final class DetailPresenter {
     }
 }
 
+// MARK: - Extension -
 extension DetailPresenter: DetailPresenterProtocol {
     func posterImageTapped(imageData: Data?) {
         guard let data = imageData else { return }
@@ -105,7 +112,6 @@ extension DetailPresenter: DetailPresenterProtocol {
                 group.leave()
             }
         }
-        
         group.notify(queue: .main) { [weak self] in
             self?.view?.updateView()
         }

@@ -22,7 +22,10 @@ protocol FeedPresenterProtocol: AnyObject {
 }
 
 final class FeedPresenter {
+    // MARK: - Public properties -
     weak var view: FeedViewProtocol?
+    
+    // MARK: - Private properties -
     private let router: FeedRouterProtocol
     private let repository: FeedRepositoryProtocol
     
@@ -40,13 +43,14 @@ final class FeedPresenter {
     private var pageToLoad = 1
     
     private var isLoading = false
-    private var isReachable: Bool = true
+    private var isReachable = true
     
     private var popularMovies = [MovieCellItem]()
     private var moviesDataSource: [MovieCellItem] {
         isSearching ? searchedResults : popularMovies
     }
     
+    // MARK: - LifeCycle -
     init(view: FeedViewProtocol,
          router: FeedRouterProtocol,
          repository: FeedRepositoryProtocol) {
@@ -55,7 +59,6 @@ final class FeedPresenter {
         self.repository = repository
         startRecieveConnectionNotification()
     }
-    
     
     deinit {
         NotificationCenter.default.removeObserver(self,
@@ -66,8 +69,10 @@ final class FeedPresenter {
                                                   object: ReachabilityManager.shared)
     }
     
+    // MARK: - Private methods -
     private func fetchPopularMovies(completion: EmptyBlock? = nil) {
         isLoading = true
+        
         repository.fetchPopular(page: pageToLoad,
                                 sortBy: selectedSortOption.rawValue) { [weak self] result in
             switch result {
@@ -97,36 +102,36 @@ final class FeedPresenter {
         }
     }
     
-    private func updateView() {
+    private func internalUpdateView() {
         view?.updateView()
         view?.hideLoading()
+        view?.showNoResultsIfNeeded(moviesDataSource.isEmpty)
         isLoading = false
     }
     
     private func performLocalSearch(with text: String) {
         searchedResults = popularMovies.filter{ $0.title.contains(text) }
-        updateView()
+        internalUpdateView()
     }
     
     private func executeSearch(with text: String) {
-        if !isReachable {
-            performLocalSearch(with: text)
-            return
-        }
-        pageToLoad = 1
-        searchedResults.removeAll()
+        clearSearch()
         if text.isEmpty {
             breakSearch(of: searchTask)
+            return
+        }
+        if !isReachable {
+            performLocalSearch(with: text)
             return
         }
         if text.count < 2 {
             return
         }
-        updateView()
         searchTask?.cancel()
         let workItem = DispatchWorkItem { [weak self] in
+            self?.view?.showLoading()
             self?.fetchMovieByKeyword(searchText: text) {
-                self?.updateView()
+                self?.internalUpdateView()
             }
         }
         searchTask = workItem
@@ -136,11 +141,8 @@ final class FeedPresenter {
     
     private func breakSearch(of dispatchWorkItem: DispatchWorkItem?) {
         dispatchWorkItem?.cancel()
-        searchedResults.removeAll()
-        popularMovies.removeAll()
-        updateView()
-        pageToLoad = 1
-        fetchPopularMovies(completion: updateView)
+        clearSearch()
+        internalUpdateView()
     }
     
     private func fetchMovieGenres(completion: EmptyBlock? = nil) {
@@ -152,12 +154,15 @@ final class FeedPresenter {
         popularMovies.removeAll()
         repository.fetchDataBaseObjects { movies in
             self.popularMovies = movies
-            self.updateView()
+            self.internalUpdateView()
             completion?()
         }
     }
     
-    // MARK: - Private methods -
+    private func clearSearch() {
+        searchedResults.removeAll()
+        pageToLoad = 1
+    }
     
     private func startRecieveConnectionNotification() {
         NotificationCenter.default.addObserver(self,
@@ -174,7 +179,7 @@ final class FeedPresenter {
     @objc func connectionDisappeared() {
         isReachable = false
         fetchSavedMovies {
-            self.updateView()
+            self.internalUpdateView()
         }
     }
     
@@ -184,6 +189,7 @@ final class FeedPresenter {
     }
 }
 
+// MARK: - Extension -
 extension FeedPresenter: FeedPresenterProtocol {
     func movieItemSelected(at index: Int) {
         router.showDetail(moviesDataSource[index].id)
@@ -200,7 +206,7 @@ extension FeedPresenter: FeedPresenterProtocol {
         popularMovies.removeAll()
         pageToLoad = 1
         selectedSortOption = option
-        fetchPopularMovies(completion: updateView)
+        fetchPopularMovies(completion: internalUpdateView)
     }
     
     var sortOptionsString: [String] {
@@ -218,10 +224,12 @@ extension FeedPresenter: FeedPresenterProtocol {
             self.isLoading = true
             if isSearching {
                 self.fetchMovieByKeyword(searchText: searchText,
-                                         completion: updateView)
+                                         completion: internalUpdateView)
             } else {
-                self.fetchPopularMovies(completion: updateView)
+                self.fetchPopularMovies(completion: internalUpdateView)
             }
+        } else {
+            view?.hideLoading()
         }
     }
     
@@ -234,6 +242,7 @@ extension FeedPresenter: FeedPresenterProtocol {
     }
     
     func configureView() {
+        
         let group = DispatchGroup()
         let requests = [fetchMovieGenres,
                         fetchPopularMovies]
@@ -246,7 +255,7 @@ extension FeedPresenter: FeedPresenterProtocol {
         }
         
         group.notify(queue: .main) { [weak self] in
-            self?.updateView()
+            self?.internalUpdateView()
         }
     }
 }
