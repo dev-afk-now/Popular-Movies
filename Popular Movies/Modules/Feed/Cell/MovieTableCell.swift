@@ -11,14 +11,18 @@ final class MovieTableCell: BaseTableViewCell {
     
     // MARK: - Private properties -
     private lazy var containerView: UIView = {
-        var view = UIView()
-        view.backgroundColor = .white
+        var view = UIView(frame: CGRect(x: .zero,
+                                        y: .zero,
+                                        width: contentView.bounds.width * 1.2,
+                                        height: 230))
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 10
-        view.layer.shadowColor = UIColor.black.withAlphaComponent(0.75).cgColor
-        view.layer.shadowOpacity = 1
+        view.clipsToBounds = false
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.75
         view.layer.shadowOffset = .zero
-        view.layer.shadowRadius = 5
+        view.layer.shadowRadius = 3
+        view.layer.shadowPath = UIBezierPath(roundedRect: view.bounds,
+                                             cornerRadius: 10).cgPath
         return view
     }()
     

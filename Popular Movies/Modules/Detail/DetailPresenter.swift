@@ -53,8 +53,8 @@ final class DetailPresenter {
     }
     
     private func fetchMovie(completion: EmptyBlock?) {
-        repository.fetchMovie(by: movieId) { [weak self] movieList in
-            switch movieList {
+        repository.fetchMovie(by: movieId) { [weak self] result in
+            switch result {
             case .success(let movieObject):
                 self?.movieDataSource = movieObject
                 completion?()

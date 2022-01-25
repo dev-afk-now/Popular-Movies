@@ -70,13 +70,13 @@ final class FeedPresenter {
     // MARK: - Private methods -
     private func fetchPopularMovies(completion: EmptyBlock? = nil) {
         isLoading = true
-        
         repository.fetchPopular(page: pageToLoad,
                                 sortBy: selectedSortOption.rawValue) { [weak self] result in
             switch result {
             case .success(let movieList):
                 self?.popularMovies += movieList
                 self?.pageToLoad += 1
+                self?.internalUpdateView()
                 completion?()
             default:
                 completion?()
@@ -93,6 +93,8 @@ final class FeedPresenter {
             case .success(let movieList):
                 self?.searchedResults += movieList
                 self?.pageToLoad += 1
+                self?.view?.showNoResultsIfNeeded(movieList.isEmpty)
+                self?.internalUpdateView()
                 completion?()
             default:
                 completion?()
@@ -103,18 +105,18 @@ final class FeedPresenter {
     private func internalUpdateView() {
         view?.updateView()
         view?.hideLoading()
-        view?.showNoResultsIfNeeded(moviesDataSource.isEmpty)
-        isLoading = false
+        isLoading = movieListCount == 0
     }
     
     private func performLocalSearch(with text: String) {
-        searchedResults = popularMovies.filter{ $0.title.contains(text) }
+        searchedResults = popularMovies.filter { $0.title.contains(text) }
         isUsingSearchedResults = true
         internalUpdateView()
     }
     
     private func executeSearch(with text: String) {
         clearSearch()
+        view?.showLoading()
         if text.isEmpty {
             breakSearch(of: searchTask)
             return
@@ -123,6 +125,7 @@ final class FeedPresenter {
             performLocalSearch(with: text)
             return
         }
+        
         if text.count < 2 {
             return
         }
@@ -141,7 +144,6 @@ final class FeedPresenter {
     
     private func breakSearch(of dispatchWorkItem: DispatchWorkItem?) {
         dispatchWorkItem?.cancel()
-        clearSearch()
         isUsingSearchedResults = false
         internalUpdateView()
     }
@@ -155,7 +157,6 @@ final class FeedPresenter {
         repository.fetchDataBaseObjects { movies in
             print(movies.count)
             self.popularMovies = movies
-            self.internalUpdateView()
             completion?()
         }
     }
@@ -163,6 +164,7 @@ final class FeedPresenter {
     private func clearSearch() {
         searchedResults.removeAll()
         pageToLoad = 1
+        self.internalUpdateView()
     }
     
     private func startRecieveConnectionNotification() {
@@ -179,8 +181,8 @@ final class FeedPresenter {
     // MARK: - Actions -
     @objc func connectionDisappeared() {
         isReachable = false
-        fetchSavedMovies {
-            self.internalUpdateView()
+        fetchSavedMovies { [weak self] in
+            self?.internalUpdateView()
         }
     }
     
@@ -221,20 +223,18 @@ extension FeedPresenter: FeedPresenterProtocol {
     }
     
     func loadMoreData() {
-        view?.showLoading()
         if !self.isLoading, isReachable {
             self.isLoading = true
+            view?.showLoading()
             if isUsingSearchedResults {
-                self.fetchMovieByKeyword(searchText: searchText,
-                                         completion: internalUpdateView)
+                self.fetchMovieByKeyword(searchText: searchText) { [weak self] in
+                    self?.isUsingSearchedResults = true
+                }
             } else {
                 self.fetchPopularMovies { [weak self] in
                     self?.isUsingSearchedResults = false
-                    self?.internalUpdateView()
                 }
             }
-        } else {
-            view?.hideLoading()
         }
     }
     

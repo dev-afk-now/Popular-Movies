@@ -13,10 +13,17 @@ final class GenrePersistentAdapter {
     private init() {}
     
     func generateDatabaseGenreObjects(from genreList: [MovieGenre]) {
-        genreList.forEach{ generateDatabaseGenreObject(from: $0) }
+        let savedObjects = pullDatabasePostObjects()
+        for genre in genreList {
+            
+            guard (savedObjects.first { $0.id == genre.id }) == nil else {
+                continue
+            }
+            generateDatabaseGenreObject(from: genre)
+        }
     }
     
-    func generateDatabaseGenreObject(from genreModel: MovieGenre) {
+    private func generateDatabaseGenreObject(from genreModel: MovieGenre) {
         let object = GenrePersistentData(context: PersistentService.shared.context)
         object.id = genreModel.id.int64value
         object.name = genreModel.name

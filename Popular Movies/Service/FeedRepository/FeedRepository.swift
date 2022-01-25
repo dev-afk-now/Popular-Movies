@@ -56,6 +56,10 @@ extension FeedRepository: FeedRepositoryProtocol {
             (result: Result<MovieNetworkList, CustomError>) in
             switch result {
             case .success(let movieObjects):
+                if movieObjects.results.isEmpty {
+                    completion(.failure(.init(message: "Empty Array")))
+                    return
+                }
                 let movies = movieObjects.results.map(MovieCellItem.init)
                 MoviePersistentAdapter.shared.generateDatabasePostObjects(from: movies)
                 completion(.success(movies))
