@@ -18,15 +18,14 @@ final class NetworkService {
                    method: endPoint.method,
                    parameters: endPoint.parameters,
                    encoding: endPoint.encoding).responseData { response in
-            print(endPoint.fullURLString())
             switch response.result {
             case .success(let data):
                 do {
                     let parsedObject = try JSONDecoder().decode(T.self, from: data)
+                    
                     completion(.success(parsedObject))
                 } catch {
                     do {
-                        print(error)
                         let serverError = try JSONDecoder().decode(ServerErrorModel.self, from: data)
                         completion(.failure(CustomError.init(with: serverError)))
                     } catch {

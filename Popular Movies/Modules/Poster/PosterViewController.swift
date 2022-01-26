@@ -54,6 +54,7 @@ class PosterViewController: UIViewController {
     // MARK: - Init -
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter.configureView()
         setupSubview()
         setupNavigationBar()
     }

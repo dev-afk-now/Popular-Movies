@@ -6,7 +6,7 @@
 //
 
 import Alamofire
-//https://api.themoviedb.org/3/movie/550?api_key=748bef7b95d85a33f87a75afaba78982&language=en-US
+
 struct Constants {
     static let baseURL = "https://api.themoviedb.org/3/"
     static let apiKey = "748bef7b95d85a33f87a75afaba78982"

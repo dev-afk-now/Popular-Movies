@@ -24,7 +24,6 @@ final class PosterPresenter {
         self.view = view
         self.router = router
         self.imageData = imageData
-        configureView()
     }
 }
 

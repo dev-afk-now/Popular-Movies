@@ -93,9 +93,6 @@ class DetailViewController: BaseViewController {
     
     // MARK: - Private methods -
     private func setupNavigationBar() {
-        navigationController?.navigationBar.setBackgroundImage(UIImage(),
-                                                               for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .white
         navigationController?.navigationBar.scrollEdgeAppearance = appearance

@@ -20,7 +20,6 @@ final class GenreManager {
                 (result: Result<NetworkGenreList, CustomError>) in
                 switch result {
                 case .success(let genreData):
-                    print(genreData)
                     self.genres = genreData.genres.map(MovieGenre.init)
                     GenrePersistentAdapter
                         .shared

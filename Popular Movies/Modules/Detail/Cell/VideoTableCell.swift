@@ -39,14 +39,8 @@ final class VideoTableCell: BaseTableViewCell {
     }
     
     func playPauseVideo() {
-        switch isPlaying {
-        case true:
-            videoView.pauseVideo()
-            isPlaying = false
-        case false:
-            videoView.playVideo()
-            isPlaying = true
-        }
+        isPlaying ? videoView.pauseVideo() : videoView.playVideo()
+        isPlaying.toggle()
     }
     
     // MARK: - Private methods -

@@ -7,6 +7,21 @@
 
 import Foundation
 
+struct MovieListContainer {
+    var totalMovies: Int
+    var movies: [MovieCellItem]
+    
+    init(with networkData: MovieNetworkListResponse) {
+        self.totalMovies = networkData.totalResults
+        self.movies = networkData.results.map(MovieCellItem.init)
+    }
+    
+    init(objects: [MovieCellItem]) {
+        self.totalMovies = objects.count
+        self.movies = objects
+    }
+}
+
 struct MovieCellItem {
     var id: Int
     var title: String

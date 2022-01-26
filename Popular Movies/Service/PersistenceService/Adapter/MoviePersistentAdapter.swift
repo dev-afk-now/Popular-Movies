@@ -13,16 +13,17 @@ final class MoviePersistentAdapter {
     private init() {}
     
     func generateDatabaseMovieObjects(from movieList: [MovieCellItem]) {
-        movieList.forEach{ generateDatabaseMovieObject(from: $0) }
+        let savedObjects = pullDatabaseMovieObjects()
+        for movie in movieList {
+            guard (savedObjects.first { $0.id == movie.id }) == nil else {
+                continue
+            }
+            generateDatabaseMovieObject(from: movie)
+        }
     }
     
-    func generateDatabaseMovieObject(from movieModel: MovieCellItem) {
-        let storedObjects = pullDatabaseMovieObjects()
-        guard (storedObjects.first { movieModel.id == $0.id }) == nil else {
-            return
-        }
+    private func generateDatabaseMovieObject(from movieModel: MovieCellItem) {
         let object = MoviePersistentData(context: PersistentService.shared.context)
-        print("created: \(movieModel.id)")
         object.id = movieModel.id.int64value
         object.releaseDate = movieModel.releaseDate
         object.rating = movieModel.rating

@@ -97,9 +97,6 @@ class FeedViewController: BaseViewController {
     
     // MARK: - Private methods -
     private func setupNavigationBar() {
-        navigationController?.navigationBar.setBackgroundImage(UIImage(),
-                                                               for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .white
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
@@ -150,9 +147,14 @@ class FeedViewController: BaseViewController {
                                          animated: true)
     }
     
+    func scrollToTop() {
+        tableView.setContentOffset(.zero,
+                                   animated: true)
+    }
+    
     override func connectionDisappeared() {
         super.connectionDisappeared()
-        setupNavigationBarSortButton(true)
+        setupNavigationBarSortButton(false)
     }
     
     override func connectionAppeared() {
@@ -166,7 +168,6 @@ class FeedViewController: BaseViewController {
                         with: presenter.sortOptionsString,
                         selected: presenter.selectedSortOptionIndex) {
             [weak self] actionTitle in
-            print(actionTitle)
             self?.presenter.sortMovies(with: actionTitle)
         }
     }
@@ -189,6 +190,9 @@ extension FeedViewController: FeedViewProtocol {
     func updateView() {
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
+            if self?.presenter.movieListCount == 20 {
+                self?.scrollToTop()
+            }
         }
     }
 }
@@ -216,7 +220,7 @@ extension FeedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView,
                    heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 300
+        return 250
     }
     
     func tableView(_ tableView: UITableView,
