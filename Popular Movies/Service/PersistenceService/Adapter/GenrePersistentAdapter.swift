@@ -13,7 +13,7 @@ final class GenrePersistentAdapter {
     private init() {}
     
     func generateDatabaseGenreObjects(from genreList: [MovieGenre]) {
-        let savedObjects = pullDatabasePostObjects()
+        let savedObjects = pullDatabaseGenreObjects()
         for genre in genreList {
             
             guard (savedObjects.first { $0.id == genre.id }) == nil else {
@@ -30,7 +30,7 @@ final class GenrePersistentAdapter {
         PersistentService.shared.save()
     }
     
-    func pullDatabasePostObjects() -> [GenrePersistentData] {
+    func pullDatabaseGenreObjects() -> [GenrePersistentData] {
         return PersistentService.shared.fetchObjects(entity: GenrePersistentData.self)
     }
 }

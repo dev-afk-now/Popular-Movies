@@ -12,9 +12,3 @@ extension UIImageView {
         ImageManager.shared.setImage(urlString, for: self)
     }
 }
-
-extension UIView {
-    func setVideo(urlString: String) {
-//        
-    }
-}

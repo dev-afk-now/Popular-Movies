@@ -7,8 +7,14 @@
 
 import Foundation
 
-struct MovieNetworkList: Codable {
+struct MovieNetworkListResponse: Codable {
     var results: [MovieNetworkItem]
+    var totalResults: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case results
+        case totalResults = "total_results"
+    }
 }
 
 struct MovieNetworkItem: Codable {

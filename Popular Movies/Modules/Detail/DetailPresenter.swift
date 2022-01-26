@@ -29,9 +29,12 @@ final class DetailPresenter {
     
     private var trailerDataSource: VideoData?
     
+    private var isReachable = true
+    private var isLoading = false
+    
     private var cellsToDraw = [DetailCellType]()
     
-    // MARK: - Init -
+    // MARK: - LifeCycle -
     init(view: DetailViewProtocol,
          router: DetailRouterProtocol,
          repository: DetailRepositoryProtocol,
@@ -41,6 +44,16 @@ final class DetailPresenter {
         self.repository = repository
         self.movieId = movieId
         prepareCellDataSource()
+        startRecieveConnectionNotification()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self,
+                                                  name: .connectionLost,
+                                                  object: ReachabilityManager.shared)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: .connectionReastablished,
+                                                  object: ReachabilityManager.shared)
     }
     
     // MARK: - Private properties -
@@ -48,7 +61,7 @@ final class DetailPresenter {
         let cellList: [DetailCellType] = [.headlineCell,
                                           .trailerCell,
                                           .descriptionCell
-                                          ]
+        ]
         cellsToDraw = cellList
     }
     
@@ -64,10 +77,34 @@ final class DetailPresenter {
         }
     }
     
+    private func startRecieveConnectionNotification() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(connectionDisappeared),
+                                               name: .connectionLost,
+                                               object: ReachabilityManager.shared)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(connectionAppeared),
+                                               name: .connectionReastablished,
+                                               object: ReachabilityManager.shared)
+    }
+    
     private func fetchVideo(completion: EmptyBlock?) {
         repository.fetchVideo(by: movieId) { [weak self] videoData in
             self?.trailerDataSource = videoData
             completion?()
+        }
+    }
+    
+    // MARK: - Actions -
+    @objc private func connectionDisappeared() {
+        isReachable = false
+        
+    }
+    
+    @objc private func connectionAppeared() {
+        isReachable = true
+        if isLoading {
+            configureView()
         }
     }
 }
@@ -98,6 +135,7 @@ extension DetailPresenter: DetailPresenterProtocol {
     func configureView() {
         let group = DispatchGroup()
         let requests = [fetchMovie, fetchVideo]
+        isLoading = true
         
         for item in requests {
             group.enter()
@@ -107,6 +145,7 @@ extension DetailPresenter: DetailPresenterProtocol {
         }
         group.notify(queue: .main) { [weak self] in
             self?.view?.updateView()
+            self?.isLoading = false
         }
     }
 }

@@ -12,8 +12,8 @@ final class MoviePersistentAdapter {
     
     private init() {}
     
-    func generateDatabasePostObjects(from movieList: [MovieCellItem]) {
-        let savedObjects = pullDatabasePostObjects()
+    func generateDatabaseMovieObjects(from movieList: [MovieCellItem]) {
+        let savedObjects = pullDatabaseMovieObjects()
         for movie in movieList {
             guard (savedObjects.first { $0.id == movie.id }) == nil else {
                 continue
@@ -24,7 +24,6 @@ final class MoviePersistentAdapter {
     
     func generateDatabaseMovieObject(from movieModel: MovieCellItem) {
         let object = MoviePersistentData(context: PersistentService.shared.context)
-        print("created: \(movieModel.id)")
         object.id = movieModel.id.int64value
         object.releaseDate = movieModel.releaseDate
         object.rating = movieModel.rating
@@ -34,7 +33,7 @@ final class MoviePersistentAdapter {
         PersistentService.shared.save()
     }
     
-    func pullDatabasePostObjects() -> [MoviePersistentData] {
+    func pullDatabaseMovieObjects() -> [MoviePersistentData] {
         return PersistentService.shared.fetchObjects(entity: MoviePersistentData.self)
     }
 }

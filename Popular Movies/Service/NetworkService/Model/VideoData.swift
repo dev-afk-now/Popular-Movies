@@ -8,7 +8,6 @@
 import Foundation
 
 struct VideoDataContainer: Codable {
-    var id: Int
     var results: [VideoData]
 }
 

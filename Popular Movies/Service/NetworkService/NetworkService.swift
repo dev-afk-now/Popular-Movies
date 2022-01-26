@@ -18,7 +18,6 @@ final class NetworkService {
                    method: endPoint.method,
                    parameters: endPoint.parameters,
                    encoding: endPoint.encoding).responseData { response in
-            print(endPoint.fullURLString())
             switch response.result {
             case .success(let data):
                 do {

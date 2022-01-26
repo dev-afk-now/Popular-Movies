@@ -147,12 +147,9 @@ class FeedViewController: BaseViewController {
                                          animated: true)
     }
     
-    private func scrollToTop() {
-        let topOffest = CGPoint(x: 0, y: -(tableView.contentInset.top ?? 0))
-        tableView.setContentOffset(topOffest, animated: true)
-//        tableView.scrollToRow(at: [0,0],
-//                                    at: .top,
-//                                    animated: true)
+    func scrollToTop() {
+        tableView.setContentOffset(.zero,
+                                   animated: true)
     }
     
     override func connectionDisappeared() {
@@ -171,7 +168,6 @@ class FeedViewController: BaseViewController {
                         with: presenter.sortOptionsString,
                         selected: presenter.selectedSortOptionIndex) {
             [weak self] actionTitle in
-            print(actionTitle)
             self?.presenter.sortMovies(with: actionTitle)
         }
     }
@@ -194,8 +190,7 @@ extension FeedViewController: FeedViewProtocol {
     func updateView() {
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
-            let moviesCount = self?.presenter.movieListCount ?? 0
-            if moviesCount == 20 {
+            if self?.presenter.movieListCount == 20 {
                 self?.scrollToTop()
             }
         }

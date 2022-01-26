@@ -11,19 +11,21 @@ protocol FeedRepositoryProtocol {
     func fetchMovieGenres(completion: EmptyBlock?)
     func fetchPopular(page: Int,
                       sortBy: String,
-                      completion: @escaping (Result<[MovieCellItem], CustomError>) -> ())
+                      completion: @escaping (Result<MovieListContainer, CustomError>) -> ())
     func searchMovies(keyword: String,
                       page: Int,
-                      completion: @escaping(Result<[MovieCellItem], CustomError>) -> ())
-    func fetchDataBaseObjects(completion: @escaping([MovieCellItem]) -> ())
+                      completion: @escaping(Result<MovieListContainer, CustomError>) -> ())
+    func fetchDataBaseObjects(completion: @escaping(MovieListContainer) -> ())
 }
 
 final class FeedRepository {}
 
 extension FeedRepository: FeedRepositoryProtocol {
-    func fetchDataBaseObjects(completion: @escaping ([MovieCellItem]) -> ()) {
-        completion(MoviePersistentAdapter.shared.pullDatabasePostObjects().map {
-            MovieCellItem.init(from: $0) })
+    func fetchDataBaseObjects(completion: @escaping (MovieListContainer) -> ()) {
+        completion(MovieListContainer(objects: MoviePersistentAdapter.shared
+                                        .pullDatabaseMovieObjects()
+                                        .map(MovieCellItem.init))
+        )
     }
     
     func fetchMovieGenres(completion: EmptyBlock? = nil) {
@@ -32,15 +34,15 @@ extension FeedRepository: FeedRepositoryProtocol {
     
     func fetchPopular(page: Int,
                       sortBy: String,
-                      completion: @escaping (Result<[MovieCellItem], CustomError>) -> ()) {
+                      completion: @escaping (Result<MovieListContainer, CustomError>) -> ()) {
         let endPoint: EndPoint = .popular(page: page, sortBy: sortBy)
         NetworkService.shared.request(endPoint: endPoint) {
-            (result: Result<MovieNetworkList, CustomError>) in
+            (result: Result<MovieNetworkListResponse, CustomError>) in
             switch result {
-            case .success(let movieObjects):
-                let movies = movieObjects.results.map(MovieCellItem.init)
-                MoviePersistentAdapter.shared.generateDatabasePostObjects(from: movies)
-                completion(.success(movies))
+            case .success(let networkContainer):
+                let movies = networkContainer.results.map(MovieCellItem.init)
+                MoviePersistentAdapter.shared.generateDatabaseMovieObjects(from: movies)
+                completion(.success(MovieListContainer(with: networkContainer)))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -49,20 +51,16 @@ extension FeedRepository: FeedRepositoryProtocol {
     
     func searchMovies(keyword: String,
                       page: Int,
-                      completion: @escaping (Result<[MovieCellItem], CustomError>) -> ()) {
+                      completion: @escaping (Result<MovieListContainer, CustomError>) -> ()) {
         let endPoint: EndPoint = .searchMovies(query: keyword.trimmingCharacters(in: .whitespacesAndNewlines),
                                                page: page)
         NetworkService.shared.request(endPoint: endPoint) {
-            (result: Result<MovieNetworkList, CustomError>) in
+            (result: Result<MovieNetworkListResponse, CustomError>) in
             switch result {
-            case .success(let movieObjects):
-                if movieObjects.results.isEmpty {
-                    completion(.failure(.init(message: "Empty Array")))
-                    return
-                }
-                let movies = movieObjects.results.map(MovieCellItem.init)
-                MoviePersistentAdapter.shared.generateDatabasePostObjects(from: movies)
-                completion(.success(movies))
+            case .success(let networkContainer):
+                let movies = networkContainer.results.map(MovieCellItem.init)
+                MoviePersistentAdapter.shared.generateDatabaseMovieObjects(from: movies)
+                completion(.success(MovieListContainer(with: networkContainer)))
             case .failure(let error):
                 completion(.failure(error))
             }

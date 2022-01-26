@@ -40,10 +40,6 @@ final class PersistentService {
     }
     
     func save() {
-        do {
-        try context.save()
-        } catch {
-            print(error.localizedDescription)
-        }
+        try? context.save()
     }
 }

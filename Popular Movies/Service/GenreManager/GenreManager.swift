@@ -20,7 +20,6 @@ final class GenreManager {
                 (result: Result<NetworkGenreList, CustomError>) in
                 switch result {
                 case .success(let genreData):
-                    print(genreData)
                     self.genres = genreData.genres.map(MovieGenre.init)
                     GenrePersistentAdapter
                         .shared
@@ -29,7 +28,7 @@ final class GenreManager {
                 case .failure:
                     self.genres = GenrePersistentAdapter
                         .shared
-                        .pullDatabasePostObjects()
+                        .pullDatabaseGenreObjects()
                         .map { MovieGenre.init(from: $0) }
                 }
             }
