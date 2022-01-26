@@ -23,6 +23,6 @@ class BaseTableViewCell: UITableViewCell,
     }
     
     private func commomInit() {
-//        selectionStyle = .none
+        selectionStyle = .none
     }
 }

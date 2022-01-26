@@ -16,18 +16,21 @@ final class GenreManager {
     
     func fetchGenreData(completion: EmptyBlock? = nil) {
         DispatchQueue.global(qos: .background).async {
-            NetworkService.shared.request(endPoint: .genres) { (result: Result<NetworkGenreList,
-                                                                CustomError>) in
+            NetworkService.shared.request(endPoint: .genres) {
+                (result: Result<NetworkGenreList, CustomError>) in
                 switch result {
                 case .success(let genreData):
                     print(genreData)
                     self.genres = genreData.genres.map(MovieGenre.init)
-                    GenrePersistentAdapter.shared.generateDatabaseGenreObjects(from: self.genres)
+                    GenrePersistentAdapter
+                        .shared
+                        .generateDatabaseGenreObjects(from: self.genres)
                     completion?()
                 case .failure:
-                    self.genres = GenrePersistentAdapter.shared.pullDatabasePostObjects().map {
-                        MovieGenre.init(from: $0)
-                    }
+                    self.genres = GenrePersistentAdapter
+                        .shared
+                        .pullDatabaseGenreObjects()
+                        .map { MovieGenre.init(from: $0) }
                 }
             }
         }

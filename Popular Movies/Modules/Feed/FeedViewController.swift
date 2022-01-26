@@ -9,22 +9,29 @@ import UIKit
 
 protocol FeedViewProtocol: AnyObject {
     func updateView()
-    func showError()
+    func showNoResultsIfNeeded(_ isNeeded: Bool)
+    func showLoading()
+    func hideLoading()
 }
 
 class FeedViewController: BaseViewController {
+    
+    // MARK: - Public properties -
     var presenter: FeedPresenterProtocol!
     
-    private var isLoading = false
     
     // MARK: - Private properties -
-    
     private lazy var searchBarView: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.backgroundColor = .white
+        searchBar.tintColor = .black
         searchBar.searchTextField.textColor = .black
         searchBar.delegate = self
+        searchBar.setImage(UIImage(),
+                           for: .search,
+                           state: .normal)
+        searchBar.placeholder = "Search"
         searchBar.backgroundImage = UIImage()
         return searchBar
     }()
@@ -54,6 +61,7 @@ class FeedViewController: BaseViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
+        tableView.keyboardDismissMode = .interactive
         MovieTableCell.register(in: tableView)
         return tableView
     }()
@@ -78,39 +86,36 @@ class FeedViewController: BaseViewController {
         return view
     }()
     
+    // MARK: - LifeCycle -
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.configureView()
-        configureTableView()
         setupConstraints()
         setupNavigationBar()
-        showActivityIndicator()
         layoutGradientView()
     }
     
+    // MARK: - Private methods -
     private func setupNavigationBar() {
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.setBackgroundImage(UIImage(),
+                                                               for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         let appearance = UINavigationBarAppearance()
-          appearance.backgroundColor = .white
+        appearance.backgroundColor = .white
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationItem.rightBarButtonItem = sortButton
         navigationItem.titleView = titleLabel
     }
     
-    private func configureTableView() {
-        tableView.keyboardDismissMode = .interactive
-    }
-    
     private func setupConstraints() {
+        let titleWidth = view.bounds.width / 1.5
         view.addSubview(titleLabel)
         view.addSubview(searchBarView)
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
-            titleLabel.widthAnchor.constraint(equalToConstant: view.bounds.width / 1.5),
+            titleLabel.widthAnchor.constraint(equalToConstant: titleWidth),
             
-            searchBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBarView.topAnchor.constraint(equalTo: view.topAnchor),
             searchBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
@@ -120,6 +125,7 @@ class FeedViewController: BaseViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
+    
     private func layoutGradientView() {
         view.addSubview(bottomGradientView)
         
@@ -131,6 +137,30 @@ class FeedViewController: BaseViewController {
         ])
     }
     
+    private func setEmptyStateIfNeeded(_ itemsIsEmpty: Bool) {
+        let noResultsImage = UIImage(named: "noResults")
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = itemsIsEmpty ? noResultsImage : nil
+        tableView.backgroundView = imageView
+    }
+    
+    private func setupNavigationBarSortButton(_ isVisible: Bool) {
+        navigationItem.setRightBarButton(isVisible ? sortButton : nil,
+                                         animated: true)
+    }
+    
+    override func connectionDisappeared() {
+        super.connectionDisappeared()
+        setupNavigationBarSortButton(true)
+    }
+    
+    override func connectionAppeared() {
+        super.connectionAppeared()
+        setupNavigationBarSortButton(true)
+    }
+    
+    // MARK: - Actions -
     @objc private func sortButtonTapped() {
         showActionSheet(title: "Sort",
                         with: presenter.sortOptionsString,
@@ -142,14 +172,22 @@ class FeedViewController: BaseViewController {
     }
 }
 
+// MARK: - Extensions -
 extension FeedViewController: FeedViewProtocol {
-    func showError() {
+    func showNoResultsIfNeeded(_ isNeeded: Bool) {
+        setEmptyStateIfNeeded(isNeeded)
+    }
+    
+    func showLoading() {
+        showActivityIndicator()
+    }
+    
+    func hideLoading() {
         hideActivityIndicator()
     }
     
     func updateView() {
         DispatchQueue.main.async { [weak self] in
-            self?.hideActivityIndicator()
             self?.tableView.reloadData()
         }
     }
@@ -186,7 +224,6 @@ extension FeedViewController: UITableViewDataSource {
                    forRowAt indexPath: IndexPath) {
         if indexPath.row == presenter.movieListCount - 3 {
             presenter.loadMoreData()
-            showActivityIndicator()
         }
     }
 }

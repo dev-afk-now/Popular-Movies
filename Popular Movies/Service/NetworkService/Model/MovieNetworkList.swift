@@ -14,14 +14,16 @@ struct MovieNetworkList: Codable {
 struct MovieNetworkItem: Codable {
     var id: Int
     var title: String
+    var originalTitle: String
     var genres: [Int]
     var backdropPath: String?
     var rating: Double
-    var releaseDate: String
+    var releaseDate: String?
     
     enum CodingKeys: String, CodingKey {
         case id
         case title
+        case originalTitle = "original_title"
         case genres = "genre_ids"
         case backdropPath = "backdrop_path"
         case rating = "vote_average"

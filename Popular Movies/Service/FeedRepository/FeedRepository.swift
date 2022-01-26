@@ -22,7 +22,11 @@ final class FeedRepository {}
 
 extension FeedRepository: FeedRepositoryProtocol {
     func fetchDataBaseObjects(completion: @escaping ([MovieCellItem]) -> ()) {
-        completion(MoviePersistentAdapter.shared.pullDatabasePostObjects().map { MovieCellItem.init(from: $0) })
+        completion(MoviePersistentAdapter
+                    .shared
+                    .pullDatabaseMovieObjects()
+                    .map { MovieCellItem.init(from: $0) }
+        )
     }
     
     func fetchMovieGenres(completion: EmptyBlock? = nil) {
@@ -36,12 +40,12 @@ extension FeedRepository: FeedRepositoryProtocol {
         NetworkService.shared.request(endPoint: endPoint) {
             (result: Result<MovieNetworkList, CustomError>) in
             switch result {
-            case .success(let success):
-                let movies = success.results.map(MovieCellItem.init)
-                MoviePersistentAdapter.shared.generateDatabasePostObjects(from: movies)
+            case .success(let movieObjects):
+                let movies = movieObjects.results.map(MovieCellItem.init)
+                MoviePersistentAdapter.shared.generateDatabaseMovieObjects(from: movies)
                 completion(.success(movies))
-            case .failure(let failure):
-                completion(.failure(failure))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
@@ -49,16 +53,17 @@ extension FeedRepository: FeedRepositoryProtocol {
     func searchMovies(keyword: String,
                       page: Int,
                       completion: @escaping (Result<[MovieCellItem], CustomError>) -> ()) {
-        let endPoint: EndPoint = .searchMovies(query: keyword.replacingOccurrences(of: " ", with: "%20"), page: page)
+        let endPoint: EndPoint = .searchMovies(query: keyword.trimmingCharacters(in: .whitespacesAndNewlines),
+                                               page: page)
         NetworkService.shared.request(endPoint: endPoint) {
             (result: Result<MovieNetworkList, CustomError>) in
             switch result {
-            case .success(let success):
-                let movies = success.results.map(MovieCellItem.init)
-                MoviePersistentAdapter.shared.generateDatabasePostObjects(from: movies)
+            case .success(let movieObjects):
+                let movies = movieObjects.results.map(MovieCellItem.init)
+                MoviePersistentAdapter.shared.generateDatabaseMovieObjects(from: movies)
                 completion(.success(movies))
-            case .failure(let failure):
-                completion(.failure(failure))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }

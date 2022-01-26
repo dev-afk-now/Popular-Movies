@@ -17,11 +17,11 @@ struct MovieCellItem {
     
     init(with networkData: MovieNetworkItem) {
         self.id = networkData.id
-        self.title = networkData.title
+        self.title = networkData.originalTitle
         self.imageURL = networkData.imagePath
         self.genres = networkData.genres
         self.rating = networkData.rating
-        self.releaseDate = networkData.releaseDate
+        self.releaseDate = networkData.releaseDate ?? ""
     }
     
     init(from model: MoviePersistentData) {

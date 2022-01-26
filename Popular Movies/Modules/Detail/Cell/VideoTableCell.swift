@@ -9,24 +9,23 @@ import UIKit
 import youtube_ios_player_helper
 
 final class VideoTableCell: BaseTableViewCell {
+    
+    // MARK: - Private properties -
+    private var isPlaying = false
+    
     private lazy var videoView: YTPlayerView = {
         var view = YTPlayerView()
         view.delegate = self
+        view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
-    func configure(with urlString: String) {
-        videoView.load(withVideoId: urlString)
-        playVideo()
-    }
     
-    func playVideo() {
-        videoView.playVideo()
-    }
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    // MARK: - Init -
+    override init(style: UITableViewCell.CellStyle,
+                  reuseIdentifier: String?) {
+        super.init(style: style,
+                   reuseIdentifier: reuseIdentifier)
         setupSubviews()
     }
     
@@ -34,6 +33,23 @@ final class VideoTableCell: BaseTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public methods -
+    func configure(with urlString: String) {
+        videoView.load(withVideoId: urlString)
+    }
+    
+    func playPauseVideo() {
+        switch isPlaying {
+        case true:
+            videoView.pauseVideo()
+            isPlaying = false
+        case false:
+            videoView.playVideo()
+            isPlaying = true
+        }
+    }
+    
+    // MARK: - Private methods -
     private func setupSubviews() {
         self.backgroundColor = .white
         self.addSubview(videoView)
@@ -47,8 +63,4 @@ final class VideoTableCell: BaseTableViewCell {
     }
 }
 
-extension VideoTableCell: YTPlayerViewDelegate {
-    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
-        
-    }
-}
+extension VideoTableCell: YTPlayerViewDelegate {}

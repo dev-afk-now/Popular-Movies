@@ -22,7 +22,10 @@ protocol FeedPresenterProtocol: AnyObject {
 }
 
 final class FeedPresenter {
+    // MARK: - Public properties -
     weak var view: FeedViewProtocol?
+    
+    // MARK: - Private properties -
     private let router: FeedRouterProtocol
     private let repository: FeedRepositoryProtocol
     
@@ -31,22 +34,21 @@ final class FeedPresenter {
     private var searchTask: DispatchWorkItem?
     private var searchedResults = [MovieCellItem]()
     
-    private var isSearching: Bool {
-        return !searchText.isEmpty
-    }
+    private var isUsingSearchedResults = false
     
     private var selectedSortOption: SortOption = .mostPopular
     
     private var pageToLoad = 1
     
     private var isLoading = false
-    private var isReachable: Bool = true
+    private var isReachable = true
     
     private var popularMovies = [MovieCellItem]()
     private var moviesDataSource: [MovieCellItem] {
-        isSearching ? searchedResults : popularMovies
+        isUsingSearchedResults ? searchedResults : popularMovies
     }
     
+    // MARK: - LifeCycle -
     init(view: FeedViewProtocol,
          router: FeedRouterProtocol,
          repository: FeedRepositoryProtocol) {
@@ -55,7 +57,6 @@ final class FeedPresenter {
         self.repository = repository
         startRecieveConnectionNotification()
     }
-    
     
     deinit {
         NotificationCenter.default.removeObserver(self,
@@ -66,59 +67,71 @@ final class FeedPresenter {
                                                   object: ReachabilityManager.shared)
     }
     
+    // MARK: - Private methods -
     private func fetchPopularMovies(completion: EmptyBlock? = nil) {
+        isLoading = true
+        
         repository.fetchPopular(page: pageToLoad,
                                 sortBy: selectedSortOption.rawValue) { [weak self] result in
             switch result {
             case .success(let movieList):
                 self?.popularMovies += movieList
                 self?.pageToLoad += 1
-                self?.isLoading = false
                 completion?()
-            case .failure:
-                self?.view?.showError()
+            default:
+                completion?()
             }
         }
     }
     
     private func fetchMovieByKeyword(searchText: String,
                                      completion: EmptyBlock? = nil) {
+        isLoading = true
         repository.searchMovies(keyword: searchText,
                                 page: pageToLoad) { [weak self] result in
             switch result {
             case .success(let movieList):
                 self?.searchedResults += movieList
                 self?.pageToLoad += 1
-                self?.isLoading = false
                 completion?()
-            case .failure:
-                self?.view?.showError()
+            default:
+                completion?()
             }
         }
     }
     
-    private func updateView() {
+    private func internalUpdateView() {
         view?.updateView()
+        view?.hideLoading()
+        view?.showNoResultsIfNeeded(moviesDataSource.isEmpty)
+        isLoading = false
+    }
+    
+    private func performLocalSearch(with text: String) {
+        searchedResults = popularMovies.filter{ $0.title.contains(text) }
+        isUsingSearchedResults = true
+        internalUpdateView()
     }
     
     private func executeSearch(with text: String) {
-        if !isReachable {
-            return 
-        }
-        pageToLoad = 1
-        searchedResults.removeAll()
+        clearSearch()
         if text.isEmpty {
             breakSearch(of: searchTask)
+            return
+        }
+        if !isReachable {
+            performLocalSearch(with: text)
             return
         }
         if text.count < 2 {
             return
         }
-        updateView()
         searchTask?.cancel()
         let workItem = DispatchWorkItem { [weak self] in
+            self?.view?.showLoading()
             self?.fetchMovieByKeyword(searchText: text) {
-                self?.updateView()
+                self?.isUsingSearchedResults = true
+                self?.internalUpdateView()
             }
         }
         searchTask = workItem
@@ -128,7 +141,9 @@ final class FeedPresenter {
     
     private func breakSearch(of dispatchWorkItem: DispatchWorkItem?) {
         dispatchWorkItem?.cancel()
-        fetchPopularMovies(completion: updateView)
+        clearSearch()
+        isUsingSearchedResults = false
+        internalUpdateView()
     }
     
     private func fetchMovieGenres(completion: EmptyBlock? = nil) {
@@ -136,13 +151,20 @@ final class FeedPresenter {
     }
     
     private func fetchSavedMovies(completion: EmptyBlock?) {
+        popularMovies.removeAll()
         repository.fetchDataBaseObjects { movies in
+            print(movies.count)
             self.popularMovies = movies
+            self.internalUpdateView()
             completion?()
         }
     }
     
-    // MARK: - Private methods -
+    private func clearSearch() {
+        searchedResults.removeAll()
+        pageToLoad = 1
+    }
+    
     private func startRecieveConnectionNotification() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(connectionDisappeared),
@@ -158,20 +180,20 @@ final class FeedPresenter {
     @objc func connectionDisappeared() {
         isReachable = false
         fetchSavedMovies {
-            self.updateView()
+            self.internalUpdateView()
         }
     }
     
     @objc func connectionAppeared() {
         isReachable = true
-        fetchPopularMovies {
-            self.updateView()
-        }
+        loadMoreData()
     }
 }
 
+// MARK: - Extension -
 extension FeedPresenter: FeedPresenterProtocol {
     func movieItemSelected(at index: Int) {
+        searchTask?.cancel()
         router.showDetail(moviesDataSource[index].id)
     }
     
@@ -181,11 +203,12 @@ extension FeedPresenter: FeedPresenterProtocol {
     
     func sortMovies(with stringOption: String) {
         let pickedOption = SortOption.allCases.first { $0.message == stringOption }
-        guard let option = pickedOption, isReachable else { return }
+        guard isReachable,
+              let option = pickedOption else { return }
         popularMovies.removeAll()
         pageToLoad = 1
         selectedSortOption = option
-        fetchPopularMovies(completion: updateView)
+        fetchPopularMovies(completion: internalUpdateView)
     }
     
     var sortOptionsString: [String] {
@@ -198,14 +221,20 @@ extension FeedPresenter: FeedPresenterProtocol {
     }
     
     func loadMoreData() {
+        view?.showLoading()
         if !self.isLoading, isReachable {
             self.isLoading = true
-            if isSearching {
+            if isUsingSearchedResults {
                 self.fetchMovieByKeyword(searchText: searchText,
-                                         completion: updateView)
+                                         completion: internalUpdateView)
             } else {
-                self.fetchPopularMovies(completion: updateView)
+                self.fetchPopularMovies { [weak self] in
+                    self?.isUsingSearchedResults = false
+                    self?.internalUpdateView()
+                }
             }
+        } else {
+            view?.hideLoading()
         }
     }
     
@@ -221,16 +250,14 @@ extension FeedPresenter: FeedPresenterProtocol {
         let group = DispatchGroup()
         let requests = [fetchMovieGenres,
                         fetchPopularMovies]
-        
         for item in requests {
             group.enter()
             item {
                 group.leave()
             }
         }
-        
         group.notify(queue: .main) { [weak self] in
-            self?.updateView()
+            self?.internalUpdateView()
         }
     }
 }

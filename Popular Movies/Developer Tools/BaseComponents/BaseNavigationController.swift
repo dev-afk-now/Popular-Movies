@@ -1,6 +1,6 @@
 //
 //  BaseNavigationController.swift
-//  Posts.demo
+//  PopularMovies.demo
 //
 //  Created by devmac on 14.12.2021.
 //
@@ -20,6 +20,7 @@ final class BaseNavigationController: UINavigationController {
     }
     
     private func configure() {
+        navigationBar.barTintColor = .white
         navigationBar.isTranslucent = false
     }
 }

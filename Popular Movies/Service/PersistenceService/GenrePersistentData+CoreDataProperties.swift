@@ -2,7 +2,7 @@
 //  GenrePersistentData+CoreDataProperties.swift
 //  Popular Movies
 //
-//  Created by devmac on 20.01.2022.
+//  Created by Никита Дубовик on 24.01.2022.
 //
 //
 
@@ -16,8 +16,8 @@ extension GenrePersistentData {
         return NSFetchRequest<GenrePersistentData>(entityName: "GenrePersistentData")
     }
 
-    @NSManaged public var name: String?
     @NSManaged public var id: Int64
+    @NSManaged public var name: String?
 
 }
 
