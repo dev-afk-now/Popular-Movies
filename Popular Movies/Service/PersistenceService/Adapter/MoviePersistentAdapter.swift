@@ -22,7 +22,7 @@ final class MoviePersistentAdapter {
         }
     }
     
-    func generateDatabaseMovieObject(from movieModel: MovieCellItem) {
+    private func generateDatabaseMovieObject(from movieModel: MovieCellItem) {
         let object = MoviePersistentData(context: PersistentService.shared.context)
         object.id = movieModel.id.int64value
         object.releaseDate = movieModel.releaseDate
