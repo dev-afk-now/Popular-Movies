@@ -98,7 +98,6 @@ final class DetailPresenter {
     // MARK: - Actions -
     @objc private func connectionDisappeared() {
         isReachable = false
-        
     }
     
     @objc private func connectionAppeared() {
