@@ -15,7 +15,6 @@ final class GenreManager {
     private init() {}
     
     func fetchGenreData(completion: EmptyBlock? = nil) {
-        DispatchQueue.global(qos: .background).async {
             NetworkService.shared.request(endPoint: .genres) {
                 (result: Result<NetworkGenreList, CustomError>) in
                 switch result {
@@ -32,7 +31,6 @@ final class GenreManager {
                         .map { MovieGenre.init(from: $0) }
                 }
             }
-        }
     }
     
     func getNameForGenre(_ genreId: Int) -> String? {

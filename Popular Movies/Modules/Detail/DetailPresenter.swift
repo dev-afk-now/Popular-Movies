@@ -5,12 +5,12 @@
 //  Created by devmac on 18.01.2022.
 //
 
-import UIKit
+import Foundation
 
 protocol DetailPresenterProtocol: AnyObject {
     var cellDataSource: [DetailCellType] { get }
     var trailerPath: String { get }
-    func configureView()
+    func setContent()
     func getMovieData() -> DetailModel?
     func closeButtonTapped()
     func posterImageTapped(imageData: Data?)
@@ -32,7 +32,7 @@ final class DetailPresenter {
     private var isReachable = true
     private var isLoading = false
     
-    private var cellsToDraw = [DetailCellType]()
+    private var cellTypes = [DetailCellType]()
     
     // MARK: - LifeCycle -
     init(view: DetailViewProtocol,
@@ -58,11 +58,10 @@ final class DetailPresenter {
     
     // MARK: - Private properties -
     private func prepareCellDataSource() {
-        let cellList: [DetailCellType] = [.headlineCell,
-                                          .trailerCell,
-                                          .descriptionCell
+        cellTypes =  [.headlineCell,
+                      .trailerCell,
+                      .descriptionCell
         ]
-        cellsToDraw = cellList
     }
     
     private func fetchMovie(completion: EmptyBlock?) {
@@ -103,7 +102,7 @@ final class DetailPresenter {
     @objc private func connectionAppeared() {
         isReachable = true
         if isLoading {
-            configureView()
+            setContent()
         }
     }
 }
@@ -120,7 +119,7 @@ extension DetailPresenter: DetailPresenterProtocol {
     }
     
     var cellDataSource: [DetailCellType] {
-        return cellsToDraw
+        return cellTypes
     }
     
     func closeButtonTapped() {
@@ -131,7 +130,7 @@ extension DetailPresenter: DetailPresenterProtocol {
         return movieDataSource
     }
     
-    func configureView() {
+    func setContent() {
         let group = DispatchGroup()
         let requests = [fetchMovie, fetchVideo]
         isLoading = true

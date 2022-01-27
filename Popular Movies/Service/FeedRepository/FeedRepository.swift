@@ -14,8 +14,8 @@ protocol FeedRepositoryProtocol {
                       completion: @escaping (Result<MovieListContainer, CustomError>) -> ())
     func searchMovies(keyword: String,
                       page: Int,
-                      completion: @escaping(Result<MovieListContainer, CustomError>) -> ())
-    func fetchDataBaseObjects(completion: @escaping(MovieListContainer) -> ())
+                      completion: @escaping (Result<MovieListContainer, CustomError>) -> ())
+    func fetchDataBaseObjects(completion: @escaping (MovieListContainer) -> ())
 }
 
 final class FeedRepository {}

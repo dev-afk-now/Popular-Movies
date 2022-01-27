@@ -18,7 +18,7 @@ class DetailViewController: BaseViewController {
     
     // MARK: - Private properties -
     private lazy var backBarButton: UIBarButtonItem = {
-        var button = UIBarButtonItem(image: UIImage(systemName: "chevron.left"),
+        let button = UIBarButtonItem(image: UIImage(systemName: "chevron.left"),
                                      style: .plain,
                                      target: self,
                                      action: #selector(backBarButtonTapped))
@@ -86,16 +86,13 @@ class DetailViewController: BaseViewController {
         super.viewDidLoad()
         showActivityIndicator()
         setupNavigationBar()
-        presenter.configureView()
+        presenter.setContent()
         setupConstraints()
         layoutGradientView()
     }
     
     // MARK: - Private methods -
     private func setupNavigationBar() {
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = .white
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationItem.leftBarButtonItem = backBarButton
         navigationItem.titleView = titleLabel
         navigationController?.interactivePopGestureRecognizer?.delegate = self

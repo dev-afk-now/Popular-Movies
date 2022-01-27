@@ -5,10 +5,10 @@
 //  Created by devmac on 21.01.2022.
 //
 
-import UIKit
+import Foundation
 
 protocol PosterPresenterProtocol: AnyObject {
-    func configureView()
+    func setContent()
     func closeView()
 }
 
@@ -32,7 +32,7 @@ extension PosterPresenter: PosterPresenterProtocol {
         router.closeCurrentViewController()
     }
     
-    func configureView() {
+    func setContent() {
         view?.updateImageView(imageData: imageData)
     }
 }

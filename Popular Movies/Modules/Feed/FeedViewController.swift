@@ -22,8 +22,10 @@ class FeedViewController: BaseViewController {
     
     // MARK: - Private properties -
     private lazy var searchBarView: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        let searchBar = UISearchBar(frame: CGRect(x: 0,
+                                                  y: 0,
+                                                  width: view.bounds.width,
+                                                  height: 60))
         searchBar.backgroundColor = .white
         searchBar.tintColor = .black
         searchBar.searchTextField.textColor = .black
@@ -37,8 +39,8 @@ class FeedViewController: BaseViewController {
     }()
     
     private lazy var sortButton: UIBarButtonItem = {
-        var button = UIBarButtonItem(image: UIImage(systemName: "text.append"),
-                                     style: .done,
+        let button = UIBarButtonItem(image: UIImage(systemName: "text.append"),
+                                     style: .plain,
                                      target: self,
                                      action: #selector(sortButtonTapped))
         button.tintColor = .black
@@ -47,7 +49,6 @@ class FeedViewController: BaseViewController {
     
     private lazy var titleLabel: UILabel = {
         let title = UILabel()
-        title.textColor = .black
         title.font = .applicatonFont(.avenirMedium, size: 18)
         title.text = "Popular Movies"
         title.textAlignment = .center
@@ -61,6 +62,7 @@ class FeedViewController: BaseViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
+        tableView.tableHeaderView = searchBarView
         tableView.keyboardDismissMode = .interactive
         MovieTableCell.register(in: tableView)
         return tableView
@@ -89,7 +91,7 @@ class FeedViewController: BaseViewController {
     // MARK: - LifeCycle -
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter.configureView()
+        presenter.setContent()
         setupConstraints()
         setupNavigationBar()
         layoutGradientView()
@@ -97,9 +99,6 @@ class FeedViewController: BaseViewController {
     
     // MARK: - Private methods -
     private func setupNavigationBar() {
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = .white
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationItem.titleView = titleLabel
     }
     
@@ -112,11 +111,7 @@ class FeedViewController: BaseViewController {
         NSLayoutConstraint.activate([
             titleLabel.widthAnchor.constraint(equalToConstant: titleWidth),
             
-            searchBarView.topAnchor.constraint(equalTo: view.topAnchor),
-            searchBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            tableView.topAnchor.constraint(equalTo: searchBarView.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)

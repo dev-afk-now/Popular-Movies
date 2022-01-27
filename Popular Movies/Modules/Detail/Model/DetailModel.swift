@@ -32,11 +32,21 @@ struct DetailModel: Decodable {
 }
 
 extension DetailModel {
-    var dateOfReleaseString: String {
+    var yearOfReleaseString: String {
+        return Date.calendarComponentString(stringDate: releaseDate,
+                                            dateFormat: "yyyy-MM-dd",
+                                            component: .year)
+    }
+}
+
+extension Date {
+    static func calendarComponentString(stringDate: String,
+                                    dateFormat: String,
+                                    component: Calendar.Component) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let date = dateFormatter.date(from: releaseDate) ?? Date()
+        dateFormatter.dateFormat = dateFormat
+        let date = dateFormatter.date(from: stringDate) ?? Date()
         let calendar = Calendar.current
-        return String(format: "%d", calendar.component(.year, from: date))
+        return String(format: "%d", calendar.component(component, from: date))
     }
 }

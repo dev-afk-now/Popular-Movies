@@ -9,10 +9,10 @@ import Foundation
 
 protocol DetailRepositoryProtocol {
     func fetchMovie(by id: Int,
-                    completion: @escaping(Result<DetailModel,
+                    completion: @escaping (Result<DetailModel,
                                           CustomError>) -> ())
     func fetchVideo(by id: Int,
-                    completion: @escaping(VideoData?) -> ())
+                    completion: @escaping (VideoData?) -> ())
 }
 
 final class DetailRepository {}
@@ -33,7 +33,7 @@ extension DetailRepository: DetailRepositoryProtocol {
     }
     
     func fetchMovie(by id: Int,
-                    completion: @escaping(Result<DetailModel,
+                    completion: @escaping (Result<DetailModel,
                                           CustomError>) -> ()) {
         let endPoint: EndPoint = .detail(movieId: id)
         NetworkService.shared.request(endPoint: endPoint) {

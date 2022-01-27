@@ -24,7 +24,6 @@ class PosterViewController: UIViewController {
                                      style: .done,
                                      target: self,
                                      action: #selector(backBarButtonTapped))
-        button.tintColor = .systemBlue
         return button
     }()
     
@@ -54,7 +53,7 @@ class PosterViewController: UIViewController {
     // MARK: - Init -
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter.configureView()
+        presenter.setContent()
         setupSubview()
         setupNavigationBar()
     }

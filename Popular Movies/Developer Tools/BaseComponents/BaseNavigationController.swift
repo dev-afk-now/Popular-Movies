@@ -20,7 +20,11 @@ final class BaseNavigationController: UINavigationController {
     }
     
     private func configure() {
-        navigationBar.barTintColor = .white
-        navigationBar.isTranslucent = false
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .white
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBar.standardAppearance = appearance
+        navigationBar.scrollEdgeAppearance = appearance
+        navigationBar.compactAppearance = appearance
     }
 }

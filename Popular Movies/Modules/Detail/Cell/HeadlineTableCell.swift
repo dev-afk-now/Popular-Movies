@@ -71,7 +71,7 @@ class HeadlineTableCell: BaseTableViewCell {
         headlineLabel.text = movieData.title
         secondaryInfoLabel.text = (movieData.productionCountries.map{$0.name}
         ).joined(separator: ", ") + ", " +
-        (movieData.dateOfReleaseString)
+        (movieData.yearOfReleaseString)
         genresLabel.text = movieData.genres.map{$0.name}.joined(separator: ", ")
         taglineLabel.text = String(format: "'%@'", movieData.tagline ?? "")
     }

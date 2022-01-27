@@ -16,20 +16,11 @@ class BaseViewController: UIViewController {
     private var activityIndicatorView: NVActivityIndicatorView!
     
     // MARK: - LifeCycle -
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        startRecieveConnectionNotification()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        startRecieveConnectionNotification()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureActivityIndicator()
         layoutActivityIndicator()
+        startRecieveConnectionNotification()
     }
 
     deinit {

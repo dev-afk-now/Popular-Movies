@@ -14,9 +14,8 @@ final class VideoTableCell: BaseTableViewCell {
     private var isPlaying = false
     
     private lazy var videoView: YTPlayerView = {
-        var view = YTPlayerView()
+        let view = YTPlayerView()
         view.delegate = self
-        view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

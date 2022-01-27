@@ -7,10 +7,9 @@
 
 import UIKit
 
+typealias BlockWithString = (String) -> ()
+
 extension UIViewController {
-    
-    typealias BlockWithString = (String)->()
-    
     func showAlert(with errorMessage: String) {
         let alert = UIAlertController(title: "Error",
                                       message: errorMessage,

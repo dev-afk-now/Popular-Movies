@@ -57,10 +57,8 @@ extension MovieCellItem {
     }
     
     var dateOfReleaseString: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let date = dateFormatter.date(from: releaseDate) ?? Date()
-        let calendar = Calendar.current
-        return String(format: "%d", calendar.component(.year, from: date))
+        return Date.calendarComponentString(stringDate: releaseDate,
+                                            dateFormat: "yyyy-MM-dd",
+                                            component: .year)
     }
 }
