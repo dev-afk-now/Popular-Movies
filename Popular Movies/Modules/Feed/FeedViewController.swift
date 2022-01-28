@@ -77,7 +77,7 @@ class FeedViewController: BaseViewController {
         view.backgroundColor = .clear
         view.makeGradient(colors: [UIColor.clear,
                                    UIColor.black.withAlphaComponent(0.016),
-                                   UIColor.black.withAlphaComponent(0.03125),
+                                   UIColor.black.withAlphaComponent(0.0312),
                                    UIColor.black.withAlphaComponent(0.0625),
                                    UIColor.black.withAlphaComponent(0.125),
                                    UIColor.black.withAlphaComponent(0.25),

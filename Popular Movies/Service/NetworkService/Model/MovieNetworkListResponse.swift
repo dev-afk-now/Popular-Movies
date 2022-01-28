@@ -42,6 +42,6 @@ extension MovieNetworkItem {
         guard let path = backdropPath else {
             return nil
         }
-        return "https://image.tmdb.org/t/p/w500\(path)"
+        return EndPoint.image(imagePath: path).fullURLString()
     }
 }

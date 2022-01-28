@@ -8,6 +8,7 @@
 import Alamofire
 
 struct Constants {
+    static let imageBaseURL = "https://image.tmdb.org/t/p/w500"
     static let baseURL = "https://api.themoviedb.org/3/"
     static let apiKey = "748bef7b95d85a33f87a75afaba78982"
     static let language = "en-US"
@@ -17,6 +18,7 @@ enum EndPoint {
     case popular(page: Int, sortBy: String)
     case searchMovies(query: String, page: Int)
     case genres
+    case image(imagePath: String)
     case detail(movieId: Int)
     case videos(movieId: Int)
     
@@ -32,6 +34,8 @@ enum EndPoint {
             return "movie/\(movieId)"
         case .videos(let movieId):
             return "movie/\(movieId)/videos"
+        case .image(let imagePath):
+            return path
         }
     }
     
@@ -41,7 +45,8 @@ enum EndPoint {
                 .searchMovies,
                 .genres,
                 .detail,
-                .videos:
+                .videos,
+                .image:
             return .get
         }
     }
@@ -52,7 +57,8 @@ enum EndPoint {
                 .searchMovies,
                 .genres,
                 .detail,
-                .videos:
+                .videos,
+                .image:
             return URLEncoding.default
         default:
             return JSONEncoding.default
@@ -73,10 +79,17 @@ enum EndPoint {
     }
     
     func fullURLString() -> String {
-        return String(format: "%@%@?api_key=%@&language=%@",
-                      Constants.baseURL,
-                      self.path,
-                      Constants.apiKey,
-                      Constants.language)
+        switch self {
+        case .image:
+            return String(format: "%@%@",
+                          Constants.imageBaseURL,
+                          self.path)
+        default:
+            return String(format: "%@%@?api_key=%@&language=%@",
+                          Constants.baseURL,
+                          self.path,
+                          Constants.apiKey,
+                          Constants.language)
+        }
     }
 }
