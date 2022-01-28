@@ -35,7 +35,7 @@ enum EndPoint {
         case .videos(let movieId):
             return "movie/\(movieId)/videos"
         case .image(let imagePath):
-            return path
+            return imagePath
         }
     }
     
