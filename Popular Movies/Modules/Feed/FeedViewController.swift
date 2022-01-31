@@ -51,6 +51,7 @@ class FeedViewController: BaseViewController {
         let title = UILabel()
         title.font = .applicatonFont(.avenirMedium, size: 18)
         title.text = "Popular Movies"
+        title.textColor = .black
         title.textAlignment = .center
         return title
     }()

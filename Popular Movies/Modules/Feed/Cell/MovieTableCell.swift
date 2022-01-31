@@ -16,13 +16,11 @@ final class MovieTableCell: BaseTableViewCell {
                                         width: contentView.bounds.width * 1.2,
                                         height: 230))
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.clipsToBounds = false
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.75
-        view.layer.shadowOffset = .zero
-        view.layer.shadowRadius = 3
-        view.layer.shadowPath = UIBezierPath(roundedRect: view.bounds,
-                                             cornerRadius: 10).cgPath
+        let yourView = UIView()
+        yourView.layer.shadowColor = UIColor.black.cgColor
+        yourView.layer.shadowOpacity = 1
+        yourView.layer.shadowOffset = .zero
+        yourView.layer.shadowRadius = 10
         return view
     }()
     
